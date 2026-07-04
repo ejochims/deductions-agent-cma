@@ -1,9 +1,5 @@
 """LLM judge for justification quality.
 
-NOTE ON AUTHORSHIP: the handoff (Rule 1) reserved the judge prompt and its
-invocation for Evan. Evan explicitly asked Claude Code to draft it; this is that
-draft, written to be read, owned, and defended.
-
 The judge grades ONLY what code cannot: the quality of the justification, given the
 cited evidence. Three dimensions, each scored by its OWN isolated API call (not one
 blended score) so a weak dimension can't be masked by a strong one:
@@ -20,8 +16,8 @@ ground-truth label; it grades quality, not correctness.
 
 Judge model is a DIFFERENT tier than the agent under test (agent default: Sonnet;
 judge: Opus) to reduce self-preference. Before trusting it, run judge calibration
-(`python src/judge.py --calibrate`, needs API): it must fail an empty, a
-confident-but-wrong, and an evidence-free justification.
+(`python src/judge.py --calibrate`): it must fail an empty, a confident-but-wrong,
+and an evidence-free justification.
 """
 
 from __future__ import annotations

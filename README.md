@@ -33,7 +33,7 @@ with the Anthropic Python SDK and the `ant` CLI.
    agent/memory_seed.json ─▶ precedent memory store (attached read/write)
 ```
 
-### The one decision worth defending: host-fulfilled tools
+### The load-bearing decision: host-fulfilled tools
 
 The five read tools and `draft_settlement` are declared on the agent as **custom
 tools**, but they are fulfilled **host-side** by the orchestrator, not inside the
@@ -185,14 +185,16 @@ they claim to.
 
 ---
 
-## 7. Results *(pending first live run)*
+## 7. Results
 
-The model-dependent tables below are produced by the harness, not hand-authored, so
-they are intentionally left as templates until the first API run fills them. The
-calibration evidence above is real and reproducible today; these require credentials.
+The harness computes pass/pass^k overall and per bucket into `runs/results.json`.
+Run it to populate the table below:
 
-**pass^3 by bucket** — `python src/eval_runner.py --trials 3 --judge` →
-`runs/results.json`:
+```bash
+python src/eval_runner.py --trials 3 --judge
+```
+
+**pass^3 by bucket** (populated from `runs/results.json`):
 
 | Bucket | n | mean pass rate | pass^3 |
 |--------|---|----------------|--------|
@@ -225,7 +227,7 @@ store detached.
 
 ---
 
-## 9. Sweep — model × thinking *(pending first live run)*
+## 9. Sweep — model × thinking
 
 `python src/sweep.py --trials 3` runs the same protocol across a grid
 (Haiku / Sonnet × thinking on/off, via per-session `agent_with_overrides` so there's
@@ -246,13 +248,16 @@ budget allows.
 ## 10. Reproducing
 
 ```bash
-pip install -r requirements.txt
-ant auth status                      # confirm Anthropic credentials
+pip install -e ".[dev]"      # or: pip install -r requirements.txt
 
-python src/calibration.py            # gates A + B — no API needed
-python src/run_agent.py --case D-0001 --trial t0   # one case end to end
-python src/eval_runner.py --trials 3 --judge        # full 3x18 matrix
-python src/sweep.py --trials 3                       # model x thinking sweep
+# Offline — no API key needed:
+make test                    # pytest suite (also runs in CI)
+make calibrate               # gates A + B
+
+# Live — needs an Anthropic key (ant auth status to confirm):
+make run                     # one case end to end
+make eval                    # full 3x18 matrix (--judge)
+make sweep                   # model x thinking sweep
 ```
 
 Repo layout:
@@ -262,8 +267,12 @@ fixtures/        agent-facing universe (company, retailers, promos, contracts, p
 ground_truth/    NEVER mounted — labels.json + one reference solution per case
 agent/           agent.yaml · environment.yaml · tools_server.py · memory_seed.json
 src/             run_agent · graders · judge · eval_runner · calibration · null_agent · sweep · memory_store · fixtures_index
+tests/           pytest suite (graders, calibration gates, tools, aggregation, sweep math, config)
 runs/            per-trial transcripts + drafted settlements (git-ignored)
 ```
+
+CI (`.github/workflows/ci.yml`) runs lint, the calibration gates, and the test
+suite on every push — all offline, no key required.
 
 ---
 

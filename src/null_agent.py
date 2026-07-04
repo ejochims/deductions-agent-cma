@@ -13,7 +13,7 @@ it through exactly the same path.
 from __future__ import annotations
 
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 from fixtures_index import FIXTURES_DIR, all_case_ids
@@ -32,7 +32,7 @@ def null_settlement(case_id: str) -> dict:
         "amount": deduction["amount"],
         "justification": "Approved as claimed.",
         "evidence_ids": evidence,
-        "drafted_at": datetime.now(timezone.utc).isoformat(),
+        "drafted_at": datetime.now(UTC).isoformat(),
     }
 
 

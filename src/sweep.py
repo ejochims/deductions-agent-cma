@@ -102,20 +102,28 @@ def plot_sweep(rows: list[dict], out_dir: Path) -> list[Path]:
 
     out_dir.mkdir(parents=True, exist_ok=True)
     labels = [r["label"] for r in rows]
-    written = []
 
-    fig, ax = plt.subplots(figsize=(8, 4))
-    ax.bar(labels, [r["mean_pass_rate"] or 0 for r in rows])
-    ax.set_ylabel("mean pass rate"); ax.set_ylim(0, 1)
-    ax.set_title("Pass rate by configuration"); fig.autofmt_xdate()
-    p1 = out_dir / "pass_rate.png"; fig.tight_layout(); fig.savefig(p1); written.append(p1)
+    def _bar(values: list[float], ylabel: str, title: str, fname: str,
+             ylim: tuple[float, float] | None = None) -> Path:
+        fig, ax = plt.subplots(figsize=(8, 4))
+        ax.bar(labels, values)
+        ax.set_ylabel(ylabel)
+        ax.set_title(title)
+        if ylim:
+            ax.set_ylim(*ylim)
+        fig.autofmt_xdate()
+        fig.tight_layout()
+        path = out_dir / fname
+        fig.savefig(path)
+        return path
 
-    fig, ax = plt.subplots(figsize=(8, 4))
-    ax.bar(labels, [r["cost_per_success_usd"] or 0 for r in rows])
-    ax.set_ylabel("cost per success ($)")
-    ax.set_title("Cost per successful settlement by configuration"); fig.autofmt_xdate()
-    p2 = out_dir / "cost_per_success.png"; fig.tight_layout(); fig.savefig(p2); written.append(p2)
-    return written
+    return [
+        _bar([r["mean_pass_rate"] or 0 for r in rows],
+             "mean pass rate", "Pass rate by configuration", "pass_rate.png", (0, 1)),
+        _bar([r["cost_per_success_usd"] or 0 for r in rows],
+             "cost per success ($)", "Cost per successful settlement by configuration",
+             "cost_per_success.png"),
+    ]
 
 
 # ---------------------------------------------------------------------- main

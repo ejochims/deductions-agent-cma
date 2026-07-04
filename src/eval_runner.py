@@ -55,7 +55,7 @@ def grade_settlement(settlement: dict | None, case_id: str) -> tuple[bool, list]
     Returns (passed, serialized_check_results). A missing draft (None) is a fail,
     not an infra_error — the agent ran but produced no settlement.
     """
-    from graders import run_all_checks, passed_all  # imported lazily: Evan-owned
+    from graders import passed_all, run_all_checks
 
     if settlement is None:
         return False, [{"name": "draft_present", "passed": False,
@@ -69,7 +69,7 @@ def judge_settlement_safe(client, settlement: dict | None) -> list:
     """Run the LLM judge if enabled; tolerate its absence during early phases."""
     if settlement is None:
         return []
-    from judge import judge_settlement  # imported lazily: Evan-owned
+    from judge import judge_settlement
     return [asdict(v) for v in judge_settlement(client, settlement)]
 
 

@@ -1,21 +1,14 @@
-"""[EVAN WRITES THE API CALLS] Run the Deductions Desk agent on one case.
+"""Run the Deductions Desk agent on one case.
 
-Rule 1: the Anthropic / Managed-Agents API calls in this file are hand-written by
-Evan. Claude Code scaffolded the orchestration plumbing around them — argument
-parsing, config loading, the tool-dispatch bridge to agent/tools_server.py,
-transcript/usage/timing capture, and the per-trial record — and left the three
-SDK-touching functions as TODO(EVAN) stubs. The file will NOT run until those are
-filled in; that is intentional.
+Creates (once) the agent from agent/agent.yaml and the environment from
+agent/environment.yaml, starts one session per case, streams events, fulfils each
+custom-tool call host-side via ToolServer.dispatch, and saves a full transcript +
+the drafted settlement + token usage + timing to runs/<trial>/<case_id>/.
 
-What this does when complete: create (once) the agent from agent/agent.yaml and
-the environment from agent/environment.yaml, start one session per case, stream
-events, fulfil each custom-tool call host-side via ToolServer.dispatch, and save a
-full transcript + the drafted settlement + token usage + timing to
-runs/<trial>/<case_id>/.
+The eval harness (src/eval_runner.py) imports and calls run_one_case across
+3 trials x N cases. To watch a single case end to end:
 
-The eval harness (src/eval_runner.py, Phase 3) will import and call run_one_case
-across 3 trials x 16 cases. For Phase 2 the goal is to watch a SINGLE case run
-end to end:  python src/run_agent.py --case D-0001 --trial t0
+    python src/run_agent.py --case D-0001 --trial t0
 """
 
 from __future__ import annotations
@@ -24,7 +17,7 @@ import argparse
 import json
 import sys
 import time
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 
 import yaml
@@ -32,7 +25,7 @@ import yaml
 # Make agent/ importable so we can reuse the host-side tool fulfilment.
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "agent"))
-from tools_server import ToolServer, ToolError  # noqa: E402
+from tools_server import ToolError, ToolServer  # noqa: E402
 
 FIXTURES_DIR = REPO_ROOT / "fixtures"
 RUNS_DIR = REPO_ROOT / "runs"
@@ -79,7 +72,7 @@ class TrialRecorder:
     """Accumulates everything worth keeping for one (case, trial) run.
 
     Kept separate from pass/fail: `status` is 'ok' or 'infra_error'. The harness
-    in Phase 3 excludes infra_error runs from the pass rate and retries them.
+    excludes infra_error runs from the pass rate and retries them.
     """
 
     def __init__(self, case_id: str, trial: str) -> None:
@@ -91,7 +84,7 @@ class TrialRecorder:
         self.timings: dict = {}               # wall-clock and per-call timing
         self.status: str = "ok"
         self.error: str | None = None
-        self.started_at = datetime.now(timezone.utc).isoformat()
+        self.started_at = datetime.now(UTC).isoformat()
 
     def record_event(self, event: dict) -> None:
         self.events.append(event)

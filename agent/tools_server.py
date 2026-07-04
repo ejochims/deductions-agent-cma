@@ -16,7 +16,7 @@ from __future__ import annotations
 
 import csv
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -171,7 +171,7 @@ class ToolServer:
             "amount": amount,
             "justification": justification,
             "evidence_ids": list(evidence_ids or []),
-            "drafted_at": datetime.now(timezone.utc).isoformat(),
+            "drafted_at": datetime.now(UTC).isoformat(),
         }
         out_dir = self.runs / trial / case_id
         out_dir.mkdir(parents=True, exist_ok=True)

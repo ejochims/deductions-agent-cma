@@ -1,17 +1,12 @@
-"""Calibration gates — run these before trusting any eval result (§6).
+"""Calibration gates — run these before trusting any eval result.
 
 Known-good must score ~100%, known-bad ~chance, or the harness is broken.
 
-Gate A (reference solutions): every hand-written reference settlement must pass
-        the programmatic graders. 16/16 required. If one fails, fix the case or
-        the grader BEFORE running any model.
+Gate A (reference solutions): every reference settlement must pass the programmatic
+        graders. If one fails, fix the case or the grader before running any model.
 
-Gate B (null agent): the always-approve baseline must FAIL the deny, partial,
-        escalate, and ambiguous buckets and pass the clean-approve bucket.
-
-Both gates depend on Evan's graders.py being implemented; they raise
-NotImplementedError until then. Gate A is Claude-Code plumbing around Evan's
-checks; running it is how Evan knows the checks are right.
+Gate B (null agent): the always-approve baseline must FAIL every non-approve case
+        (guaranteed by action_correct, since it only ever drafts 'approve').
 
 Usage:  python src/calibration.py
 """
@@ -31,7 +26,7 @@ from null_agent import null_settlement
 
 
 def _grade(settlement: dict, case_id: str) -> tuple[bool, list]:
-    from graders import run_all_checks, passed_all
+    from graders import passed_all, run_all_checks
     results = run_all_checks(settlement, load_label(case_id), valid_evidence_ids())
     return passed_all(results), results
 

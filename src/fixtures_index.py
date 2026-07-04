@@ -59,7 +59,7 @@ def load_label(case_id: str) -> dict:
 
 
 def load_reference_solution(case_id: str) -> dict:
-    """The hand-written correct settlement for a case (calibration gate A)."""
+    """The reference (correct) settlement for a case (calibration gate A)."""
     path = GROUND_TRUTH_DIR / "reference_solutions" / f"{case_id}.json"
     return json.loads(path.read_text())
 
