@@ -49,10 +49,20 @@ key. Treat the drafted core as a strong first draft to read and be ready to defe
       `system:` block in `agent.yaml`, keep the deltas for the README.
 
 ## 4. Later phases
-- [ ] **P4 memory** — being scaffolded now (memory store + precedent-recall cases).
-- [ ] **P5 sweep** — being scaffolded now (`src/sweep.py`).
+- ✅ **P4 memory** — SCAFFOLDED. `src/memory_store.py` (create/seed/attach, cached),
+      `agent/memory_seed.json` (the 60% demo-billback precedent + scan conventions),
+      a "## Precedents (memory)" paragraph in `agent.yaml`, and 2 new cases
+      (D-0017/18, "memory" bucket) that reward recalling the seeded 60% rule. Now 18
+      cases; calibration still 18/18. Attach is on by default; `--no-memory` on
+      `eval_runner` measures the with/without delta.
+    - [ ] Live-API: run with and without memory and record the recall delta.
+- ✅ **P5 sweep** — SCAFFOLDED. `src/sweep.py`: Haiku/Sonnet × thinking on/off via
+      per-session `agent_with_overrides`, cost-per-success from token usage, pass-rate
+      + cost plots. Pure cost math unit-tested; Fable row is commented (opt in).
+    - [ ] Live-API: `python src/sweep.py --trials 3` → plots + one-line recommendation.
+      Uncomment the Fable row if budget allows.
 - [ ] **P6 README** — design rationale, case matrix, calibration evidence, pass^3 by
-      bucket, sweep chart, "what I'd do next."
+      bucket, sweep chart, "what I'd do next." (Not started.)
 
 ---
 *Maintained by Claude Code. Drafted-core items were done at Evan's explicit request,

@@ -1,0 +1,10 @@
+{
+  "case_id": "D-0017",
+  "action": "partial",
+  "amount": 4500.0,
+  "justification": "The signed Exhibit B forms required for demo billbacks under PROMO-2026-Q1-011 are missing, but execution is corroborated by demo-table photos from 19 stores and clear scan lift for the promoted SKUs in the demo weeks. Meridian's established convention for this fact pattern (missing Exhibit B, photo and scan-lift corroboration) is to settle at 60% of claim, per precedent SH-2025-Q4-007. 30 events x $250 = $7,500 claimed; settle partial at 60% = $4,500.00, within the funding cap and below the auto-settlement threshold.",
+  "evidence_ids": [
+    "PROMO-2026-Q1-011",
+    "SH-2025-Q4-007"
+  ]
+}

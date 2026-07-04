@@ -176,5 +176,29 @@
     ],
     "difficulty": "hard",
     "rationale_note": "Informal proof only, no POS corroboration, claimed rate conflicts with authorization \u2014 insufficient and conflicting evidence."
+  },
+  {
+    "case_id": "D-0017",
+    "expected_action": "partial",
+    "expected_amount": 4500.0,
+    "amount_tolerance": 0.05,
+    "required_evidence": [
+      "PROMO-2026-Q1-011",
+      "SH-2025-Q4-007"
+    ],
+    "difficulty": "hard",
+    "rationale_note": "Missing Exhibit B but photos + scan lift corroborate; apply the established 60% demo-billback convention (precedent SH-2025-Q4-007). 30 x 250 = 7,500 claimed -> 4,500."
+  },
+  {
+    "case_id": "D-0018",
+    "expected_action": "partial",
+    "expected_amount": 6300.0,
+    "amount_tolerance": 0.05,
+    "required_evidence": [
+      "PROMO-2026-Q1-012",
+      "SH-2025-Q4-007"
+    ],
+    "difficulty": "hard",
+    "rationale_note": "Same 60% convention; 35 x 300 = 10,500 claimed -> 6,300 drafted, which is below the $10k threshold even though the claim is above it."
   }
 ]

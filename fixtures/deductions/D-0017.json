@@ -1,0 +1,29 @@
+{
+  "case_id": "D-0017",
+  "retailer_id": "harvest-co",
+  "deduction_ref": "hc 20988",
+  "deduction_date": "2025-11-27",
+  "amount": 7500.0,
+  "deduction_type": "demo_billback",
+  "remittance_text": "autumn demo program 30 events @ 250 promo 2026 q1 011. pop forms to follow",
+  "claimed_reference": "PROMO-2026-Q1-011",
+  "claim_detail": {
+    "events_claimed": 30,
+    "rate_claimed": 250.0,
+    "period": "2025-10-04/2025-11-15",
+    "skus": [
+      "MF-SN-001",
+      "MF-SN-003"
+    ]
+  },
+  "attachments": [
+    {
+      "type": "store_photos",
+      "description": "Demo-table photos from 19 stores, various Oct/Nov weekends"
+    },
+    {
+      "type": "email_thread",
+      "description": "Meridian field rep note: 'autumn demos ran well across the stores' \u2014 no signed Exhibit B forms attached"
+    }
+  ]
+}

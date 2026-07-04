@@ -164,5 +164,38 @@
     "start_date": "2025-11-03",
     "end_date": "2025-12-14",
     "funding_cap": 15000.0
+  },
+  {
+    "promo_id": "PROMO-2026-Q1-011",
+    "retailer_id": "harvest-co",
+    "name": "Autumn In-Store Demo Program \u2014 Pita & Popcorn",
+    "mechanic": "demo_billback",
+    "skus": [
+      "MF-SN-001",
+      "MF-SN-003"
+    ],
+    "rate": {
+      "per_demo_event": 250.0
+    },
+    "performance_requirement": "Weekend in-store demo events; signed Proof-of-Performance form (Exhibit B, per contract section 3.4) and store execution report within 30 days of each event.",
+    "start_date": "2025-10-04",
+    "end_date": "2025-11-15",
+    "funding_cap": 12000.0
+  },
+  {
+    "promo_id": "PROMO-2026-Q1-012",
+    "retailer_id": "harvest-co",
+    "name": "Holiday In-Store Demo Program \u2014 Sparkling Lemonade",
+    "mechanic": "demo_billback",
+    "skus": [
+      "MF-BV-101"
+    ],
+    "rate": {
+      "per_demo_event": 300.0
+    },
+    "performance_requirement": "Weekend in-store demo events; signed Proof-of-Performance form (Exhibit B, per contract section 3.4) and store execution report within 30 days of each event.",
+    "start_date": "2025-11-22",
+    "end_date": "2025-12-20",
+    "funding_cap": 18000.0
   }
 ]

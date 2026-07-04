@@ -78,7 +78,8 @@ def gate_b_null_agent() -> tuple[bool, list[str], str]:
 
 
 def main() -> None:
-    print("Gate A — reference solutions through graders (expect 16/16):")
+    n = len(all_case_ids())
+    print(f"Gate A — reference solutions through graders (expect {n}/{n}):")
     a_ok, a_fail = gate_a_reference_solutions()
     if a_ok:
         print("  PASS: all reference solutions pass the graders.")

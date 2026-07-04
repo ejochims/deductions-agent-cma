@@ -75,17 +75,19 @@ def judge_settlement_safe(client, settlement: dict | None) -> list:
 
 # --------------------------------------------------------------- run one cell
 def run_trial(case_id: str, trial: str, client, *, use_judge: bool,
+              use_memory: bool = True, agent_override: dict | None = None,
               retry_once: bool = True) -> TrialResult:
     """Run one (case, trial): drive the agent, read the draft, grade (and judge).
 
     infra_error is retried once. run_agent.run_one_case is responsible for
     classifying its own failures as infra_error.
     """
-    from run_agent import run_one_case  # imported lazily: touches Evan's SDK code
+    from run_agent import run_one_case  # imported lazily: touches the SDK code
 
-    recorder = run_one_case(case_id, trial, client=client)
+    kw = dict(client=client, use_memory=use_memory, agent_override=agent_override)
+    recorder = run_one_case(case_id, trial, **kw)
     if recorder.status == "infra_error" and retry_once:
-        recorder = run_one_case(case_id, trial, client=client)
+        recorder = run_one_case(case_id, trial, **kw)
 
     if recorder.status == "infra_error":
         return TrialResult(case_id, trial, status="infra_error", passed=None,
@@ -161,20 +163,25 @@ def aggregate(results: list[TrialResult]) -> dict:
 
 # ---------------------------------------------------------------------- main
 def run_matrix(trials: list[str], case_ids: list[str], client, *,
-               use_judge: bool) -> dict:
+               use_judge: bool, use_memory: bool = True,
+               agent_override: dict | None = None,
+               results_path: Path = RESULTS_PATH) -> dict:
     results: list[TrialResult] = []
     for trial in trials:
         for case_id in case_ids:
-            results.append(run_trial(case_id, trial, client, use_judge=use_judge))
+            results.append(run_trial(case_id, trial, client, use_judge=use_judge,
+                                     use_memory=use_memory,
+                                     agent_override=agent_override))
     summary = aggregate(results)
     payload = {
         "trials": trials,
         "cases": case_ids,
         "used_judge": use_judge,
+        "used_memory": use_memory,
         "summary": summary,
         "results": [asdict(r) for r in results],
     }
-    RESULTS_PATH.write_text(json.dumps(payload, indent=2) + "\n")
+    results_path.write_text(json.dumps(payload, indent=2) + "\n")
     return payload
 
 
@@ -184,13 +191,15 @@ def main() -> None:
     parser.add_argument("--cases", nargs="*", default=None,
                         help="Case ids to run (default: all 16).")
     parser.add_argument("--judge", action="store_true", help="Enable the LLM judge.")
+    parser.add_argument("--no-memory", action="store_true",
+                        help="Detach the precedent memory store (for the with/without delta).")
     args = parser.parse_args()
 
-    # TODO(EVAN): construct the client, e.g. import anthropic; client = anthropic.Anthropic()
-    client = None
+    client = None  # run_one_case constructs anthropic.Anthropic() when None
     trials = [f"t{i}" for i in range(args.trials)]
     case_ids = args.cases or all_case_ids()
-    payload = run_matrix(trials, case_ids, client, use_judge=args.judge)
+    payload = run_matrix(trials, case_ids, client, use_judge=args.judge,
+                         use_memory=not args.no_memory)
 
     overall = payload["summary"]["overall"]
     print(f"overall pass^{len(trials)} = {overall['pass_k']} "

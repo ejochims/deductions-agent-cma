@@ -205,14 +205,29 @@ def create_environment(client, env_cfg: dict) -> str:
     return env.id
 
 
+def _agent_ref(agent_id: str, agent_version: int, override: dict | None) -> dict:
+    """Session agent reference — pinned version, or agent_with_overrides for the sweep.
+
+    `override` (P5) is e.g. {"model": "claude-haiku-4-5"} or
+    {"model": ..., "thinking": {"type": "adaptive"}}; it replaces those fields for
+    this session only without creating a new agent version.
+    """
+    if not override:
+        return {"type": "agent", "id": agent_id, "version": agent_version}
+    return {"type": "agent_with_overrides", "id": agent_id,
+            "version": agent_version, **override}
+
+
 def run_session_for_case(client, agent_id: str, agent_version: int, env_id: str,
                          case_id: str, trial: str, tools: ToolServer,
-                         recorder: TrialRecorder) -> None:
+                         recorder: TrialRecorder, resources: list | None = None,
+                         agent_override: dict | None = None) -> None:
     """Drive one session to completion for one case (stream-first, Pattern 5 gate)."""
     session = client.beta.sessions.create(
-        agent={"type": "agent", "id": agent_id, "version": agent_version},
+        agent=_agent_ref(agent_id, agent_version, agent_override),
         environment_id=env_id,
         title=case_id,
+        resources=resources or [],
     )
     print(f"  trace: https://platform.claude.com/workspaces/default/sessions/{session.id}")
 
@@ -260,12 +275,14 @@ def run_session_for_case(client, agent_id: str, agent_version: int, env_id: str,
 
 
 # --------------------------------------------------------------- orchestration
-def run_one_case(case_id: str, trial: str, client=None) -> TrialRecorder:
+def run_one_case(case_id: str, trial: str, client=None, *,
+                 use_memory: bool = True, agent_override: dict | None = None) -> TrialRecorder:
     """Run a single case end to end and persist its record.
 
-    `client` is an Anthropic SDK client; when None, Evan's code should construct
-    one (anthropic.Anthropic()). Everything except the three API functions above
-    is wired up here.
+    `client` is an Anthropic SDK client; when None one is constructed. `use_memory`
+    attaches the precedent memory store to the session (P4) — set False to measure
+    the with/without-memory delta. `agent_override` (P5) swaps model/thinking per
+    session for the sweep, without creating a new agent version.
     """
     agent_cfg = load_agent_config()
     env_cfg = load_environment_config()
@@ -280,8 +297,13 @@ def run_one_case(case_id: str, trial: str, client=None) -> TrialRecorder:
             client = anthropic.Anthropic()
         agent_id, agent_version = create_or_load_agent(client, agent_cfg)
         env_id = create_environment(client, env_cfg)
+        resources = None
+        if use_memory:
+            from memory_store import create_or_load_memory_store, memory_resource
+            resources = [memory_resource(create_or_load_memory_store(client))]
         run_session_for_case(client, agent_id, agent_version, env_id,
-                             case_id, trial, tools, recorder)
+                             case_id, trial, tools, recorder, resources=resources,
+                             agent_override=agent_override)
     except Exception as exc:  # noqa: BLE001 — infra failures are recorded, not raised
         recorder.status = "infra_error"
         recorder.error = f"{type(exc).__name__}: {exc}"
