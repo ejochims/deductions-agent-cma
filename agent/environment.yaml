@@ -1,0 +1,23 @@
+# Managed Agents environment for the Deductions Desk agent.
+# Applied with:  ant beta:environments create < agent/environment.yaml
+#
+# Anti-leakage by construction: this environment mounts NOTHING. All six tools are
+# custom tools fulfilled host-side by the orchestrator (src/run_agent.py via
+# agent/tools_server.py), so fixtures/ never enters the container and ground_truth/
+# is unreachable by design. The agent has no bash/read/write and makes no outbound
+# calls, so networking is locked down to `limited` with nothing allowed.
+
+name: deductions-desk
+
+description: >-
+  Sandbox for the Deductions Desk settlement agent. The agent uses only custom
+  tools (fulfilled by the orchestrator); the container is an idle execution
+  sandbox. No fixtures are mounted and no egress is permitted.
+
+config:
+  type: cloud
+  networking:
+    type: limited
+    allow_package_managers: false
+    allow_mcp_servers: false
+    allowed_hosts: []

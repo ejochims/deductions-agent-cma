@@ -1,0 +1,9 @@
+{
+  "case_id": "D-0003",
+  "action": "approve",
+  "amount": 2150.0,
+  "justification": "Despite the non-standard invoice format, the claim maps to PROMO-2026-Q1-007 (Fall Snack Scan): POS shows 4,300 units of MF-SN-001/MF-SN-003 scanned in the promo window, and 4,300 x $0.50 = $2,150.00 matches the deduction exactly, within the $9,000 cap. Approve in full.",
+  "evidence_ids": [
+    "PROMO-2026-Q1-007"
+  ]
+}

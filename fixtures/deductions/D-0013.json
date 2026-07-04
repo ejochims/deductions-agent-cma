@@ -1,0 +1,25 @@
+{
+  "case_id": "D-0013",
+  "retailer_id": "valumax",
+  "deduction_ref": "VM-90501",
+  "deduction_date": "2025-12-22",
+  "amount": 8200.0,
+  "deduction_type": "mdf",
+  "remittance_text": "Q1 MDF \u2014 VALUMAX.COM DIGITAL PLACEMENTS MERIDIAN BRAND",
+  "claimed_reference": "MDF (contract section 5)",
+  "claim_detail": {
+    "activity": "valumax.com homepage and search placements featuring Meridian snacks",
+    "period": "2025-10-01/2025-12-15",
+    "skus": [
+      "MF-SN-001",
+      "MF-SN-002",
+      "MF-SN-003"
+    ]
+  },
+  "attachments": [
+    {
+      "type": "campaign_report",
+      "description": "Digital campaign report: placements, dates, impressions, spend allocation of $8,200"
+    }
+  ]
+}

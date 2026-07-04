@@ -1,0 +1,22 @@
+{
+  "case_id": "D-0014",
+  "retailer_id": "northcart",
+  "deduction_ref": "NC-105433",
+  "deduction_date": "2025-12-18",
+  "amount": 42000.0,
+  "deduction_type": "slotting",
+  "remittance_text": "NEW ITEM SLOTTING COLD BREW OAT LATTE \u2014 CHAINWIDE PHASE PER PROMO-2026-Q1-003",
+  "claimed_reference": "PROMO-2026-Q1-003",
+  "claim_detail": {
+    "phase": "chainwide",
+    "skus": [
+      "MF-BV-102"
+    ]
+  },
+  "attachments": [
+    {
+      "type": "distribution_confirmation",
+      "description": "Chainwide distribution confirmation, 1,240 stores, effective 2025-12-08"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "case_id": "D-0018",
+  "action": "partial",
+  "amount": 6300.0,
+  "justification": "Demo billback under PROMO-2026-Q1-012 lacking signed Exhibit B forms but corroborated by sampling-station photos from 22 stores and holiday-week scan lift. Applying the same 60% demo-billback convention (precedent SH-2025-Q4-007): 35 events x $300 = $10,500 claimed; settle partial at 60% = $6,300.00. Note the claim exceeds the $10,000 threshold but the drafted settlement is below it, so a partial is appropriate rather than an escalation.",
+  "evidence_ids": [
+    "PROMO-2026-Q1-012",
+    "SH-2025-Q4-007"
+  ]
+}

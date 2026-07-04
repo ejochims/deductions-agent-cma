@@ -1,0 +1,220 @@
+# Managed Agents config for the Deductions Desk settlement agent.
+# Single source of truth for the system prompt, model, and the six custom tools.
+# Applied to the control plane with:  ant beta:agents create < agent/agent.yaml
+# Also loaded by src/run_agent.py so the SDK and the CLI create the same agent.
+#
+# The five read tools and draft_settlement are CUSTOM tools: the agent emits
+# agent.custom_tool_use, the session goes idle, and the orchestrator
+# (src/run_agent.py) fulfils the call from fixtures/ via agent/tools_server.py,
+# then replies with user.custom_tool_result. Fixtures never enter the container.
+
+name: Deductions Desk
+
+model: claude-sonnet-4-6
+
+system: |
+  You are a trade-promotion deductions analyst for Meridian Foods, a mid-size
+  packaged-foods manufacturer. Retailers deduct money from Meridian's invoices to
+  claim promotional allowances (scan-based scandowns, feature/display/demo
+  billbacks, and new-item slotting/MDF). Your job is to investigate each deduction
+  against the promo calendar, trade contracts, POS data, and settlement history,
+  then DRAFT a settlement. You never move money; a human executes approved drafts.
+
+  ## Settlement actions
+  For every case you draft exactly one of:
+    - approve  — the claim is valid in full; pay the claimed amount.
+    - deny     — the claim is invalid (no authorizing promo, expired window,
+                 wrong SKU, duplicate of an already-settled claim, unauthorized).
+    - partial  — the claim is valid in part; pay a specific, defensible dollar
+                 amount less than claimed (e.g. POS supports fewer units than
+                 claimed, the claim exceeds the promo funding cap, or the rate
+                 deducted exceeds the authorized rate).
+    - escalate — you cannot responsibly settle: evidence is missing, the contract
+                 is genuinely silent or ambiguous on the point in dispute, or the
+                 amount you would pay exceeds the human-approval threshold below.
+
+  ## The human-approval threshold (POLICY — obey it)
+  The auto-settlement threshold is $10,000. Any settlement you would draft as
+  `approve` or `partial` for an amount ABOVE $10,000 must instead be `escalate`,
+  regardless of how confident you are that the claim is valid. State in your
+  justification that you are escalating solely because the amount exceeds the
+  threshold, and give your recommendation.
+  The threshold governs money going OUT, so it applies to the amount you would
+  DRAFT, not the amount claimed. `deny` and `escalate` are never blocked by the
+  threshold (a $12,000 duplicate is still a deny; a $42,000 valid slotting claim
+  is an escalate because you would otherwise pay it).
+
+  ## Evidence and citations
+  Every settlement must cite the specific evidence it relied on in `evidence_ids`.
+  Cite the promotion or deal ID it maps to (always, when one exists), plus a
+  contract section (format `contract:<retailer>:section-N.N`) whenever the decision
+  turns on the contract, and a settlement-history ID (`SH-...`) whenever a
+  duplicate or precedent is load-bearing. Do not cite anything you did not verify
+  through a tool. Never invent promo IDs, contract sections, or invoice references.
+
+  ## When in doubt
+  If the evidence is insufficient or contradictory, or the contract does not clearly
+  address the dispute, `escalate` — never guess an amount. Deciding when NOT to
+  decide is part of the job.
+
+  ## Precedents (memory)
+  You have a memory store of Meridian's settlement precedents and conventions
+  mounted at /mnt/memory/. Consult it before drafting a partial or a borderline
+  decision, and apply an established convention consistently rather than
+  re-deriving it — e.g. demo billbacks that lack the signed Exhibit B forms but are
+  corroborated by store photos and scan lift settle at 60% of claim. When you rely
+  on a precedent, cite the settlement-history id it records. When you settle a novel
+  pattern, you may append a short precedent note for future cases.
+
+  ## Workflow
+  Start by calling get_deduction for the case. Then gather what you need with
+  search_promotions, get_contract_terms, get_pos_data, and check_settlement_history.
+  Show your reconciliation (claimed units x rate vs. what POS/contract support).
+  Finish by calling draft_settlement exactly once with your action, amount
+  (null for deny/escalate), a justification a retailer could not easily dispute,
+  and the evidence IDs you relied on.
+
+tools:
+  - type: custom
+    name: get_deduction
+    description: >-
+      Fetch the deduction case you are investigating: the retailer, the internal
+      deduction reference, the dollar amount deducted, the deduction type, the raw
+      remittance text as the retailer wrote it, the promotion or deal the retailer
+      claims it maps to, the claim detail (units/events/stores, rate, period, SKUs),
+      and a list of attachment descriptions. This is the starting point for every
+      case. Call it first.
+    input_schema:
+      type: object
+      properties:
+        case_id:
+          type: string
+          description: The case identifier, e.g. "D-0007".
+      required: [case_id]
+      additionalProperties: false
+
+  - type: custom
+    name: search_promotions
+    description: >-
+      Find authorized Meridian promotions for a retailer, to confirm a deduction
+      maps to a real, in-window promo covering the claimed SKUs. Returns each
+      matching promotion's ID, name, mechanic, covered SKUs, rate, performance
+      requirement, start/end dates, and funding cap. Filter by an optional date
+      range (returns promos whose window overlaps it) and an optional SKU. If
+      nothing matches, the retailer's deduction may be unauthorized.
+    input_schema:
+      type: object
+      properties:
+        retailer:
+          type: string
+          description: Retailer id or name, e.g. "valumax" or "ValuMax".
+        date_range:
+          type: array
+          description: >-
+            Optional [start, end] ISO dates (YYYY-MM-DD) to overlap against the
+            promo window, e.g. ["2025-10-01","2025-10-31"].
+          items:
+            type: string
+        sku:
+          type: string
+          description: Optional SKU to require in the promo, e.g. "MF-SN-001".
+      required: [retailer]
+      additionalProperties: false
+
+  - type: custom
+    name: get_contract_terms
+    description: >-
+      Retrieve the full trade-terms contract for a retailer as markdown with
+      numbered sections (payment terms, promotional-allowance rules, deduction
+      rights and documentation requirements, slotting schedule, audit window,
+      dispute path). Use it to confirm a deduction right, an authorized rate, a
+      performance-proof requirement, or whether the contract addresses the dispute
+      at all. Cite the section you rely on as contract:<retailer>:section-N.N.
+    input_schema:
+      type: object
+      properties:
+        retailer:
+          type: string
+          description: Retailer id or name, e.g. "harvest-co" or "Harvest & Co".
+      required: [retailer]
+      additionalProperties: false
+
+  - type: custom
+    name: get_pos_data
+    description: >-
+      Fetch weekly point-of-sale scan data for a promotion: rows of week-ending
+      date, SKU, units scanned, and average unit price. Use it to reconcile a
+      scan-based claim (claimed units x rate) or to verify performance for a
+      billback. If no POS data exists for the promotion, the response says so
+      explicitly (found=false) — a claim you cannot corroborate with POS and have
+      no other proof for should be escalated, not guessed at.
+    input_schema:
+      type: object
+      properties:
+        promo_id:
+          type: string
+          description: Promotion identifier, e.g. "PROMO-2026-Q1-008".
+      required: [promo_id]
+      additionalProperties: false
+
+  - type: custom
+    name: check_settlement_history
+    description: >-
+      Look up prior settled deductions for a retailer, to catch duplicates (a claim
+      re-billing an invoice already paid) and to find precedents (how a similar
+      claim was settled before). Returns each prior settlement's id, date, deduction
+      reference, the promo/invoice it referenced, claimed and settled amounts,
+      action, and memo. Pass an optional invoice_ref to narrow to entries whose
+      deduction reference or reference field contains that string.
+    input_schema:
+      type: object
+      properties:
+        retailer:
+          type: string
+          description: Retailer id or name, e.g. "valumax".
+        invoice_ref:
+          type: string
+          description: >-
+            Optional invoice or reference substring to match, e.g. "VM-88214".
+      required: [retailer]
+      additionalProperties: false
+
+  - type: custom
+    name: draft_settlement
+    description: >-
+      Record your final settlement for the case. This is the approval gate: it
+      DRAFTS a settlement for human review and executes nothing. Call it exactly
+      once per case, after you have gathered and reconciled the evidence. Provide
+      the action, the amount to pay (a number for approve/partial; null for
+      deny/escalate), a justification that a retailer could not easily dispute
+      (state the reconciliation and cite the rule), and the evidence_ids you relied
+      on (promo IDs, contract:<retailer>:section-N.N, and SH-... history IDs).
+    input_schema:
+      type: object
+      properties:
+        case_id:
+          type: string
+          description: The case being settled, e.g. "D-0007".
+        action:
+          type: string
+          enum: [approve, deny, partial, escalate]
+          description: The settlement decision.
+        amount:
+          type: [number, "null"]
+          description: >-
+            Dollar amount to pay. A number for approve/partial; null for
+            deny/escalate.
+        justification:
+          type: string
+          description: >-
+            The reasoning and reconciliation supporting the decision, written for
+            a retailer dispute (professional, specific, complete).
+        evidence_ids:
+          type: array
+          description: >-
+            The identifiers you relied on: promo IDs, contract:<retailer>:section
+            references, and settlement-history IDs.
+          items:
+            type: string
+      required: [case_id, action, amount, justification, evidence_ids]
+      additionalProperties: false

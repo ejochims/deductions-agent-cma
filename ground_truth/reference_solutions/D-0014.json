@@ -1,0 +1,9 @@
+{
+  "case_id": "D-0014",
+  "action": "escalate",
+  "amount": null,
+  "justification": "The chainwide slotting phase for MF-BV-102 is authorized under PROMO-2026-Q1-003 at $42,000 and distribution is confirmed (1,240 stores effective 2025-12-08) \u2014 on the merits this claim is valid. However, $42,000 exceeds the $10,000 auto-settlement threshold, so it must route to a human approver. Escalate with a recommendation to approve in full.",
+  "evidence_ids": [
+    "PROMO-2026-Q1-003"
+  ]
+}

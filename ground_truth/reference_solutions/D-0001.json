@@ -1,0 +1,9 @@
+{
+  "case_id": "D-0001",
+  "action": "approve",
+  "amount": 6800.0,
+  "justification": "NorthCart's scan deduction reconciles exactly to POS: 13,600 units of MF-SN-001/MF-SN-002 scanned during PROMO-2026-Q1-001 (2025-10-06 to 2025-11-02) at the authorized $0.50/unit equals $6,800.00, within the $10,000 funding cap. The TPR performance requirement is supported by promoted retails in the scan data. Approve in full.",
+  "evidence_ids": [
+    "PROMO-2026-Q1-001"
+  ]
+}

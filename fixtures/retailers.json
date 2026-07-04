@@ -1,0 +1,29 @@
+[
+  {
+    "retailer_id": "northcart",
+    "name": "NorthCart",
+    "channel": "national grocery",
+    "store_count": 1240,
+    "buyer_contact": "T. Okafor, Category Manager \u2014 Snacks & Beverages",
+    "contract_file": "contracts/northcart.md",
+    "remittance_format": "NC-###### deduction references on consolidated check remittances"
+  },
+  {
+    "retailer_id": "valumax",
+    "name": "ValuMax",
+    "channel": "national discount grocery",
+    "store_count": 2115,
+    "buyer_contact": "D. Reyes, Divisional Merchandise Manager",
+    "contract_file": "contracts/valumax.md",
+    "remittance_format": "VM-##### deduction references, deducted from open invoices"
+  },
+  {
+    "retailer_id": "harvest-co",
+    "name": "Harvest & Co",
+    "channel": "regional grocery",
+    "store_count": 385,
+    "buyer_contact": "S. Lindqvist, Grocery Buyer",
+    "contract_file": "contracts/harvest-co.md",
+    "remittance_format": "HC deduction references (format varies by store accounting office)"
+  }
+]

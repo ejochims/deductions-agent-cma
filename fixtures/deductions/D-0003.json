@@ -1,0 +1,25 @@
+{
+  "case_id": "D-0003",
+  "retailer_id": "harvest-co",
+  "deduction_ref": "hc-20447/B",
+  "deduction_date": "2025-11-14",
+  "amount": 2150.0,
+  "deduction_type": "scan_based",
+  "remittance_text": "oct scan meridian snacks -- promo 7? see wksht. ttl 4300 un @ .50",
+  "claimed_reference": "OCT SCAN \u2014 MERIDIAN SNACKS (see worksheet)",
+  "claim_detail": {
+    "units_claimed": 4300,
+    "rate_claimed": 0.5,
+    "period": "2025-10-13/2025-11-09",
+    "skus": [
+      "MF-SN-001",
+      "MF-SN-003"
+    ]
+  },
+  "attachments": [
+    {
+      "type": "scan_worksheet",
+      "description": "Handwritten scan summary faxed from store accounting; totals by week, SKUs abbreviated"
+    }
+  ]
+}

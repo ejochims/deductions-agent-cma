@@ -1,0 +1,201 @@
+[
+  {
+    "promo_id": "PROMO-2026-Q1-001",
+    "retailer_id": "northcart",
+    "name": "October Snack Scan \u2014 Pita & Pretzel TPR",
+    "mechanic": "scan_based",
+    "skus": [
+      "MF-SN-001",
+      "MF-SN-002"
+    ],
+    "rate": {
+      "per_unit_scanned": 0.5
+    },
+    "performance_requirement": "Temporary price reduction to $2.49 (MF-SN-001) / $2.79 (MF-SN-002) at shelf for the full promo period.",
+    "start_date": "2025-10-06",
+    "end_date": "2025-11-02",
+    "funding_cap": 10000.0
+  },
+  {
+    "promo_id": "PROMO-2026-Q1-002",
+    "retailer_id": "northcart",
+    "name": "November Sparkling Lemonade Endcap Display",
+    "mechanic": "display_billback",
+    "skus": [
+      "MF-BV-101"
+    ],
+    "rate": {
+      "per_store": 100.0,
+      "committed_stores": 42
+    },
+    "performance_requirement": "Endcap display in each committed store for a minimum of 3 weeks; signed display agreement and circular tear sheet as proof.",
+    "start_date": "2025-11-03",
+    "end_date": "2025-11-30",
+    "funding_cap": 5000.0
+  },
+  {
+    "promo_id": "PROMO-2026-Q1-003",
+    "retailer_id": "northcart",
+    "name": "Cold Brew Oat Latte New Item Launch \u2014 Slotting Program",
+    "mechanic": "slotting",
+    "skus": [
+      "MF-BV-102"
+    ],
+    "rate": {
+      "regional_phase": 9500.0,
+      "chainwide_phase": 42000.0
+    },
+    "performance_requirement": "Item authorized and shelved: regional phase (up to 900 stores) invoiced at $9,500; chainwide expansion phase invoiced at $42,000 upon distribution confirmation. Per contract section 4.",
+    "start_date": "2025-10-01",
+    "end_date": "2025-12-31",
+    "funding_cap": 51500.0
+  },
+  {
+    "promo_id": "PROMO-2026-Q1-004",
+    "retailer_id": "valumax",
+    "name": "October Popcorn Scandown",
+    "mechanic": "scan_based",
+    "skus": [
+      "MF-SN-003"
+    ],
+    "rate": {
+      "per_unit_scanned": 0.6
+    },
+    "performance_requirement": "Advertised price of $2.99 or lower during the promo period.",
+    "start_date": "2025-09-30",
+    "end_date": "2025-10-27",
+    "funding_cap": 8000.0
+  },
+  {
+    "promo_id": "PROMO-2026-Q1-005",
+    "retailer_id": "valumax",
+    "name": "Holiday Beverage Scandown \u2014 Lemonade & Tea",
+    "mechanic": "scan_based",
+    "skus": [
+      "MF-BV-101",
+      "MF-BV-103"
+    ],
+    "rate": {
+      "per_unit_scanned": 0.7
+    },
+    "performance_requirement": "Feature in at least two weekly circulars during the promo period.",
+    "start_date": "2025-11-03",
+    "end_date": "2025-12-07",
+    "funding_cap": 7500.0
+  },
+  {
+    "promo_id": "PROMO-2026-Q1-006",
+    "retailer_id": "valumax",
+    "name": "Pita Chips Feature Ad Billback",
+    "mechanic": "feature_ad_billback",
+    "skus": [
+      "MF-SN-001"
+    ],
+    "rate": {
+      "per_featured_unit": 1.0
+    },
+    "performance_requirement": "Front-page circular feature for at least two weeks of the promo period; billback payable per unit sold during feature weeks.",
+    "start_date": "2025-10-20",
+    "end_date": "2025-11-16",
+    "funding_cap": 6000.0
+  },
+  {
+    "promo_id": "PROMO-2026-Q1-007",
+    "retailer_id": "harvest-co",
+    "name": "Fall Snack Scan \u2014 Pita Chips & Popcorn",
+    "mechanic": "scan_based",
+    "skus": [
+      "MF-SN-001",
+      "MF-SN-003"
+    ],
+    "rate": {
+      "per_unit_scanned": 0.5
+    },
+    "performance_requirement": "Shelf tag price reduction for the full promo period.",
+    "start_date": "2025-10-13",
+    "end_date": "2025-11-09",
+    "funding_cap": 9000.0
+  },
+  {
+    "promo_id": "PROMO-2026-Q1-008",
+    "retailer_id": "harvest-co",
+    "name": "Sparkling Lemonade Holiday Scandown",
+    "mechanic": "scan_based",
+    "skus": [
+      "MF-BV-101"
+    ],
+    "rate": {
+      "per_unit_scanned": 0.65
+    },
+    "performance_requirement": "Advertised price of $7.99 or lower during the promo period.",
+    "start_date": "2025-11-10",
+    "end_date": "2025-12-07",
+    "funding_cap": 12000.0
+  },
+  {
+    "promo_id": "PROMO-2026-Q1-009",
+    "retailer_id": "harvest-co",
+    "name": "December Pretzel Scandown",
+    "mechanic": "scan_based",
+    "skus": [
+      "MF-SN-002"
+    ],
+    "rate": {
+      "per_unit_scanned": 0.55
+    },
+    "performance_requirement": "Shelf tag price reduction to $2.99 for the full promo period.",
+    "start_date": "2025-11-24",
+    "end_date": "2025-12-21",
+    "funding_cap": 6500.0
+  },
+  {
+    "promo_id": "PROMO-2026-Q1-010",
+    "retailer_id": "harvest-co",
+    "name": "Holiday In-Store Demo Program \u2014 Pretzels & Cold Brew",
+    "mechanic": "demo_billback",
+    "skus": [
+      "MF-SN-002",
+      "MF-BV-102"
+    ],
+    "rate": {
+      "per_demo_event": 250.0
+    },
+    "performance_requirement": "In-store demo events on weekends; signed Proof-of-Performance form (Exhibit B, per contract section 3.4) and store execution report submitted within 30 days of each event.",
+    "start_date": "2025-11-03",
+    "end_date": "2025-12-14",
+    "funding_cap": 15000.0
+  },
+  {
+    "promo_id": "PROMO-2026-Q1-011",
+    "retailer_id": "harvest-co",
+    "name": "Autumn In-Store Demo Program \u2014 Pita & Popcorn",
+    "mechanic": "demo_billback",
+    "skus": [
+      "MF-SN-001",
+      "MF-SN-003"
+    ],
+    "rate": {
+      "per_demo_event": 250.0
+    },
+    "performance_requirement": "Weekend in-store demo events; signed Proof-of-Performance form (Exhibit B, per contract section 3.4) and store execution report within 30 days of each event.",
+    "start_date": "2025-10-04",
+    "end_date": "2025-11-15",
+    "funding_cap": 12000.0
+  },
+  {
+    "promo_id": "PROMO-2026-Q1-012",
+    "retailer_id": "harvest-co",
+    "name": "Holiday In-Store Demo Program \u2014 Sparkling Lemonade",
+    "mechanic": "demo_billback",
+    "skus": [
+      "MF-BV-101"
+    ],
+    "rate": {
+      "per_demo_event": 300.0
+    },
+    "performance_requirement": "Weekend in-store demo events; signed Proof-of-Performance form (Exhibit B, per contract section 3.4) and store execution report within 30 days of each event.",
+    "start_date": "2025-11-22",
+    "end_date": "2025-12-20",
+    "funding_cap": 18000.0
+  }
+]

@@ -1,0 +1,9 @@
+{
+  "case_id": "D-0002",
+  "action": "approve",
+  "amount": 4200.0,
+  "justification": "Display billback matches the PROMO-2026-Q1-002 authorization: 42 committed stores x $100/store = $4,200.00, within the $5,000 cap. Proof of performance is on file (signed display agreement DA-2026-Q1-002 and circular tear sheets for two November weeks). Approve in full.",
+  "evidence_ids": [
+    "PROMO-2026-Q1-002"
+  ]
+}

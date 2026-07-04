@@ -1,0 +1,9 @@
+{
+  "case_id": "D-0011",
+  "action": "partial",
+  "amount": 4000.0,
+  "justification": "Feature performance is verified (front-page features ran; POS shows 4,215 featured units, supporting the 4,000 billed), but the authorized rate under PROMO-2026-Q1-006 is $1.00/unit, not the $1.50 deducted. Settle partial at 4,000 x $1.00 = $4,000.00.",
+  "evidence_ids": [
+    "PROMO-2026-Q1-006"
+  ]
+}

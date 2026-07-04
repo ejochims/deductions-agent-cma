@@ -1,0 +1,9 @@
+{
+  "case_id": "D-0005",
+  "action": "deny",
+  "amount": 0.0,
+  "justification": "No Meridian promotion authorization exists for a 'Fall Harvest Savings Event' on MF-SN-002 in October 2025 \u2014 a search of authorized ValuMax promotions returns no match, and the backup references no Meridian promotion ID. Contract section 3.1 requires deductions to reference a pre-approved authorization and makes unauthorized deductions repayable. Deny and request repayment.",
+  "evidence_ids": [
+    "contract:valumax:section-3.1"
+  ]
+}

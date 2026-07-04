@@ -1,0 +1,9 @@
+{
+  "case_id": "D-0013",
+  "action": "escalate",
+  "amount": null,
+  "justification": "The claim charges $8,200 of MDF for valumax.com digital placements. Contract section 5.2 enumerates qualifying MDF activities (print circular features, in-store displays, end-caps, demo events) and is silent on retailer-site digital media \u2014 it neither authorizes nor excludes it. Whether digital placements qualify is a trade-terms interpretation for sales management. Escalate.",
+  "evidence_ids": [
+    "contract:valumax:section-5.2"
+  ]
+}

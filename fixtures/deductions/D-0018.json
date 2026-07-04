@@ -1,0 +1,28 @@
+{
+  "case_id": "D-0018",
+  "retailer_id": "harvest-co",
+  "deduction_ref": "HC-21044/dm",
+  "deduction_date": "2025-12-27",
+  "amount": 10500.0,
+  "deduction_type": "demo_billback",
+  "remittance_text": "HOLIDAY LEMONADE DEMO 35 EVENTS @ 300 PER PROMO-2026-Q1-012",
+  "claimed_reference": "PROMO-2026-Q1-012",
+  "claim_detail": {
+    "events_claimed": 35,
+    "rate_claimed": 300.0,
+    "period": "2025-11-22/2025-12-20",
+    "skus": [
+      "MF-BV-101"
+    ]
+  },
+  "attachments": [
+    {
+      "type": "store_photos",
+      "description": "Sampling-station photos from 22 stores, Dec weekends"
+    },
+    {
+      "type": "email_thread",
+      "description": "Harvest buyer: 'holiday demos as arranged' \u2014 Exhibit B forms not included"
+    }
+  ]
+}

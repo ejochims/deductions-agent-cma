@@ -1,0 +1,11 @@
+{
+  "case_id": "D-0006",
+  "action": "deny",
+  "amount": 0.0,
+  "justification": "PROMO-2026-Q1-004 ended 2025-10-27; this claim covers 8,500 units scanned 2025-10-28 through 2025-11-17, entirely outside the promotional period. Contract section 2.3 limits scan allowances to units scanned within the promo period. The valid in-window volume (11,180 units) was already settled and paid under deduction VM-90126 (settlement SH-2026-Q1-002). Deny.",
+  "evidence_ids": [
+    "PROMO-2026-Q1-004",
+    "SH-2026-Q1-002",
+    "contract:valumax:section-2.3"
+  ]
+}

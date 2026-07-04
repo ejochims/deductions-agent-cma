@@ -1,0 +1,10 @@
+{
+  "case_id": "D-0016",
+  "action": "escalate",
+  "amount": null,
+  "justification": "Contract section 3.4 requires signed Exhibit B forms and a store execution report for demo billbacks; this claim has neither \u2014 only photos from 6 stores and a buyer email referencing an unspecified discussion. The claimed rate ($200/event) also conflicts with the $250/event authorized under PROMO-2026-Q1-010, and the claimed period extends beyond the promo window. Evidence is insufficient and internally inconsistent \u2014 escalate for buyer follow-up rather than deny outright, since some events may be documentable.",
+  "evidence_ids": [
+    "PROMO-2026-Q1-010",
+    "contract:harvest-co:section-3.4"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "case_id": "D-0008",
+  "retailer_id": "valumax",
+  "deduction_ref": "VM-90332",
+  "deduction_date": "2025-12-02",
+  "amount": 12000.0,
+  "deduction_type": "slotting",
+  "remittance_text": "NEW ITEM SLOTTING MF-BV-102 COLD BREW OAT LATTE / REF INV VM-88214",
+  "claimed_reference": "SLOT-VM-2025-09 / INV VM-88214",
+  "claim_detail": {
+    "skus": [
+      "MF-BV-102"
+    ]
+  },
+  "attachments": [
+    {
+      "type": "invoice_copy",
+      "description": "Copy of slotting invoice VM-88214 dated 2025-09-02"
+    }
+  ]
+}
