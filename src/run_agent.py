@@ -201,7 +201,7 @@ def create_environment(client, env_cfg: dict) -> str:
 def _agent_ref(agent_id: str, agent_version: int, override: dict | None) -> dict:
     """Session agent reference — pinned version, or agent_with_overrides for the sweep.
 
-    `override` (P5) is e.g. {"model": "claude-haiku-4-5"} or
+    `override` is e.g. {"model": "claude-haiku-4-5"} or
     {"model": ..., "thinking": {"type": "adaptive"}}; it replaces those fields for
     this session only without creating a new agent version.
     """
@@ -273,8 +273,8 @@ def run_one_case(case_id: str, trial: str, client=None, *,
     """Run a single case end to end and persist its record.
 
     `client` is an Anthropic SDK client; when None one is constructed. `use_memory`
-    attaches the precedent memory store to the session (P4) — set False to measure
-    the with/without-memory delta. `agent_override` (P5) swaps model/thinking per
+    attaches the precedent memory store to the session — set False to measure the
+    with/without-memory delta. `agent_override` swaps model/thinking per
     session for the sweep, without creating a new agent version.
     """
     agent_cfg = load_agent_config()

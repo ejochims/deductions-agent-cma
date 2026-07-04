@@ -1,4 +1,4 @@
-"""Model x thinking sweep with cost-per-success (Phase 5).
+"""Model x thinking sweep with cost-per-success.
 
 Runs the same 3xN protocol across a grid of (model, thinking) configurations via
 per-session agent_with_overrides — one persisted agent, cheap per-session swaps.

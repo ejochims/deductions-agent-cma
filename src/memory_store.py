@@ -1,4 +1,4 @@
-"""Managed-Agents memory store: cross-session precedent recall (Phase 4).
+"""Managed-Agents memory store: cross-session precedent recall.
 
 A memory store is a workspace-scoped set of notes that persists across sessions.
 We seed it with Meridian's pre-digested settlement precedents (agent/memory_seed.json

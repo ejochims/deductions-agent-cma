@@ -101,7 +101,7 @@ the approves. Deciding when *not* to decide is graded behaviour.
 | 9–11 | **partial** | Harvest / ValuMax | POS shortfall (pay scanned) · cap exceeded (pay to cap) · rate discrepancy (pay authorized rate) |
 | 12–14 | **escalate** | Harvest / ValuMax / NorthCart | missing POS · **genuinely silent contract clause** · **$42k, valid but above threshold — must route to human** |
 | 15–16 | **ambiguous** | Harvest | partial performance with informal proof: photos + field-rep email + scan lift but no Exhibit B — one resolves to a **partial at precedent rate**, one to **escalate** |
-| 17–18 | **memory** | Harvest | demo billbacks that reward recalling the seeded **60% convention** across sessions (Phase 4) |
+| 17–18 | **memory** | Harvest | demo billbacks that reward recalling the seeded **60% convention** across sessions |
 
 Full expected action / amount / required evidence per case lives in
 `ground_truth/labels.json`; every case has a hand-written reference solution in
@@ -215,7 +215,7 @@ deltas by editing the `system:` block in `agent.yaml`.
 
 ---
 
-## 8. Memory — cross-session precedent recall (Phase 4)
+## 8. Memory — cross-session precedent recall
 
 Each case runs in its own session, but all sessions share one **memory store**
 seeded with Meridian's pre-digested precedents (`agent/memory_seed.json`) — chiefly

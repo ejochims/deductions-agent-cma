@@ -28,7 +28,7 @@ _BUCKET_RANGES = [
     (9, 11, "partial"),
     (12, 14, "escalate"),
     (15, 16, "ambiguous"),
-    (17, 18, "memory"),   # P4: reward cross-session precedent recall
+    (17, 18, "memory"),   # reward cross-session precedent recall
 ]
 
 HUMAN_APPROVAL_THRESHOLD = 10_000.0
