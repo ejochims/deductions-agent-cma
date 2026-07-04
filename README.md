@@ -1,21 +1,27 @@
 # Deductions Desk
 
-An agent that investigates retailer trade-promotion deductions against promo
-calendars, contracts, and POS data, then **drafts** (never executes) an
-approve / deny / partial / escalate settlement with cited evidence. Autonomy is
-bounded by a dollar threshold: anything that would pay out above it routes to a
-human.
+**A proof of concept for automating retailer trade-promotion deduction
+settlement.** It tests a specific claim: that an agent can adjudicate CPG
+deductions with *bounded autonomy* — investigating each claim against promo
+calendars, contracts, and POS data, then **drafting** (never executing) an
+approve / deny / partial / escalate decision with cited evidence — and that the
+decision can be *validated rigorously enough to trust on money*. Anything that
+would pay out above a dollar threshold routes to a human.
 
-The point of this project is not the agent — it is the **eval harness around it**.
-The agent is a realistic-but-tractable stand-in for the kind of judgement work you
-would actually deploy an agent on; the harness is a demonstration of how I'd
-develop such an agent responsibly on Anthropic primitives: fixtures with a
-ground-truth answer key, programmatic graders for what code can check, an LLM judge
-for what it can't, calibration gates that must pass before any result is trusted,
-and a model/thinking sweep that makes the model choice empirical.
+The concept only matters if you can prove it works, so this repo is built around
+the validation as much as the agent: fixtures with a ground-truth answer key,
+programmatic graders for what code can check, an LLM judge for what it can't,
+calibration gates that must pass before any result is believed, and a model /
+thinking sweep that makes the model choice empirical rather than asserted. That
+harness is what would let a finance owner sign off on auto-settling under a
+threshold — it is the difference between a plausible demo and a defensible one.
 
-Built on **Claude Managed Agents** (versioned agent config + per-session sandboxes)
-with the Anthropic Python SDK and the `ant` CLI.
+Scope note: this is a proof of concept, not a product. It proves the *judgment and
+trust* layer on a realistic-but-synthetic case set; production ingestion (retailer
+EDI / deduction portals / OCR of backup docs) is deliberately out of scope and
+stubbed behind the tool interface (see §1). The implementation runs on Claude
+Managed Agents (versioned agent config + per-session sandboxes, Anthropic Python
+SDK, `ant` CLI), but the concept is not tied to that stack.
 
 ---
 
@@ -276,8 +282,16 @@ suite on every push — all offline, no key required.
 
 ---
 
-## 11. What I'd do next
+## 11. From proof of concept to production
 
+The gap between this and a deployable system is deliberately concentrated in one
+place — everything below the judgment layer:
+
+- **Ingestion is the real work.** The tool interface here reads clean fixtures; a
+  production system replaces it with retailer EDI (812 chargebacks), deduction-portal
+  exports, and OCR of scanned backup docs, plus matching to the promo/TPM system.
+  That plumbing — not the reasoning — is the bulk of a real build, and it's the first
+  thing to prove next on real data.
 - **Adversarial fixtures.** Add cases designed to fool *this* agent once the first
   eval exposes its failure modes — e.g. a valid claim whose remittance text mimics a
   duplicate, to test that the agent checks history rather than pattern-matching.
