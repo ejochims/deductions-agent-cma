@@ -185,28 +185,52 @@ def run_matrix(trials: list[str], case_ids: list[str], client, *,
     return payload
 
 
+def _agent_model() -> str:
+    from run_agent import load_agent_config
+    return load_agent_config()["model"]
+
+
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Run the 3x16 eval matrix.")
+    parser = argparse.ArgumentParser(description="Run the N-trial x cases eval matrix.")
     parser.add_argument("--trials", type=int, default=3, help="Trials per case.")
     parser.add_argument("--cases", nargs="*", default=None,
-                        help="Case ids to run (default: all 16).")
+                        help="Case ids to run (default: all cases).")
     parser.add_argument("--judge", action="store_true", help="Enable the LLM judge.")
     parser.add_argument("--no-memory", action="store_true",
                         help="Detach the precedent memory store (for the with/without delta).")
+    parser.add_argument("--estimate-only", action="store_true",
+                        help="Print the cost estimate and exit without running.")
     args = parser.parse_args()
 
-    client = None  # run_one_case constructs anthropic.Anthropic() when None
     trials = [f"t{i}" for i in range(args.trials)]
     case_ids = args.cases or all_case_ids()
+    model = _agent_model()
+
+    # Cost visibility: always print an estimate before spending anything.
+    from costs import actuals_from_runs, estimate_eval, format_actuals, format_estimate
+    est = estimate_eval(len(case_ids), len(trials), model, args.judge)
+    print(format_estimate(est))
+    if args.estimate_only:
+        return
+
+    client = None  # run_one_case constructs anthropic.Anthropic() when None
     payload = run_matrix(trials, case_ids, client, use_judge=args.judge,
                          use_memory=not args.no_memory)
 
     overall = payload["summary"]["overall"]
-    print(f"overall pass^{len(trials)} = {overall['pass_k']} "
+    print(f"\noverall pass^{len(trials)} = {overall['pass_k']} "
           f"mean pass rate = {overall['mean_pass_rate']}")
     for bucket, s in payload["summary"]["by_bucket"].items():
         print(f"  {bucket:10s} pass^k={s['pass_k']} mean={s['mean_pass_rate']} "
               f"(n={s['n_cases']})")
+
+    print()
+    print(format_actuals(actuals_from_runs(RUNS_DIR, trials, case_ids, model), model))
+
+    # Failure digest (reports, never fixes).
+    print()
+    from digest import write_and_print
+    write_and_print(RESULTS_PATH)
 
 
 if __name__ == "__main__":

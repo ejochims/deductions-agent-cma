@@ -30,5 +30,6 @@ def test_summarize_config():
 
 
 def test_grid_models_all_priced():
+    from costs import PRICING
     for cfg in sweep.GRID:
-        assert cfg["model"] in sweep.PRICING
+        assert cfg["model"] in PRICING

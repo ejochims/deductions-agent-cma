@@ -4,13 +4,13 @@ version = "0.1.0"
 description = "Eval-driven trade-promotion deduction settlement agent on Claude Managed Agents."
 requires-python = ">=3.12"
 dependencies = [
-    "anthropic>=0.92.0",
-    "PyYAML>=6.0",
-    "matplotlib>=3.7",
+    "anthropic==0.116.0",
+    "PyYAML==6.0.1",
+    "matplotlib==3.11.0",
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8.0", "ruff>=0.6"]
+dev = ["pytest==9.1.1", "ruff==0.15.20"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src", "agent"]

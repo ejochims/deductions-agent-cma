@@ -1,3 +1,5 @@
-anthropic>=0.92.0
-PyYAML>=6.0
-matplotlib>=3.7
+# Runtime dependencies, pinned for reproducibility.
+# Dev/test tools (pytest, ruff) are in pyproject.toml under [project.optional-dependencies].
+anthropic==0.116.0
+PyYAML==6.0.1
+matplotlib==3.11.0

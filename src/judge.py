@@ -183,6 +183,10 @@ def main() -> None:
     args = parser.parse_args()
     if not args.calibrate:
         parser.error("nothing to do; pass --calibrate")
+    from costs import estimate_judge_calibration
+    est = estimate_judge_calibration(len(known_negatives()))
+    print(f"COST ESTIMATE (rough) — {est['calls']} judge calls on "
+          f"{est['judge_model']}: ~${est['total_cost']:.2f}\n")
     import anthropic  # local: only needed when actually calling the API
     run_calibration(anthropic.Anthropic())
 
