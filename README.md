@@ -104,7 +104,7 @@ the approves. Deciding when *not* to decide is graded behaviour.
 | 17–18 | **memory** | Harvest | demo billbacks that reward recalling the seeded **60% convention** across sessions |
 
 Full expected action / amount / required evidence per case lives in
-`ground_truth/labels.json`; every case has a hand-written reference solution in
+`ground_truth/labels.json`; every case has a reference solution in
 `ground_truth/reference_solutions/`.
 
 ---
@@ -170,7 +170,7 @@ Gate B — null agent fails every non-approve case:
   info: null passed 3/4 approve-bucket cases (informational)
 ```
 
-- **Gate A (known-good ≈ 100%):** all 18 hand-written reference solutions pass every
+- **Gate A (known-good ≈ 100%):** all 18 reference solutions pass every
   programmatic check. If one fails, the case or the grader is wrong — fix it before
   running a model.
 - **Gate B (known-bad ≈ chance):** a null agent that always approves the full claimed
