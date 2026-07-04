@@ -61,8 +61,13 @@ key. Treat the drafted core as a strong first draft to read and be ready to defe
       + cost plots. Pure cost math unit-tested; Fable row is commented (opt in).
     - [ ] Live-API: `python src/sweep.py --trials 3` → plots + one-line recommendation.
       Uncomment the Fable row if budget allows.
-- [ ] **P6 README** — design rationale, case matrix, calibration evidence, pass^3 by
-      bucket, sweep chart, "what I'd do next." (Not started.)
+- ✅ **P6 README** — DRAFTED (`README.md`). Design rationale, host-fulfilled-tools
+      decision, fixture universe, 18-case matrix, agent spec, harness, **real
+      calibration evidence**, memory, reproduce steps, "what I'd do next." The
+      pass^3-by-bucket and sweep tables are left as templates with the exact
+      commands — they populate from the first live run (do NOT hand-fill).
+    - [ ] After the first eval + sweep: paste the real pass^3-by-bucket numbers and
+      the two sweep PNGs into §7 and §9.
 
 ---
 *Maintained by Claude Code. Drafted-core items were done at Evan's explicit request,
