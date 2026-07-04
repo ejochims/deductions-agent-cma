@@ -1,0 +1,65 @@
+{
+  "company": "Meridian Foods",
+  "description": "Mid-size CPG manufacturer of premium snacks and ready-to-drink beverages, sold through grocery retail.",
+  "fiscal_calendar": {
+    "quarter": "Q1 FY26",
+    "start": "2025-10-01",
+    "end": "2025-12-31"
+  },
+  "skus": [
+    {
+      "sku_id": "MF-SN-001",
+      "name": "Meridian Sea Salt Pita Chips 8oz",
+      "category": "snacks",
+      "case_pack": 12,
+      "list_price_case": 24.0,
+      "unit_list_price": 2.0,
+      "suggested_retail": 2.99
+    },
+    {
+      "sku_id": "MF-SN-002",
+      "name": "Meridian Honey Mustard Pretzel Twists 10oz",
+      "category": "snacks",
+      "case_pack": 12,
+      "list_price_case": 27.0,
+      "unit_list_price": 2.25,
+      "suggested_retail": 3.29
+    },
+    {
+      "sku_id": "MF-SN-003",
+      "name": "Meridian White Cheddar Popcorn 6oz",
+      "category": "snacks",
+      "case_pack": 12,
+      "list_price_case": 30.0,
+      "unit_list_price": 2.5,
+      "suggested_retail": 3.49
+    },
+    {
+      "sku_id": "MF-BV-101",
+      "name": "Meridian Sparkling Lemonade 12pk",
+      "category": "beverages",
+      "case_pack": 4,
+      "list_price_case": 28.0,
+      "unit_list_price": 7.0,
+      "suggested_retail": 8.99
+    },
+    {
+      "sku_id": "MF-BV-102",
+      "name": "Meridian Cold Brew Oat Latte 4pk",
+      "category": "beverages",
+      "case_pack": 6,
+      "list_price_case": 36.0,
+      "unit_list_price": 6.0,
+      "suggested_retail": 7.49
+    },
+    {
+      "sku_id": "MF-BV-103",
+      "name": "Meridian Berry Hibiscus Tea 6pk",
+      "category": "beverages",
+      "case_pack": 6,
+      "list_price_case": 42.0,
+      "unit_list_price": 7.0,
+      "suggested_retail": 8.49
+    }
+  ]
+}

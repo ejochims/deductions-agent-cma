@@ -1,0 +1,25 @@
+{
+  "case_id": "D-0010",
+  "retailer_id": "valumax",
+  "deduction_ref": "VM-90455",
+  "deduction_date": "2025-12-16",
+  "amount": 9800.0,
+  "deduction_type": "scan_based",
+  "remittance_text": "HOLIDAY BEV SCANDOWN 14000 UNITS @ $0.70 PER PROMO-2026-Q1-005",
+  "claimed_reference": "PROMO-2026-Q1-005",
+  "claim_detail": {
+    "units_claimed": 14000,
+    "rate_claimed": 0.7,
+    "period": "2025-11-03/2025-12-07",
+    "skus": [
+      "MF-BV-101",
+      "MF-BV-103"
+    ]
+  },
+  "attachments": [
+    {
+      "type": "scan_export",
+      "description": "ValuMax scan detail export, 5 weeks, both SKUs"
+    }
+  ]
+}

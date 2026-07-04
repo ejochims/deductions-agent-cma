@@ -1,0 +1,24 @@
+{
+  "case_id": "D-0009",
+  "retailer_id": "harvest-co",
+  "deduction_ref": "hc20690",
+  "deduction_date": "2025-12-15",
+  "amount": 8899.8,
+  "deduction_type": "scan_based",
+  "remittance_text": "lemonade holiday scandown 13692 units @ 0.65 promo 2026 q1 008",
+  "claimed_reference": "PROMO-2026-Q1-008",
+  "claim_detail": {
+    "units_claimed": 13692,
+    "rate_claimed": 0.65,
+    "period": "2025-11-10/2025-12-07",
+    "skus": [
+      "MF-BV-101"
+    ]
+  },
+  "attachments": [
+    {
+      "type": "claim_worksheet",
+      "description": "Scan claim worksheet; unit count basis not stated (includes column labeled 'shipped+scanned')"
+    }
+  ]
+}

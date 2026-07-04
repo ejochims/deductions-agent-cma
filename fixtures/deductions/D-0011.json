@@ -1,0 +1,24 @@
+{
+  "case_id": "D-0011",
+  "retailer_id": "valumax",
+  "deduction_ref": "VM-90390",
+  "deduction_date": "2025-12-09",
+  "amount": 6000.0,
+  "deduction_type": "feature_ad_billback",
+  "remittance_text": "FEATURE AD BILLBACK PITA CHIPS 4000 UNITS @ $1.50 PER PROMO-2026-Q1-006",
+  "claimed_reference": "PROMO-2026-Q1-006",
+  "claim_detail": {
+    "units_claimed": 4000,
+    "rate_claimed": 1.5,
+    "period": "2025-10-20/2025-11-16",
+    "skus": [
+      "MF-SN-001"
+    ]
+  },
+  "attachments": [
+    {
+      "type": "ad_proof",
+      "description": "Front-page circular features, weeks of 10/26 and 11/09"
+    }
+  ]
+}

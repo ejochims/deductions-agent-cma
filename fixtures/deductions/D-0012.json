@@ -1,0 +1,24 @@
+{
+  "case_id": "D-0012",
+  "retailer_id": "harvest-co",
+  "deduction_ref": "HC-20712",
+  "deduction_date": "2025-12-29",
+  "amount": 4699.75,
+  "deduction_type": "scan_based",
+  "remittance_text": "DEC PRETZEL SCANDOWN 8545 UNITS @ $0.55 PER PROMO-2026-Q1-009",
+  "claimed_reference": "PROMO-2026-Q1-009",
+  "claim_detail": {
+    "units_claimed": 8545,
+    "rate_claimed": 0.55,
+    "period": "2025-11-24/2025-12-21",
+    "skus": [
+      "MF-SN-002"
+    ]
+  },
+  "attachments": [
+    {
+      "type": "claim_summary",
+      "description": "One-line claim summary; weekly scan detail 'to follow'"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "case_id": "D-0006",
+  "retailer_id": "valumax",
+  "deduction_ref": "VM-90287",
+  "deduction_date": "2025-11-25",
+  "amount": 5100.0,
+  "deduction_type": "scan_based",
+  "remittance_text": "SCANDOWN POPCORN PER PROMO-2026-Q1-004 PERIOD 10/28-11/17",
+  "claimed_reference": "PROMO-2026-Q1-004",
+  "claim_detail": {
+    "units_claimed": 8500,
+    "rate_claimed": 0.6,
+    "period": "2025-10-28/2025-11-17",
+    "skus": [
+      "MF-SN-003"
+    ]
+  },
+  "attachments": [
+    {
+      "type": "scan_export",
+      "description": "ValuMax scan detail export, weeks ending 11/03-11/17"
+    }
+  ]
+}

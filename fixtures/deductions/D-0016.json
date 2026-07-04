@@ -1,0 +1,29 @@
+{
+  "case_id": "D-0016",
+  "retailer_id": "harvest-co",
+  "deduction_ref": "HC20701-s",
+  "deduction_date": "2025-12-23",
+  "amount": 6400.0,
+  "deduction_type": "demo_billback",
+  "remittance_text": "IN STORE SAMPLING SUPPORT NOV/DEC 32 EVENTS @ 200",
+  "claimed_reference": "IN STORE SAMPLING SUPPORT NOV/DEC",
+  "claim_detail": {
+    "events_claimed": 32,
+    "rate_claimed": 200.0,
+    "period": "2025-11-01/2025-12-20",
+    "skus": [
+      "MF-SN-002",
+      "MF-BV-102"
+    ]
+  },
+  "attachments": [
+    {
+      "type": "store_photos",
+      "description": "Photos of sampling stations from 6 stores"
+    },
+    {
+      "type": "email_thread",
+      "description": "Email from Harvest buyer to Meridian sales: 'sampling support as discussed at category review' \u2014 no authorization or event details attached"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "case_id": "D-0005",
+  "retailer_id": "valumax",
+  "deduction_ref": "VM-90105",
+  "deduction_date": "2025-11-03",
+  "amount": 7300.0,
+  "deduction_type": "billback",
+  "remittance_text": "FALL HARVEST SAVINGS EVENT \u2014 AD SUPPORT MERIDIAN PRETZELS",
+  "claimed_reference": "FALL HARVEST SAVINGS EVENT",
+  "claim_detail": {
+    "period": "2025-10-01/2025-10-31",
+    "skus": [
+      "MF-SN-002"
+    ]
+  },
+  "attachments": [
+    {
+      "type": "charge_summary",
+      "description": "ValuMax internal ad charge allocation summary; no Meridian promotion ID referenced"
+    }
+  ]
+}

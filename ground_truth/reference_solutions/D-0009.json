@@ -1,0 +1,9 @@
+{
+  "case_id": "D-0009",
+  "action": "partial",
+  "amount": 5519.8,
+  "justification": "POS for PROMO-2026-Q1-008 shows 8,492 units of MF-BV-101 scanned in the promo window versus 13,692 claimed \u2014 the claim worksheet appears to include shipped, not just scanned, units. Scan allowances pay on scanned volume: 8,492 x $0.65 = $5,519.80. Settle partial at $5,519.80 and provide the weekly scan reconciliation to Harvest & Co.",
+  "evidence_ids": [
+    "PROMO-2026-Q1-008"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "case_id": "D-0002",
+  "retailer_id": "northcart",
+  "deduction_ref": "NC-105117",
+  "deduction_date": "2025-12-04",
+  "amount": 4200.0,
+  "deduction_type": "display_billback",
+  "remittance_text": "NOV ENDCAP DISPLAY BILLBACK SPARKLING LEMONADE 42 STORES",
+  "claimed_reference": "PROMO-2026-Q1-002",
+  "claim_detail": {
+    "stores_billed": 42,
+    "rate_claimed": 100.0,
+    "period": "2025-11-03/2025-11-30",
+    "skus": [
+      "MF-BV-101"
+    ]
+  },
+  "attachments": [
+    {
+      "type": "display_agreement",
+      "description": "Signed display agreement DA-2026-Q1-002, 42 stores"
+    },
+    {
+      "type": "tear_sheet",
+      "description": "Weekly circular tear sheet, weeks of 11/09 and 11/23"
+    }
+  ]
+}

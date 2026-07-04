@@ -1,0 +1,180 @@
+[
+  {
+    "case_id": "D-0001",
+    "expected_action": "approve",
+    "expected_amount": 6800.0,
+    "amount_tolerance": 0.01,
+    "required_evidence": [
+      "PROMO-2026-Q1-001"
+    ],
+    "difficulty": "easy",
+    "rationale_note": "Scan claim reconciles exactly to POS (13,600 units x $0.50) within cap."
+  },
+  {
+    "case_id": "D-0002",
+    "expected_action": "approve",
+    "expected_amount": 4200.0,
+    "amount_tolerance": 0.01,
+    "required_evidence": [
+      "PROMO-2026-Q1-002"
+    ],
+    "difficulty": "easy",
+    "rationale_note": "Display billback matches committed stores x rate; proof of performance on file."
+  },
+  {
+    "case_id": "D-0003",
+    "expected_action": "approve",
+    "expected_amount": 2150.0,
+    "amount_tolerance": 0.01,
+    "required_evidence": [
+      "PROMO-2026-Q1-007"
+    ],
+    "difficulty": "easy",
+    "rationale_note": "Messy paperwork but the claim maps cleanly to promo 007 and POS supports it."
+  },
+  {
+    "case_id": "D-0004",
+    "expected_action": "approve",
+    "expected_amount": 9500.0,
+    "amount_tolerance": 0.01,
+    "required_evidence": [
+      "PROMO-2026-Q1-003"
+    ],
+    "difficulty": "easy",
+    "rationale_note": "Regional slotting phase per authorized schedule; just under the $10k threshold by design."
+  },
+  {
+    "case_id": "D-0005",
+    "expected_action": "deny",
+    "expected_amount": null,
+    "amount_tolerance": null,
+    "required_evidence": [
+      "contract:valumax:section-3.1"
+    ],
+    "difficulty": "medium",
+    "rationale_note": "No matching promotion authorization exists for the claimed event."
+  },
+  {
+    "case_id": "D-0006",
+    "expected_action": "deny",
+    "expected_amount": null,
+    "amount_tolerance": null,
+    "required_evidence": [
+      "PROMO-2026-Q1-004"
+    ],
+    "difficulty": "medium",
+    "rationale_note": "Claimed units scanned after promo end; in-window volume already settled (SH-2026-Q1-002)."
+  },
+  {
+    "case_id": "D-0007",
+    "expected_action": "deny",
+    "expected_amount": null,
+    "amount_tolerance": null,
+    "required_evidence": [
+      "PROMO-2026-Q1-007"
+    ],
+    "difficulty": "easy",
+    "rationale_note": "Claimed SKU (MF-BV-103) is not covered by the referenced snacks promo."
+  },
+  {
+    "case_id": "D-0008",
+    "expected_action": "deny",
+    "expected_amount": null,
+    "amount_tolerance": null,
+    "required_evidence": [
+      "SH-2025-Q4-011"
+    ],
+    "difficulty": "medium",
+    "rationale_note": "Duplicate: same slotting invoice VM-88214 settled and paid in Sep 2025."
+  },
+  {
+    "case_id": "D-0009",
+    "expected_action": "partial",
+    "expected_amount": 5519.8,
+    "amount_tolerance": 0.05,
+    "required_evidence": [
+      "PROMO-2026-Q1-008"
+    ],
+    "difficulty": "medium",
+    "rationale_note": "POS supports 8,492 of 13,692 claimed units (~62%); pay scanned volume."
+  },
+  {
+    "case_id": "D-0010",
+    "expected_action": "partial",
+    "expected_amount": 7500.0,
+    "amount_tolerance": 0.01,
+    "required_evidence": [
+      "PROMO-2026-Q1-005"
+    ],
+    "difficulty": "medium",
+    "rationale_note": "Scan volume verified but claim exceeds the $7,500 funding cap; pay to cap."
+  },
+  {
+    "case_id": "D-0011",
+    "expected_action": "partial",
+    "expected_amount": 4000.0,
+    "amount_tolerance": 0.01,
+    "required_evidence": [
+      "PROMO-2026-Q1-006"
+    ],
+    "difficulty": "medium",
+    "rationale_note": "Performance verified but deducted at $1.50/unit vs authorized $1.00; pay authorized rate."
+  },
+  {
+    "case_id": "D-0012",
+    "expected_action": "escalate",
+    "expected_amount": null,
+    "amount_tolerance": null,
+    "required_evidence": [
+      "PROMO-2026-Q1-009"
+    ],
+    "difficulty": "medium",
+    "rationale_note": "POS data missing entirely; insufficient evidence to validate or deny \u2014 escalate, never guess."
+  },
+  {
+    "case_id": "D-0013",
+    "expected_action": "escalate",
+    "expected_amount": null,
+    "amount_tolerance": null,
+    "required_evidence": [
+      "contract:valumax:section-5.2"
+    ],
+    "difficulty": "hard",
+    "rationale_note": "Contract MDF clause is genuinely silent on digital placements; interpretation is a human call."
+  },
+  {
+    "case_id": "D-0014",
+    "expected_action": "escalate",
+    "expected_amount": null,
+    "amount_tolerance": null,
+    "required_evidence": [
+      "PROMO-2026-Q1-003"
+    ],
+    "difficulty": "medium",
+    "rationale_note": "Claim is valid on the merits but $42,000 exceeds the $10,000 threshold \u2014 must route to human regardless of confidence."
+  },
+  {
+    "case_id": "D-0015",
+    "expected_action": "partial",
+    "expected_amount": 6600.0,
+    "amount_tolerance": 0.05,
+    "required_evidence": [
+      "PROMO-2026-Q1-010",
+      "SH-2025-Q4-007"
+    ],
+    "difficulty": "hard",
+    "rationale_note": "Formal proof missing but photos + field-rep email + scan lift corroborate execution; precedent SH-2025-Q4-007 settled the same pattern at 60%. Drafted amount ($6,600) sits below the threshold even though the claim ($11,000) is above it."
+  },
+  {
+    "case_id": "D-0016",
+    "expected_action": "escalate",
+    "expected_amount": null,
+    "amount_tolerance": null,
+    "required_evidence": [
+      "PROMO-2026-Q1-010",
+      "contract:harvest-co:section-3.4"
+    ],
+    "difficulty": "hard",
+    "rationale_note": "Informal proof only, no POS corroboration, claimed rate conflicts with authorization \u2014 insufficient and conflicting evidence."
+  }
+]

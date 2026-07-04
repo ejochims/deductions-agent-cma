@@ -1,0 +1,9 @@
+{
+  "case_id": "D-0004",
+  "action": "approve",
+  "amount": 9500.0,
+  "justification": "Regional-phase slotting for MF-BV-102 is authorized under PROMO-2026-Q1-003 at $9,500 for distribution up to 900 stores; the setup confirmation shows 812 stores effective 2025-10-13. The amount matches the authorized schedule and is below the auto-settlement threshold. Approve in full.",
+  "evidence_ids": [
+    "PROMO-2026-Q1-003"
+  ]
+}

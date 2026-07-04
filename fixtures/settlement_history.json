@@ -1,0 +1,145 @@
+[
+  {
+    "settlement_id": "SH-2025-Q4-001",
+    "settled_date": "2025-07-18",
+    "retailer_id": "northcart",
+    "deduction_ref": "NC-101206",
+    "reference": "PROMO-2025-Q4-002",
+    "claim_amount": 5240.0,
+    "settled_amount": 5240.0,
+    "action": "approve",
+    "memo": "July scan allowance on MF-SN-001; POS reconciled to claimed units."
+  },
+  {
+    "settlement_id": "SH-2025-Q4-002",
+    "settled_date": "2025-08-05",
+    "retailer_id": "valumax",
+    "deduction_ref": "VM-87410",
+    "reference": "PROMO-2025-Q4-005",
+    "claim_amount": 4800.0,
+    "settled_amount": 3600.0,
+    "action": "partial",
+    "memo": "Ad billback deducted at $1.20/unit; authorized rate $0.90/unit. Paid at authorized rate."
+  },
+  {
+    "settlement_id": "SH-2025-Q4-003",
+    "settled_date": "2025-08-21",
+    "retailer_id": "harvest-co",
+    "deduction_ref": "HC-19812",
+    "reference": "PROMO-2025-Q4-007",
+    "claim_amount": 3120.0,
+    "settled_amount": 3120.0,
+    "action": "approve",
+    "memo": "August popcorn scandown; scan data matched claim."
+  },
+  {
+    "settlement_id": "SH-2025-Q4-004",
+    "settled_date": "2025-09-04",
+    "retailer_id": "valumax",
+    "deduction_ref": "VM-87903",
+    "reference": "PROMO-2025-Q4-005",
+    "claim_amount": 2750.0,
+    "settled_amount": 0.0,
+    "action": "deny",
+    "memo": "Scan claim for units scanned after promo end date; contract section 2.3 limits allowances to the promotional period."
+  },
+  {
+    "settlement_id": "SH-2025-Q4-005",
+    "settled_date": "2025-09-10",
+    "retailer_id": "northcart",
+    "deduction_ref": "NC-102544",
+    "reference": "PROMO-2025-Q4-003",
+    "claim_amount": 3800.0,
+    "settled_amount": 3800.0,
+    "action": "approve",
+    "memo": "Display billback; signed display agreement and tear sheet on file."
+  },
+  {
+    "settlement_id": "SH-2025-Q4-006",
+    "settled_date": "2025-09-12",
+    "retailer_id": "harvest-co",
+    "deduction_ref": "HC-19960",
+    "reference": "PROMO-2025-Q4-008",
+    "claim_amount": 6900.0,
+    "settled_amount": 5175.0,
+    "action": "partial",
+    "memo": "Scan volume supported 75% of claimed units; paid scanned volume at authorized rate."
+  },
+  {
+    "settlement_id": "SH-2025-Q4-007",
+    "settled_date": "2025-09-19",
+    "retailer_id": "harvest-co",
+    "deduction_ref": "HC-20018",
+    "reference": "PROMO-2025-Q4-009",
+    "claim_amount": 9250.0,
+    "settled_amount": 5550.0,
+    "action": "partial",
+    "memo": "Demo billback lacking signed Exhibit B forms; store photos and scan lift corroborated a majority of claimed events. Settled at 60% of claim with settlement manager approval."
+  },
+  {
+    "settlement_id": "SH-2025-Q4-008",
+    "settled_date": "2025-09-19",
+    "retailer_id": "valumax",
+    "deduction_ref": "VM-88101",
+    "reference": "unmatched",
+    "claim_amount": 5600.0,
+    "settled_amount": 0.0,
+    "action": "deny",
+    "memo": "Billback with no matching promotion authorization; repaid per contract section 3.1."
+  },
+  {
+    "settlement_id": "SH-2025-Q4-009",
+    "settled_date": "2025-09-22",
+    "retailer_id": "northcart",
+    "deduction_ref": "NC-102890",
+    "reference": "PROMO-2025-Q4-004",
+    "claim_amount": 7410.0,
+    "settled_amount": 7410.0,
+    "action": "approve",
+    "memo": "September scan allowance; POS reconciled."
+  },
+  {
+    "settlement_id": "SH-2025-Q4-010",
+    "settled_date": "2025-09-25",
+    "retailer_id": "harvest-co",
+    "deduction_ref": "HC-20105",
+    "reference": "SLOT-HC-2025-08",
+    "claim_amount": 6000.0,
+    "settled_amount": 6000.0,
+    "action": "approve",
+    "memo": "New item slotting for MF-BV-101 per authorization; setup confirmed."
+  },
+  {
+    "settlement_id": "SH-2025-Q4-011",
+    "settled_date": "2025-09-22",
+    "retailer_id": "valumax",
+    "deduction_ref": "VM-88214",
+    "reference": "SLOT-VM-2025-09 (MF-BV-102 new item slotting)",
+    "claim_amount": 12000.0,
+    "settled_amount": 12000.0,
+    "action": "approve",
+    "memo": "Chainwide slotting for MF-BV-102 per contract section 4.1; item setup confirmed 2025-09-02. Paid in full."
+  },
+  {
+    "settlement_id": "SH-2026-Q1-001",
+    "settled_date": "2025-10-30",
+    "retailer_id": "northcart",
+    "deduction_ref": "NC-104201",
+    "reference": "PROMO-2025-Q4-010",
+    "claim_amount": 4980.0,
+    "settled_amount": 4980.0,
+    "action": "approve",
+    "memo": "Trailing September scan claim settled in October; POS reconciled."
+  },
+  {
+    "settlement_id": "SH-2026-Q1-002",
+    "settled_date": "2025-11-10",
+    "retailer_id": "valumax",
+    "deduction_ref": "VM-90126",
+    "reference": "PROMO-2026-Q1-004",
+    "claim_amount": 6708.0,
+    "settled_amount": 6708.0,
+    "action": "approve",
+    "memo": "October popcorn scandown, in-period volume (11,180 units x $0.60); POS reconciled. Paid in full."
+  }
+]

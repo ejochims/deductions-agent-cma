@@ -1,0 +1,25 @@
+{
+  "case_id": "D-0001",
+  "retailer_id": "northcart",
+  "deduction_ref": "NC-104882",
+  "deduction_date": "2025-11-06",
+  "amount": 6800.0,
+  "deduction_type": "scan_based",
+  "remittance_text": "PROMO SCAN ALLOW OCT PITA/PRETZEL PER PROMO-2026-Q1-001",
+  "claimed_reference": "PROMO-2026-Q1-001",
+  "claim_detail": {
+    "units_claimed": 13600,
+    "rate_claimed": 0.5,
+    "period": "2025-10-06/2025-11-02",
+    "skus": [
+      "MF-SN-001",
+      "MF-SN-002"
+    ]
+  },
+  "attachments": [
+    {
+      "type": "scan_summary",
+      "description": "NorthCart weekly scan summary by SKU, 4 weeks"
+    }
+  ]
+}

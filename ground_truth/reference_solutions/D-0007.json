@@ -1,0 +1,9 @@
+{
+  "case_id": "D-0007",
+  "action": "deny",
+  "amount": 0.0,
+  "justification": "The claim bills 6,800 units of MF-BV-103 (Berry Hibiscus Tea) against PROMO-2026-Q1-007, which covers only MF-SN-001 and MF-SN-003. No authorized Harvest & Co promotion covers MF-BV-103 in this period, and the promo's POS data contains no MF-BV-103 volume. Deny.",
+  "evidence_ids": [
+    "PROMO-2026-Q1-007"
+  ]
+}

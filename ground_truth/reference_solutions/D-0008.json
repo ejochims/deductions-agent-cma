@@ -1,0 +1,10 @@
+{
+  "case_id": "D-0008",
+  "action": "deny",
+  "amount": 0.0,
+  "justification": "This deduction re-bills slotting invoice VM-88214 for MF-BV-102, which was settled and paid in full ($12,000.00) on 2025-09-22 per settlement SH-2025-Q4-011. Contract section 4.2 makes slotting a one-time charge per item. Duplicate claim \u2014 deny and request repayment.",
+  "evidence_ids": [
+    "SH-2025-Q4-011",
+    "contract:valumax:section-4.2"
+  ]
+}

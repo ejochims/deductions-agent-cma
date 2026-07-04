@@ -1,0 +1,9 @@
+{
+  "case_id": "D-0012",
+  "action": "escalate",
+  "amount": null,
+  "justification": "The claim references PROMO-2026-Q1-009, but no POS data is available for this promotion and the deduction backup is a one-line summary with scan detail 'to follow.' The 8,545 claimed units cannot be validated or refuted. Insufficient evidence \u2014 escalate for follow-up with Harvest & Co to obtain weekly scan data before settling.",
+  "evidence_ids": [
+    "PROMO-2026-Q1-009"
+  ]
+}

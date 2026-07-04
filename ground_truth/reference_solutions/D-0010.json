@@ -1,0 +1,9 @@
+{
+  "case_id": "D-0010",
+  "action": "partial",
+  "amount": 7500.0,
+  "justification": "POS confirms 14,020 units scanned, supporting the claimed 14,000 units, but PROMO-2026-Q1-005 carries a $7,500 funding cap and 14,000 x $0.70 = $9,800 exceeds it. Settle partial at the cap: $7,500.00.",
+  "evidence_ids": [
+    "PROMO-2026-Q1-005"
+  ]
+}
