@@ -143,62 +143,120 @@ def fulfil_tool_call(tools: ToolServer, name: str, tool_input: dict,
 
 
 # ============================================================ API surface
-# ------------------------ TODO(EVAN): everything below calls the SDK ---------
-# These three functions are the Anthropic / Managed-Agents API surface that Evan
-# hand-writes (Rule 1). Signatures and docstrings describe exactly what each must
-# do and which SDK calls / event patterns to use; the bodies are stubs.
+# The Anthropic / Managed-Agents API surface. Agent and environment are created
+# ONCE and their ids cached in runs/.managed_ids.json so they are reused across
+# cases and trials (agents are versioned, reusable resources — never recreate per
+# run). Session creation + the event loop happen per case.
+
+_IDS_CACHE = RUNS_DIR / ".managed_ids.json"
+
+
+def _load_ids() -> dict:
+    if _IDS_CACHE.exists():
+        return json.loads(_IDS_CACHE.read_text())
+    return {}
+
+
+def _save_ids(ids: dict) -> None:
+    RUNS_DIR.mkdir(parents=True, exist_ok=True)
+    _IDS_CACHE.write_text(json.dumps(ids, indent=2) + "\n")
+
+
+def _as_dict(obj) -> dict:
+    """Best-effort serialization of an SDK event/usage object for the transcript."""
+    for attr in ("model_dump", "to_dict", "dict"):
+        fn = getattr(obj, attr, None)
+        if callable(fn):
+            try:
+                return fn()
+            except TypeError:
+                continue
+    if isinstance(obj, dict):
+        return obj
+    return {"repr": repr(obj)}
+
 
 def create_or_load_agent(client, agent_cfg: dict) -> tuple[str, int]:
-    """Create the agent from agent_cfg (or reuse an existing one) and return
-    (agent_id, version).
-
-    TODO(EVAN): call client.beta.agents.create(name=..., model=..., system=...,
-    tools=agent_cfg["tools"]) ONCE and persist the returned id (agents are
-    versioned, reusable resources — do not recreate per run; hoist to setup or
-    accept an --agent-id). Return (agent.id, agent.version).
-    Ref: shared/managed-agents-core.md (Agents), python/managed-agents/README.md.
-    """
-    raise NotImplementedError("EVAN: implement agents.create / agent reuse")
+    """Create the agent from agent_cfg once, or reuse the cached id."""
+    ids = _load_ids()
+    if ids.get("agent_id") and ids.get("agent_version") is not None:
+        return ids["agent_id"], ids["agent_version"]
+    agent = client.beta.agents.create(
+        name=agent_cfg["name"],
+        model=agent_cfg["model"],
+        system=agent_cfg["system"],
+        tools=agent_cfg["tools"],
+    )
+    ids.update({"agent_id": agent.id, "agent_version": agent.version})
+    _save_ids(ids)
+    return agent.id, agent.version
 
 
 def create_environment(client, env_cfg: dict) -> str:
-    """Create the sandbox environment from env_cfg and return its id.
-
-    TODO(EVAN): call client.beta.environments.create(name=env_cfg["name"],
-    config=env_cfg["config"]) ONCE (reuse across cases) and return env.id.
-    Environment names are unique — reuse an existing one if present.
-    """
-    raise NotImplementedError("EVAN: implement environments.create / reuse")
+    """Create the sandbox environment once, or reuse the cached id."""
+    ids = _load_ids()
+    if ids.get("env_id"):
+        return ids["env_id"]
+    env = client.beta.environments.create(
+        name=env_cfg["name"], config=env_cfg["config"]
+    )
+    ids["env_id"] = env.id
+    _save_ids(ids)
+    return env.id
 
 
 def run_session_for_case(client, agent_id: str, agent_version: int, env_id: str,
                          case_id: str, trial: str, tools: ToolServer,
                          recorder: TrialRecorder) -> None:
-    """Drive one session to completion for one case.
+    """Drive one session to completion for one case (stream-first, Pattern 5 gate)."""
+    session = client.beta.sessions.create(
+        agent={"type": "agent", "id": agent_id, "version": agent_version},
+        environment_id=env_id,
+        title=case_id,
+    )
+    print(f"  trace: https://platform.claude.com/workspaces/default/sessions/{session.id}")
 
-    TODO(EVAN): implement the session lifecycle with the SDK:
-      1. session = client.beta.sessions.create(agent={"type":"agent","id":agent_id,
-         "version":agent_version}, environment_id=env_id, title=case_id)
-         Print the Console trace URL:
-         https://platform.claude.com/workspaces/default/sessions/{session.id}
-      2. STREAM-FIRST: open client.beta.sessions.events.stream(session.id) BEFORE
-         sending the kickoff, then send the user.message that names the case, e.g.
-         "Investigate and draft a settlement for case {case_id}."
-      3. For each streamed event:
-           - record it with recorder.record_event(...)
-           - on 'agent.custom_tool_use': call fulfil_tool_call(tools, event.name,
-             event.input, trial, recorder), then send the result back with
-             client.beta.sessions.events.send(session.id, events=[{
-               "type":"user.custom_tool_result","custom_tool_use_id":event.id,
-               "content":[{"type":"text","text":result_text}],"is_error":is_error}])
-           - on 'span.model_request_end': accumulate event.model_usage into
-             recorder.usage
-      4. Break on 'session.status_terminated', or 'session.status_idle' whose
-         stop_reason.type != 'requires_action' (see client-patterns.md Pattern 5).
-    Capture timeouts / rate limits / tool-server crashes by setting
-    recorder.status = "infra_error" and recorder.error; the harness handles retries.
-    """
-    raise NotImplementedError("EVAN: implement the session event loop")
+    kickoff = (f"Investigate case {case_id} and draft a settlement. Call "
+               f"get_deduction first, gather the evidence you need, then call "
+               f"draft_settlement exactly once.")
+
+    # Stream-first: open the stream, THEN send the kickoff, so no early events are
+    # missed (shared/managed-agents-events.md § stream-first ordering).
+    with client.beta.sessions.events.stream(session_id=session.id) as stream:
+        client.beta.sessions.events.send(
+            session_id=session.id,
+            events=[{"type": "user.message",
+                     "content": [{"type": "text", "text": kickoff}]}],
+        )
+        for event in stream:
+            recorder.record_event(_as_dict(event))
+            etype = getattr(event, "type", None)
+
+            if etype == "agent.custom_tool_use":
+                result_text, is_error = fulfil_tool_call(
+                    tools, event.name, dict(event.input or {}), trial, recorder)
+                client.beta.sessions.events.send(
+                    session_id=session.id,
+                    events=[{"type": "user.custom_tool_result",
+                             "custom_tool_use_id": event.id,
+                             "content": [{"type": "text", "text": result_text}],
+                             "is_error": is_error}],
+                )
+
+            elif etype == "span.model_request_end":
+                usage = _as_dict(getattr(event, "model_usage", {}) or {})
+                for k, v in usage.items():
+                    if isinstance(v, (int, float)):
+                        recorder.usage[k] = recorder.usage.get(k, 0) + v
+
+            elif etype == "session.status_terminated":
+                break
+
+            elif etype == "session.status_idle":
+                stop_reason = getattr(event, "stop_reason", None)
+                sr_type = getattr(stop_reason, "type", None)
+                if sr_type != "requires_action":
+                    break  # end_turn / retries_exhausted — terminal for this run
 
 
 # --------------------------------------------------------------- orchestration
@@ -217,14 +275,13 @@ def run_one_case(case_id: str, trial: str, client=None) -> TrialRecorder:
     recorder = TrialRecorder(case_id, trial)
     t0 = time.monotonic()
     try:
-        # TODO(EVAN): construct the client if not supplied, e.g.
-        #   import anthropic; client = client or anthropic.Anthropic()
+        if client is None:
+            import anthropic  # local import: only needed when actually running
+            client = anthropic.Anthropic()
         agent_id, agent_version = create_or_load_agent(client, agent_cfg)
         env_id = create_environment(client, env_cfg)
         run_session_for_case(client, agent_id, agent_version, env_id,
                              case_id, trial, tools, recorder)
-    except NotImplementedError:
-        raise
     except Exception as exc:  # noqa: BLE001 — infra failures are recorded, not raised
         recorder.status = "infra_error"
         recorder.error = f"{type(exc).__name__}: {exc}"

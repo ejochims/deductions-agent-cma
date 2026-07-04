@@ -1,73 +1,59 @@
-# Evan's TODO — the hand-written core + gates
+# Evan's TODO — review + live-API verification
 
-Running list of everything that is **yours** to do (Rule 1: you write `graders.py`,
-`judge.py`, and the Anthropic/Managed-Agents API calls in `run_agent.py`), plus the
-setup/decision items that block progress. Claude Code has scaffolded everything
-around these and marked the exact spots. Ordered by what unblocks the most.
+Status update: the handoff (Rule 1) reserved `graders.py`, `judge.py`, and the API
+calls in `run_agent.py` for Evan. **Evan asked Claude Code to draft all three**, so
+they are now written. Everything offline-verifiable has been verified; what remains
+is (a) your review/ownership of those drafts and (b) the steps that need a live API
+key. Treat the drafted core as a strong first draft to read and be ready to defend
+— that was the point of Rule 1.
 
-## 0. Setup / decisions (unblocks running anything)
-- [ ] **Anthropic auth.** Confirm credentials: `ant auth status`. The harness and
-      `run_agent.py` need a live client. (`pip install -r requirements.txt` first.)
-- [ ] **Model baseline decision.** `agent/agent.yaml` uses `claude-sonnet-4-6` per
-      the handoff. `claude-sonnet-5` is now the current Sonnet — decide whether to
-      bump the baseline (affects the P5 sweep set). No code blocked either way.
-- [ ] **Confirm the host-fulfilled tool design** (fixtures never mounted; agent has
-      no bash/read/write). This diverges from the handoff's literal "environment.yaml
-      mounts fixtures." Recommended and in place — flag if you want the mounted-files
-      variant instead.
+## Verified already (no action needed to trust these)
+- ✅ **Calibration gate A**: all 16 reference solutions pass the graders.
+- ✅ **Calibration gate B**: the null agent fails every non-approve case (passes
+      3/4 approves; D-0003's messy-invoice approve is the expected miss).
+- ✅ Full grading path exercised end to end (reference-passes, broken-fails-the-
+      right-checks, missing-draft-fails).
+- ✅ Tool layer (all 6 tools) dispatches correctly against fixtures.
+- ✅ `run_agent.py` / `judge.py` import clean; judge evidence-resolver + prompt
+      assembly verified offline.
+  Re-run any time: `python src/calibration.py`
 
-## 1. `src/run_agent.py` — the API calls  → unblocks P2 milestone + all of P3
-Three `TODO(EVAN)` stubs; docstrings name the exact SDK calls and event rules.
-- [ ] `create_or_load_agent(client, agent_cfg)` — `client.beta.agents.create(...)`
-      from `agent.yaml`, once; persist the id (or accept `--agent-id`).
-- [ ] `create_environment(client, env_cfg)` — `client.beta.environments.create(...)`,
-      reuse by name.
-- [ ] `run_session_for_case(...)` — session create + **stream-first** event loop:
-      handle `agent.custom_tool_use` → `fulfil_tool_call(...)` → send
-      `user.custom_tool_result`; accumulate usage from `span.model_request_end`;
-      break on terminated / idle-not-requires_action. Classify timeouts/rate-limits
-      as `infra_error`.
-- [ ] Construct the client in `run_one_case` / `main` (`anthropic.Anthropic()`).
-- [ ] **P2 milestone:** watch one case run end to end and read its transcript:
-      `python src/run_agent.py --case D-0001 --trial t0`.
+## 0. Setup / decisions (needed before the live-API steps)
+- [ ] **Anthropic auth**: `pip install -r requirements.txt` then `ant auth status`.
+- [ ] **Model baseline**: `agent.yaml` uses `claude-sonnet-4-6` (handoff default).
+      `claude-sonnet-5` is now current Sonnet — bump or keep? Affects the P5 sweep.
+- [ ] **Confirm host-fulfilled tool design** (fixtures never mounted). In place and
+      recommended; flag if you want the mounted-files variant instead.
 
-## 2. `src/graders.py` — the 5 checks  → unblocks calibration gate A + eval
-Skeleton has `CheckResult`, signatures, contracts/edge-cases, and the dispatcher.
-Fill the five bodies (each `raise NotImplementedError`):
-- [ ] `action_correct` · [ ] `amount_within_tolerance` (skip deny/escalate)
-- [ ] `evidence_cited` (required ⊆ cited) · [ ] `threshold_respected` (the safety
-      property — hard fail if approve/partial amount > $10k)
-- [ ] `no_hallucinated_evidence` (cited ⊆ `valid_evidence_ids()`)
-- [ ] **Calibration gate A:** `python src/calibration.py` → all 16 reference
-      solutions must pass. If one fails, fix the case or the grader before any model
-      run. Gate B (null agent) runs in the same command and must fail
-      deny/partial/escalate/ambiguous.
+## 1. Review the drafted core (your fingers-on-keys call)
+- [ ] Read `src/graders.py` — the 5 checks. All pass calibration; the one judgement
+      call to sign off on is `amount_within_tolerance` applicability (keyed to the
+      label's expected payout, so a wrong-action draft double-fails; documented).
+- [ ] Read `src/judge.py` — 3 rubrics, isolated per-dimension calls, opus judge vs
+      sonnet agent. Own the rubric wording.
+- [ ] Read `run_agent.py` API section — agent/env cached in `runs/.managed_ids.json`
+      (created once), stream-first loop, custom-tool round-trip.
 
-## 3. `src/judge.py` — prompt + invocation  → quality dimension of the eval
-Skeleton has the 3-dimension structure, `Verdict`, and dispatch.
-- [ ] `_evidence_context(settlement)` — resolve cited ids to fixture text.
-- [ ] `judge_dimension(client, settlement, dimension)` — concrete rubric prompt +
-      isolated `client.messages.create(model=JUDGE_MODEL, ...)` per dimension,
-      parse to `{verdict, reason}`. Judge model is a **different tier** than the
-      agent (`JUDGE_MODEL = claude-opus-4-8`).
-- [ ] **Judge calibration:** feed 3 known negatives (empty / confident-wrong /
-      evidence-free justifications) — must fail all; spot-check 10 verdicts by hand.
+## 2. Live-API verification (needs credentials)
+- [ ] **P2 milestone**: `python src/run_agent.py --case D-0001 --trial t0` → watch
+      one case run end to end; read `runs/t0/D-0001/record.json`.
+- [ ] **Judge calibration**: `python src/judge.py --calibrate` → must fail all 3
+      known negatives (empty / confident-wrong / evidence-free). Spot-check 10 real
+      verdicts by hand once the eval runs.
+- [ ] **First full run**: `python src/eval_runner.py --trials 3 --judge`.
+- [ ] Read the failures ("failures should seem fair"); if >1 in 10 look like grader
+      error, fix graders first.
 
-## 4. Eval-driven iteration (P3 doctrine)
-- [ ] First full 3×16 run: `python src/eval_runner.py --trials 3 [--judge]`.
-- [ ] Read the failures ("failures should seem fair" — if >1 in 10 look like grader
-      error, fix graders first).
-- [ ] **≥2 recorded prompt iterations** with before/after eval deltas (edit the
-      `system` block in `agent.yaml`; keep the deltas for the README).
+## 3. Eval-driven iteration (P3 doctrine)
+- [ ] **≥2 recorded prompt iterations** with before/after eval deltas — edit the
+      `system:` block in `agent.yaml`, keep the deltas for the README.
 
-## 5. Later phases (not yet scaffolded)
-- [ ] **P4 memory:** add a memory store; 1–2 cases rewarding precedent recall
-      (D-0015's 60% precedent SH-2025-Q4-007 is pre-planted).
-- [ ] **P5 sweep:** `src/sweep.py` — Haiku/Sonnet/(Fable) × thinking on/off via
-      `agent_with_overrides`; cost-per-success + pass-rate plots.
-- [ ] **P6 README:** design rationale, case matrix, calibration evidence, pass^3 by
+## 4. Later phases
+- [ ] **P4 memory** — being scaffolded now (memory store + precedent-recall cases).
+- [ ] **P5 sweep** — being scaffolded now (`src/sweep.py`).
+- [ ] **P6 README** — design rationale, case matrix, calibration evidence, pass^3 by
       bucket, sweep chart, "what I'd do next."
 
 ---
-*Claude Code maintains this file as it scaffolds. Everything above marked `TODO(EVAN)`
-in code is yours; everything else is done and offline-verified where possible.*
+*Maintained by Claude Code. Drafted-core items were done at Evan's explicit request,
+overriding the handoff's Rule 1; they are written to be reviewed and owned.*

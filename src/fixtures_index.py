@@ -94,6 +94,65 @@ def valid_evidence_ids() -> frozenset[str]:
     return frozenset(ids)
 
 
+@lru_cache(maxsize=1)
+def _promotions_by_id() -> dict[str, dict]:
+    promotions = json.loads((FIXTURES_DIR / "promotions.json").read_text())
+    return {p["promo_id"]: p for p in promotions}
+
+
+@lru_cache(maxsize=1)
+def _history_by_id() -> dict[str, dict]:
+    history = json.loads((FIXTURES_DIR / "settlement_history.json").read_text())
+    return {s["settlement_id"]: s for s in history}
+
+
+def _contract_section(retailer: str, section: str) -> str | None:
+    """Extract the text of one numbered subsection (### N.N ...) from a contract."""
+    path = FIXTURES_DIR / "contracts" / f"{retailer}.md"
+    if not path.exists():
+        return None
+    lines = path.read_text().splitlines()
+    out: list[str] = []
+    capturing = False
+    head = re.compile(r"^###\s+(\d+\.\d+)\b")
+    for line in lines:
+        m = head.match(line)
+        if m:
+            if capturing:  # reached the next subsection
+                break
+            capturing = m.group(1) == section
+        if capturing:
+            out.append(line)
+    return "\n".join(out).strip() or None
+
+
+def resolve_evidence(evidence_id: str) -> str:
+    """Render one cited evidence id to the fixture text behind it, for the judge.
+
+    Mechanical lookup only — no judgement. Returns a human-readable block, or an
+    explicit '(not found ...)' marker so a hallucinated citation is visible to the
+    judge rather than silently dropped.
+    """
+    if evidence_id.startswith("PROMO-"):
+        promo = _promotions_by_id().get(evidence_id)
+        return f"PROMOTION {evidence_id}:\n{json.dumps(promo, indent=2)}" if promo \
+            else f"(not found: no promotion {evidence_id})"
+    if evidence_id.startswith("SH-"):
+        s = _history_by_id().get(evidence_id)
+        return f"PRIOR SETTLEMENT {evidence_id}:\n{json.dumps(s, indent=2)}" if s \
+            else f"(not found: no settlement {evidence_id})"
+    if evidence_id.startswith("contract:"):
+        try:
+            _, retailer, sec = evidence_id.split(":")
+            section = sec.replace("section-", "")
+        except ValueError:
+            return f"(malformed contract reference: {evidence_id})"
+        text = _contract_section(retailer, section)
+        return f"CONTRACT {retailer} §{section}:\n{text}" if text \
+            else f"(not found: {retailer} has no section {section})"
+    return f"(unrecognized evidence id: {evidence_id})"
+
+
 def load_settlement(runs_dir: Path, trial: str, case_id: str) -> dict | None:
     """Read the drafted settlement for a run, or None if the agent produced none."""
     path = runs_dir / trial / case_id / "settlement.json"

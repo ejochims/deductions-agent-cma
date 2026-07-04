@@ -48,23 +48,33 @@ def gate_a_reference_solutions() -> tuple[bool, list[str]]:
     return (not failures), failures
 
 
-def gate_b_null_agent() -> tuple[bool, list[str]]:
-    """Null agent must fail deny/partial/escalate/ambiguous, pass approve.
+def gate_b_null_agent() -> tuple[bool, list[str], str]:
+    """The always-approve baseline must FAIL every non-approve case.
 
-    Returns (ok, anomalies) where an anomaly is a case that graded the wrong way
-    for the null (always-approve) baseline.
+    That is the safety-relevant property (a settle-everything agent must fail the
+    deny/partial/escalate/ambiguous buckets), and it is guaranteed by
+    action_correct alone since the null always drafts 'approve'. Passing the
+    approve bucket is NOT required: a null that does no investigation legitimately
+    cannot cite the promo on a messy-paperwork approve (D-0003), so it fails there
+    — that is correct null behaviour, not a broken harness. Approve-bucket passes
+    are reported for information only.
+
+    Returns (ok, anomalies, info) — an anomaly is a non-approve case the null
+    wrongly PASSED.
     """
     anomalies = []
+    approve_pass = approve_total = 0
     for case_id in all_case_ids():
         bucket = case_bucket(case_id)
         passed, _ = _grade(null_settlement(case_id), case_id)
-        # The null approves everything: it should only pass the approve bucket.
-        should_pass = bucket == "approve"
-        if passed != should_pass:
-            anomalies.append(
-                f"{case_id} ({bucket}): null agent passed={passed}, "
-                f"expected {should_pass}")
-    return (not anomalies), anomalies
+        if bucket == "approve":
+            approve_total += 1
+            approve_pass += int(passed)
+        elif passed:
+            # A non-approve case the null passed would mean the harness is broken.
+            anomalies.append(f"{case_id} ({bucket}): null agent wrongly PASSED")
+    info = f"null passed {approve_pass}/{approve_total} approve-bucket cases (informational)"
+    return (not anomalies), anomalies, info
 
 
 def main() -> None:
@@ -76,13 +86,14 @@ def main() -> None:
         for f in a_fail:
             print(f"  FAIL: {f}")
 
-    print("Gate B — null agent fails the right buckets:")
-    b_ok, b_anom = gate_b_null_agent()
+    print("Gate B — null agent fails every non-approve case:")
+    b_ok, b_anom, b_info = gate_b_null_agent()
     if b_ok:
-        print("  PASS: null agent passes only the approve bucket.")
+        print("  PASS: null agent fails all deny/partial/escalate/ambiguous cases.")
     else:
         for a in b_anom:
             print(f"  ANOMALY: {a}")
+    print(f"  info: {b_info}")
 
     sys.exit(0 if (a_ok and b_ok) else 1)
 
