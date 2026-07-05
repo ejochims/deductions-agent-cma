@@ -12,6 +12,9 @@
   `src/calibration.py` (gates A + B), `src/null_agent.py`, `src/fixtures_index.py`,
   `src/memory_store.py`, `src/sweep.py`.
 - **Tests** — `tests/` (pytest); CI runs them + calibration on every push.
+- **Local UI** — `ui/` (Streamlit, `make ui`): case queue, investigation
+  replay + grader scorecard, results dashboard with offline null-baseline demo,
+  optional live-run panel (key-gated).
 - **Calibration** — Gate A: all 18 reference solutions pass the graders. Gate B: the
   null agent fails every non-approve case. `python src/calibration.py`.
 

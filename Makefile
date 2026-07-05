@@ -1,12 +1,12 @@
-.PHONY: install lint verify-quickstart clean \
+.PHONY: install lint verify-quickstart clean ui \
         gates phase-a phase-b phase-c phase-d phase-e phase-f \
         test calibrate judge-calibrate run-one estimate trial eval digest sweep
 
 install:
-	pip install -e ".[dev]"
+	pip install -e ".[dev,ui]"
 
 lint:
-	ruff check src tests agent
+	ruff check src tests agent ui
 
 # Verify the README quickstart from a clean checkout (fresh venv). No key needed.
 verify-quickstart:
@@ -51,6 +51,10 @@ phase-f eval:
 # failure digest from the last run (reports; never fixes)
 digest:
 	python src/digest.py
+
+# local review UI (case queue, investigation replay, dashboard, live run)
+ui:
+	streamlit run ui/app.py
 
 # model sweep (cost-per-success)
 sweep:

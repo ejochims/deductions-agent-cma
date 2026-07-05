@@ -16,7 +16,7 @@ python -m venv "$WORK/venv"
 # shellcheck disable=SC1091
 source "$WORK/venv/bin/activate"
 python -m pip install --quiet --upgrade pip
-python -m pip install --quiet -e ".[dev]"
+python -m pip install --quiet -e ".[dev,ui]"
 
 echo "==> offline gate: tests"
 python -m pytest -q

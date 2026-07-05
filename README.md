@@ -271,6 +271,9 @@ make trial                   # (e) 1 x all cases, judge OFF
 make eval                    # (f) 3 x all cases, judge ON
 make digest                  # failure digest from the last run (reports; never fixes)
 make sweep                   # model sweep, cost-per-success
+
+# Local review UI (works offline; live-run button needs the key):
+make ui                      # case queue, investigation replay, dashboard
 ```
 
 Every paid run prints a rough dollar estimate before spending and token actuals
