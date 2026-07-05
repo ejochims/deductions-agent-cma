@@ -1,12 +1,19 @@
-"""Model x thinking sweep with cost-per-success.
+"""Model sweep with cost-per-success.
 
-Runs the same 3xN protocol across a grid of (model, thinking) configurations via
-per-session agent_with_overrides — one persisted agent, cheap per-session swaps.
-For each configuration it records the pass^k, mean pass rate, and cost, and derives
-cost-per-success so the model recommendation is empirical, not asserted.
+Runs the same protocol across a grid of models via per-session
+agent_with_overrides — one persisted agent, cheap per-session model swaps. For each
+model it records the pass^k, mean pass rate, and cost, and derives cost-per-success
+so the model recommendation is empirical, not asserted.
 
-Claude-Code-owned. The pure pieces (pricing -> cost, cost-per-success) are
-unit-tested offline; running the grid and plotting needs the API + matplotlib.
+Scope note: Managed Agents lets a session override only model / system / tools /
+mcp_servers / skills — NOT thinking. So this sweep varies the MODEL and runs every
+model with the shipped thinking config (extended thinking on, the MA default; see
+agent/agent.yaml). Comparing thinking on vs off would require separate versioned
+agents (or the future local Messages-API runner, where thinking is a request
+parameter) and is intentionally out of scope here.
+
+The pure pieces (pricing -> cost, cost-per-success) are unit-tested offline;
+running the grid and plotting needs the API + matplotlib.
 
 Usage:  python src/sweep.py --trials 3            # full grid
         python src/sweep.py --trials 1 --quick    # cheap smoke of the grid
@@ -18,44 +25,21 @@ import argparse
 import json
 from pathlib import Path
 
+from costs import usage_cost
 from eval_runner import run_matrix
 from fixtures_index import REPO_ROOT, all_case_ids
 
 RUNS_DIR = REPO_ROOT / "runs"
 SWEEP_DIR = RUNS_DIR / "sweep"
 
-# Blended $/1M tokens (input, output). Kept here so cost math is auditable and easy
-# to refresh from the current price list.
-PRICING: dict[str, tuple[float, float]] = {
-    "claude-haiku-4-5": (1.00, 5.00),
-    "claude-sonnet-4-6": (3.00, 15.00),
-    "claude-sonnet-5": (3.00, 15.00),
-    "claude-opus-4-8": (5.00, 25.00),
-    "claude-fable-5": (10.00, 50.00),
-}
-
-# The sweep grid. Thinking off vs adaptive, across the tiers the handoff names
-# (Haiku / Sonnet, and Fable if budget allows — commented, opt in explicitly).
+# The sweep grid — model tiers the handoff names (Haiku / Sonnet; Fable is pricey,
+# opt in explicitly). Every entry runs with the shipped thinking config.
 GRID: list[dict] = [
-    {"label": "haiku-nothink", "model": "claude-haiku-4-5", "thinking": {"type": "disabled"}},
-    {"label": "haiku-think", "model": "claude-haiku-4-5", "thinking": {"type": "adaptive"}},
-    {"label": "sonnet-nothink", "model": "claude-sonnet-4-6", "thinking": {"type": "disabled"}},
-    {"label": "sonnet-think", "model": "claude-sonnet-4-6", "thinking": {"type": "adaptive"}},
-    # {"label": "fable-think", "model": "claude-fable-5"},  # thinking always on; pricey
+    {"label": "haiku", "model": "claude-haiku-4-5"},
+    {"label": "sonnet-4-6", "model": "claude-sonnet-4-6"},
+    {"label": "sonnet-5", "model": "claude-sonnet-5"},
+    # {"label": "fable", "model": "claude-fable-5"},  # most capable, most expensive
 ]
-
-
-# --------------------------------------------------------------- cost helpers
-def usage_cost(model: str, usage: dict) -> float:
-    """Dollar cost of one run's token usage. Cache reads/writes fold into input at
-    their headline rate here (a deliberate simplification; refine if cache volume
-    is large)."""
-    in_rate, out_rate = PRICING[model]
-    in_tok = (usage.get("input_tokens", 0)
-              + usage.get("cache_read_input_tokens", 0)
-              + usage.get("cache_creation_input_tokens", 0))
-    out_tok = usage.get("output_tokens", 0)
-    return in_tok / 1e6 * in_rate + out_tok / 1e6 * out_rate
 
 
 def summarize_config(model: str, payload: dict) -> dict:
@@ -132,9 +116,7 @@ def run_sweep(trials: int, case_ids: list[str], *, use_judge: bool) -> list[dict
     trial_labels = [f"t{i}" for i in range(trials)]
     rows = []
     for cfg in GRID:
-        override = {"model": cfg["model"]}
-        if "thinking" in cfg:
-            override["thinking"] = cfg["thinking"]
+        override = {"model": cfg["model"]}  # MA overrides model only (see module docstring)
         out_path = SWEEP_DIR / f"results_{cfg['label']}.json"
         SWEEP_DIR.mkdir(parents=True, exist_ok=True)
         # Namespace the trial labels per config so runs/ files don't collide.

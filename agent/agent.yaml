@@ -10,6 +10,15 @@
 
 name: Deductions Desk
 
+# --- Production config (the setup the eval measures = the setup we ship) ---
+# model:    claude-sonnet-4-6
+# thinking: extended thinking ON — this is the Managed Agents default for a
+#           session and is what we ship. Careful multi-step reconciliation is the
+#           job, so thinking stays on. (MA has no per-session thinking override:
+#           model/system/tools/mcp_servers/skills are the only overridable fields,
+#           so the sweep varies model only and every model runs thinking-on.)
+# temperature: not exposed by the Managed Agents agent config; no override. The
+#           agent is steered by the system prompt, not sampling params.
 model: claude-sonnet-4-6
 
 system: |

@@ -253,18 +253,30 @@ budget allows.
 
 ## 10. Reproducing
 
+The run sequence is **cheap-first and gated** — free steps first, then the paid
+steps in increasing cost, each a single command. Stop and read between phases.
+
 ```bash
-pip install -e ".[dev]"      # or: pip install -r requirements.txt
+pip install -e ".[dev]"      # pinned deps; or: pip install -r requirements.txt
+make verify-quickstart       # fresh-venv sanity check of this quickstart
 
-# Offline — no API key needed:
-make test                    # pytest suite (also runs in CI)
-make calibrate               # gates A + B
+# Free — no API key:
+make gates                   # (a) tests + tools-consistency, (b) calibration A+B
 
-# Live — needs an Anthropic key (ant auth status to confirm):
-make run                     # one case end to end
-make eval                    # full 3x18 matrix (--judge)
-make sweep                   # model x thinking sweep
+# Paid — needs an Anthropic key (each prints a $ estimate first, actuals after):
+make estimate                # preflight: print the cost estimate, run nothing
+make judge-calibrate         # (c) trust the judge before it grades anything
+make run-one                 # (d) ONE case (D-0001) — then read the transcript
+make trial                   # (e) 1 x all cases, judge OFF
+make eval                    # (f) 3 x all cases, judge ON
+make digest                  # failure digest from the last run (reports; never fixes)
+make sweep                   # model sweep, cost-per-success
 ```
+
+Every paid run prints a rough dollar estimate before spending and token actuals
+after; after each eval, `make digest` (auto-run by `make eval`/`make trial`) writes
+`runs/digest.md`. Prompt/grader changes are decided by a human reading transcripts
+and logged in `ITERATIONS.md` with the before/after pass-rate delta by bucket.
 
 Repo layout:
 
@@ -272,9 +284,10 @@ Repo layout:
 fixtures/        agent-facing universe (company, retailers, promos, contracts, pos, deductions, history)
 ground_truth/    NEVER mounted — labels.json + one reference solution per case
 agent/           agent.yaml · environment.yaml · tools_server.py · memory_seed.json
-src/             run_agent · graders · judge · eval_runner · calibration · null_agent · sweep · memory_store · fixtures_index
-tests/           pytest suite (graders, calibration gates, tools, aggregation, sweep math, config)
-runs/            per-trial transcripts + drafted settlements (git-ignored)
+src/             run_agent · graders · judge · eval_runner · calibration · null_agent · sweep · memory_store · costs · digest · fixtures_index
+tests/           pytest suite (graders, calibration, tools, aggregation, costs, digest, config)
+runs/            transcripts + drafts (git-ignored except results.json, digest.md, curated/)
+ITERATIONS.md    log of eval-driven prompt/grader changes with before/after deltas
 ```
 
 CI (`.github/workflows/ci.yml`) runs lint, the calibration gates, and the test
