@@ -450,6 +450,22 @@ recommendation by cost-per-success. Paste into `README.md` §9. To measure the
 memory store's contribution: `python src/eval_runner.py --trials 3 --no-memory`
 and compare the memory bucket against the with-memory run.
 
+### Optional — the local review UI
+
+```bash
+make ui             # streamlit run ui/app.py  ->  http://localhost:8501
+```
+
+Four tabs, all read-only over the harness's artifacts: the **case queue** (the 18
+deductions as an analyst worklist, with each claim shown exactly as the agent
+receives it), the **investigation viewer** (replay any run from `runs/` —
+transcript, drafted settlement, and the live grader scorecard), the **results
+dashboard** (pass^k by bucket from `results.json`, plus a one-click offline
+null-baseline demo that visualizes the known-bad calibration), and a **live run**
+panel (drives one case end to end; disabled unless `ANTHROPIC_API_KEY` is set,
+with the cost stated up front). There is deliberately no way to execute a
+settlement from the UI — drafts only, same as the system.
+
 ### Troubleshooting
 
 | Symptom | Meaning / fix |
