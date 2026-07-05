@@ -237,7 +237,9 @@ with tab_live:
                    "to enable live runs. Everything else in this app works "
                    "without it.")
     case_id = st.selectbox("Case", data.all_case_ids(), key="live_case")
-    trial = st.text_input("Trial label", value="ui")
+    trial_raw = st.text_input("Trial label", value="ui")
+    # Sanitize: the label becomes a directory name under runs/.
+    trial = "".join(ch for ch in trial_raw.strip() if ch.isalnum() or ch in "-_") or "ui"
     if st.button("Investigate live", disabled=not has_key, type="primary"):
         from run_agent import run_one_case
         with st.status(f"Session running for {case_id}… (watch the trace URL "

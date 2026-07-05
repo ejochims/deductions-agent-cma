@@ -111,7 +111,26 @@ def plot_sweep(rows: list[dict], out_dir: Path) -> list[Path]:
 
 
 # ---------------------------------------------------------------------- main
+def sweep_estimate(grid: list[dict], n_cases: int, n_trials: int,
+                   use_judge: bool) -> dict:
+    """Pre-run dollar estimate for the whole grid (same assumptions as costs.py)."""
+    from costs import estimate_eval
+    per_config = {cfg["label"]: estimate_eval(n_cases, n_trials, cfg["model"],
+                                              use_judge)["total_cost"]
+                  for cfg in grid}
+    return {"per_config": per_config,
+            "total": round(sum(per_config.values()), 2)}
+
+
 def run_sweep(trials: int, case_ids: list[str], *, use_judge: bool) -> list[dict]:
+    # Cost visibility: like every other paid command, print the estimate first.
+    est = sweep_estimate(GRID, len(case_ids), trials, use_judge)
+    print(f"COST ESTIMATE (rough, pre-run) — sweep of {len(GRID)} configs x "
+          f"{trials}x{len(case_ids)} runs:")
+    for label, cost in est["per_config"].items():
+        print(f"  {label:16s} ~${cost:.2f}")
+    print(f"  TOTAL:           ~${est['total']:.2f}\n")
+
     client = None  # constructed lazily inside run_one_case
     trial_labels = [f"t{i}" for i in range(trials)]
     rows = []
