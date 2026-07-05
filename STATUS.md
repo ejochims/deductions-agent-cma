@@ -16,6 +16,7 @@
   null agent fails every non-approve case. `python src/calibration.py`.
 
 ## Needs a live Anthropic key to run
+(Step-by-step runbook with costs and expected output: `WALKTHROUGH.md` §11.)
 - One case end to end: `python src/run_agent.py --case D-0001 --trial t0`
 - Judge calibration: `python src/judge.py --calibrate`
 - Full eval: `python src/eval_runner.py --trials 3 --judge`

@@ -337,7 +337,133 @@ Guardrails around the ladder:
 
 ---
 
-## 11. Repo map
+## 11. Running it yourself — the operator's runbook
+
+Everything above is the theory; this is the exact sequence to run, what each step
+costs, what success looks like, and what to do with the output.
+
+### Setup (once)
+
+```bash
+git clone https://github.com/ejochims/deductions-agent-cma && cd deductions-agent-cma
+make install                      # Python 3.11+; installs pinned deps + pytest/ruff
+
+# Only needed from step 3 onward — the first two steps are free and keyless:
+export ANTHROPIC_API_KEY=sk-ant-...   # create at platform.claude.com → API keys
+```
+
+The key needs an account with usage credits. The full ladder below (steps 3–6) is
+roughly **$10–15** at the estimator's assumptions; the optional sweep adds
+~$15. Every paid command prints its own dollar estimate before spending and
+actuals after — trust those over these round numbers.
+
+### Step 1 — free gates (run every time, costs nothing)
+
+```bash
+make phase-a        # unit tests            → expect: "49 passed"
+make phase-b        # calibration gates     → expect: Gate A PASS, Gate B PASS
+```
+
+If either fails, stop — the harness itself is broken, and nothing a model does
+downstream can be trusted. (These also run in CI on every push.)
+
+### Step 2 — preflight the spend (free)
+
+```bash
+make estimate       # prints the dollar estimate for the full eval, runs nothing
+```
+
+### Step 3 — calibrate the judge (~$0.15)
+
+```bash
+make phase-c
+```
+
+Expect three `[PASS]` lines — the judge must **fail** all three planted negatives
+(empty justification, confident-but-wrong, evidence-free). Any `[PROBLEM]` line
+means the judge is too lenient: stop, tighten the rubric wording in
+`src/judge.py`, and re-run before letting it grade anything real.
+
+### Step 4 — one case, end to end (~$0.15)
+
+```bash
+make phase-d        # runs case D-0001 only, as trial t0
+```
+
+This is the "watch it work once" milestone. Three things to look at:
+
+1. The console prints a **trace URL** — open it to watch the session's tool calls
+   live in the Anthropic Console.
+2. `runs/t0/D-0001/settlement.json` — the draft. D-0001 is a clean approve, so
+   expect `action: "approve"` with the governing promo cited in `evidence_ids`.
+3. `runs/t0/D-0001/record.json` — the full transcript: every event, every tool
+   call and result, token usage, timing. **Actually read it** — this is where you
+   build intuition for how the agent investigates.
+
+Don't proceed until this looks right.
+
+### Step 5 — one full trial, judge off (~$2–3)
+
+```bash
+make phase-e        # 1 trial × 18 cases
+```
+
+Prints the per-bucket pass table, cost actuals, and the failure digest. Then read
+`runs/digest.md`: every failure lists the case, bucket, which check failed, and
+the transcript path. This cheap pass catches gross problems (systematic
+misreading of a tool, a case that confuses the model) before the 3× run.
+
+### Step 6 — the real eval (~$9)
+
+```bash
+make phase-f        # 3 trials × 18 cases, judge on
+```
+
+The headline output is **pass^3 by bucket** — read escalate/deny/ambiguous before
+approve; those are the safety behaviors. Results land in `runs/results.json`,
+the digest in `runs/digest.md`.
+
+### Step 7 — the human loop (this part is you, not the tooling)
+
+1. **Read every failure transcript** in the digest. First question per failure:
+   is the *grader* wrong or the *agent* wrong? ("Failures should seem fair.")
+2. **Grader wrong** → fix the grader or the case, re-run `make phase-b` (gates
+   must still pass), then re-evaluate.
+3. **Agent wrong** → edit the `system:` block in `agent/agent.yaml`. The runner
+   fingerprints the config and automatically publishes a new agent version, so
+   your next run measures the new prompt. Re-run, and log the change in
+   `ITERATIONS.md` with the before/after pass-rate delta by bucket (template in
+   the file). Two or more recorded iterations is the goal — that log *is* the
+   development method, demonstrated.
+4. **Publish the evidence**: paste the pass^3-by-bucket table into `README.md`
+   §7, copy `runs/results.json` and 2–3 instructive failure transcripts into
+   `runs/curated/`, and commit those (bulk `runs/` stays git-ignored).
+
+### Optional — the model sweep (~$15)
+
+```bash
+make sweep          # Haiku / Sonnet-4.6 / Sonnet-5 × 3 trials × 18 cases
+```
+
+Writes `runs/sweep/sweep_summary.json` + two charts and prints a one-line
+recommendation by cost-per-success. Paste into `README.md` §9. To measure the
+memory store's contribution: `python src/eval_runner.py --trials 3 --no-memory`
+and compare the memory bucket against the with-memory run.
+
+### Troubleshooting
+
+| Symptom | Meaning / fix |
+|---|---|
+| `[infra_error]` on a run | Timeout, rate limit, or crash — **not** an agent failure. Excluded from pass rates, retried once automatically; listed separately in the digest. |
+| A session runs past ~15 min | It's killed by the 900s ceiling and recorded as `infra_error`. |
+| Want a fresh agent/environment | `make clean` deletes `runs/.managed_ids.json` (the cached agent / environment / memory-store ids); the next run recreates and reseeds them. |
+| Edited `agent.yaml`, worried it won't take | It will — the config fingerprint forces a new agent version on the next run. |
+| Judge returns `unknown` verdicts | Its reply didn't parse — an infrastructure signal, not a quality fail. Check the raw judge output; re-run the trial. |
+| Gate B "null passed 3/4 approve cases" | Expected — the null agent legitimately can't cite the promo on the messy-invoice approve. The gate only requires it to fail every non-approve case. |
+
+---
+
+## 12. Repo map
 
 ```
 agent/
@@ -369,7 +495,7 @@ runs/                 per-run transcripts and drafts (git-ignored, except curate
 
 ---
 
-## 12. Design decisions and their reasons
+## 13. Design decisions and their reasons
 
 **Why host-fulfilled tools instead of mounting data into the sandbox?**
 Anti-leakage by construction (the answer key physically isn't there), a typed
