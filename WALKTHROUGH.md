@@ -6,6 +6,13 @@ Managed Agents runs the loop, how one deduction case flows through the system en
 to end, and how the eval harness proves the results are trustworthy. It assumes no
 prior knowledge of the Anthropic API.
 
+**How to use this document.** Learning how the system works for the first time:
+read §1–§10 in order. Coming back after time away: start at **§14** (the
+30-minute re-orientation). Running it: **§11** is the operator's runbook.
+Reading or changing the code: **§15** is the module-by-module tour. Running or
+writing tests: **§16**. Presenting it live to someone else: **§17** is the demo
+script, showcase cases, and fallback plan.
+
 ---
 
 ## 1. The problem in one paragraph
@@ -385,7 +392,7 @@ actuals after — trust those over these round numbers.
 ### Step 1 — free gates (run every time, costs nothing)
 
 ```bash
-make phase-a        # unit tests            → expect: "49 passed"
+make phase-a        # unit tests            → expect: "71 passed"
 make phase-b        # calibration gates     → expect: Gate A PASS, Gate B PASS
 ```
 
@@ -590,3 +597,397 @@ keeps each dimension's verdict independent.
 **Why record token usage per run?** Cost is a first-class output. The sweep's
 cost-per-success — not raw accuracy — is the deployment decision metric, and it
 can't be computed without per-run usage.
+
+---
+
+## 14. Picking it back up — the first 30 minutes
+
+Coming back to this repo after weeks away, run this sequence in order. It costs
+nothing until you choose otherwise, and each step reloads a layer of context.
+
+**1. Prove the environment (5 min, free, offline).**
+
+```bash
+git clone https://github.com/ejochims/deductions-agent-cma && cd deductions-agent-cma
+make install
+make lint test      # ruff clean, "71 passed"
+```
+
+If this fails on a fresh clone, the problem is your Python (needs 3.11+) or the
+install, not the project.
+
+**2. Prove the harness (1 min, free).**
+
+```bash
+make gates          # Gate A PASS, Gate B PASS
+```
+
+The gates are the harness's self-test (§7). If they pass, the graders, the
+fixtures, and the ground truth are all still consistent with each other — the
+measuring instrument works before you measure anything.
+
+**3. See the system (5 min, free, no API key).**
+
+```bash
+make ui             # → http://localhost:8501
+```
+
+Click through all four tabs. On the **Results dashboard**, press *"Generate +
+grade the null baseline"* — it runs the known-bad agent offline and charts it,
+which is the whole eval philosophy in one picture: the floor every real agent
+must beat. If `runs/` has committed curated runs or old results, the
+**Investigation viewer** replays them.
+
+**4. Reload the domain with one case triplet (10 min).**
+
+Read these three files side by side — they are the same case seen from the three
+vantage points the whole system is built on:
+
+- `fixtures/deductions/D-0009.json` — what the *agent* sees: a ValuMax scan
+  deduction of **$8,899.80**, claiming 13,692 units × $0.65.
+- `ground_truth/labels.json`, entry `D-0009` — what the *graders* know: expected
+  `partial` at **$5,519.80** ±5%, must cite `PROMO-2026-Q1-008`, because POS
+  supports only 8,492 of the 13,692 claimed units.
+- `ground_truth/reference_solutions/D-0009.json` — what a *correct settlement*
+  looks like written out in full.
+
+Then skim `fixtures/pos/PROMO-2026-Q1-008.csv` and confirm the units sum to
+8,492. Once this triplet makes sense, every other case is the same pattern with
+a different trap.
+
+**5. Reread the policy (5 min).**
+
+Open `agent/agent.yaml` and read the `system:` block. The system prompt *is* the
+settlement policy — the four actions, the $10k threshold **on the drafted
+amount**, the citation rule, "insufficient evidence → escalate, never guess."
+Everything the graders check is a mechanization of a sentence in this block.
+
+**6. Go deeper as needed.**
+
+Concepts fuzzy → §2–§7. Ready to spend money → §11 from Step 2 (the estimate)
+onward. Changing code → §15. Presenting it → §17.
+
+**Signs something is wrong, and what they mean:**
+
+| Sign | Meaning |
+|---|---|
+| `make test` fails on a clean clone | Environment problem (Python version, deps) — nothing to do with the agent. |
+| `make gates` fails | The harness itself is inconsistent — a fixture, label, or grader changed without the others. Fix this before trusting or running anything. Do not proceed to paid phases. |
+| UI dashboard is empty | No `runs/results.json` — normal on a fresh clone. Either run the eval (§11) or use the null-baseline button, which needs nothing. |
+| Live-run tab disabled | `ANTHROPIC_API_KEY` not exported — expected; everything else works without it. |
+
+---
+
+## 15. A tour of the code
+
+The modules form a dependency chain; read them in this order and each one only
+uses ideas the previous ones introduced.
+
+### Reading order
+
+**`src/fixtures_index.py`** — the data plumbing everything else imports: repo
+paths, `all_case_ids()`, bucket mapping, label loading, and
+`valid_evidence_ids()` (the enumerated universe the hallucination check grades
+against). The anti-leakage rule starts here: this module reads `ground_truth/`
+*for the harness*; nothing on the agent's side of the boundary imports it.
+
+**`agent/tools_server.py`** — host-side fulfilment of the six tools.
+`ToolServer.dispatch(name, tool_input, trial)` routes to one handler per tool.
+Three design points to notice while reading:
+
+- *Errors vs. plausible-empty results.* An unknown retailer raises `ToolError`
+  rather than returning zero results, because "0 promotions found" for a typo'd
+  retailer would read as "unauthorized deduction" and steer the agent toward a
+  wrong deny. A missing POS file, by contrast, returns `found: false` — that's
+  a real, gradeable state of the world that should push the agent to escalate,
+  not a fault.
+- *`draft_settlement` is policy in code.* Deny/escalate get their amount coerced
+  to null no matter what the model passed; approve/partial without a positive
+  numeric amount is rejected back to the agent. The prompt states the policy;
+  this function enforces it.
+- *`trial` is injected by the orchestrator*, never supplied by the agent — it
+  only determines where the draft lands under `runs/`.
+
+**`src/run_agent.py`** — the orchestrator; the only module that talks to the
+Managed Agents API. `run_one_case(case_id, trial)` owns the session lifecycle:
+create-or-load the agent (fingerprinting `agent.yaml` so a prompt edit publishes
+a new version — §5), open the event stream *before* sending the kickoff, then
+loop on events: `agent.custom_tool_use` → `ToolServer.dispatch` →
+`user.custom_tool_result`, until the session idles with a draft on disk.
+`clear_prior_draft()` deletes any stale settlement before a retry so a failed
+run can't inherit the previous attempt's draft. The `RunRecorder` captures every
+event, token usage, and timing into `runs/<trial>/<case>/record.json`, and
+classifies outcomes as `ok` vs `infra_error` — the separation the metrics
+depend on (§7).
+
+**`src/graders.py`** — the five atomic checks (§7), each returning a
+`CheckResult` with an `applicable` flag. The flag is the subtlety: an
+inapplicable check (amount tolerance on a deny) is *skipped*, never counted as
+a pass, so it can't inflate a score.
+
+**`src/judge.py`** — the LLM judge: three isolated calls, one per dimension,
+structured outputs constraining each reply to `pass | fail | unknown` + reason,
+judge model a different tier than the agent. `--calibrate` runs the three
+planted negatives.
+
+**`src/eval_runner.py`** — `run_matrix(trials, case_ids, ...)`: the trials ×
+cases loop, one retry for infra errors, then the aggregation — pass^k, mean
+pass rate, per-bucket rollups — into `runs/results.json`. The math functions
+are pure and unit-tested offline.
+
+**`src/calibration.py`** — Gates A and B (§7), built from `graders.py` +
+`fixtures_index.py` + `null_agent.py`. Free, keyless, runs in CI.
+
+**The supporting cast.** `src/costs.py` — the price table and the
+estimate/actuals math every paid command prints. `src/digest.py` — renders the
+failure digest; reports, never fixes. `src/sweep.py` — the model grid;
+`sweep_estimate()` prints the whole grid's cost before anything runs, and each
+config's trials are namespaced (`sonnet-5-t0`) so runs don't collide.
+`src/memory_store.py` — creates and seeds the memory store from
+`agent/memory_seed.json`. `src/null_agent.py` — the ~30-line known-bad
+baseline.
+
+**`ui/`** — `data.py` is the pure data layer (reads `fixtures/` and `runs/`,
+re-grades drafts live via `graders.py`, no Streamlit imports — which is what
+makes it unit-testable); `app.py` renders the four tabs; `theme.py` centralizes
+every color role. The UI holds the same line as the system: there is no
+execute button anywhere.
+
+### One tool call, traced end to end
+
+What actually happens between "the model wants POS data" and "the model has POS
+data," for D-0009:
+
+1. Server-side, the model emits a `tool_use` for `get_pos_data` with
+   `{"promo_id": "PROMO-2026-Q1-008"}`. The session goes **idle** and the event
+   stream delivers `agent.custom_tool_use` to our process.
+2. `run_agent.py` catches the event and calls
+   `tools.dispatch("get_pos_data", {...}, trial)`.
+3. `tools_server.py` reads `fixtures/pos/PROMO-2026-Q1-008.csv`, types the
+   columns, sums `units_scanned` → 8,492, returns the JSON. (If the handler
+   raised `ToolError`, the orchestrator would return it as a tool result with
+   `is_error: true` instead — the agent recovers; the run doesn't crash.)
+4. The orchestrator sends `user.custom_tool_result` carrying that JSON and
+   records both the call and result in the transcript.
+5. The session resumes; the model reconciles 8,492 × $0.65 = $5,519.80 and
+   eventually calls `draft_settlement`, which writes
+   `runs/<trial>/D-0009/settlement.json` — the artifact the graders pick up.
+
+### Extending it
+
+**Add a case (D-0019).** Create `fixtures/deductions/D-0019.json` (mirror a
+neighbor's shape), add any backing data it needs (a promo in
+`promotions.json`, a POS CSV, a history row), add its label to
+`ground_truth/labels.json` (action, amount ± tolerance, required evidence,
+bucket), and write `ground_truth/reference_solutions/D-0019.json`. Then run
+`make gates`: Gate A forces your reference solution to actually pass the
+graders, and the fixture-count assertions in `tests/test_fixtures_index.py`
+will tell you what else expects updating. That's the loop working for you —
+the harness rejects an inconsistent case before it costs a cent.
+
+**Change the prompt.** Edit the `system:` block in `agent/agent.yaml` — that's
+it. The config fingerprint publishes a new agent version on the next run (§5),
+so there is no cache to invalidate. Re-run the eval and log the before/after
+bucket deltas in `ITERATIONS.md`.
+
+**Add a tool.** Declare it in `agent.yaml` (the description is prompt
+engineering — write it for cold use), implement the handler in
+`tools_server.py`, route it in `dispatch()`, and add a fulfilment test in
+`tests/test_tools_server.py`. `tests/test_agent_config.py` asserts the YAML
+declarations and the dispatch layer stay in sync, so forgetting one side is a
+test failure, not a silent runtime error.
+
+---
+
+## 16. Working with the tests
+
+Everything in `tests/` runs **offline** — no API key, no network, ~1 second
+total. That's a design constraint, not a limitation: anything API-shaped is
+exercised through stub clients, so the suite can gate every push in CI for
+free.
+
+```bash
+make test                                  # the whole suite (= make phase-a)
+make lint                                  # ruff over src, tests, agent, ui
+pytest tests/test_graders.py               # one file
+pytest tests/test_graders.py -k amount     # tests matching a keyword
+pytest -x -q                               # stop at first failure, terse output
+```
+
+### What each file pins
+
+| File | What it protects |
+|---|---|
+| `test_graders.py` | The five checks: pass/fail/applicability logic per check, including threshold-on-drafted-amount and the inapplicable-check rule. |
+| `test_calibration.py` | Gates A and B actually pass — the harness's own correctness proof, as a test. |
+| `test_fixtures_index.py` | Fixture integrity: 18 cases, bucket mapping, every label's evidence IDs resolve, valid-ID enumeration. |
+| `test_tools_server.py` | Each tool's fulfilment against the real fixtures: filters, error paths, the `draft_settlement` gate. |
+| `test_agent_config.py` | `agent.yaml` parses and its tool declarations match the fulfilment layer one-to-one. |
+| `test_citation_namespace.py` | The citation format the prompt teaches == the format the graders accept (a formatting mismatch would fail correct settlements). |
+| `test_run_agent_ids.py` | The agent create/update/cache lifecycle via a stub client — a prompt edit must publish a new version, not reuse a stale cached agent. |
+| `test_eval_runner.py` | The aggregation math: pass^k, bucket rollups, infra_error exclusion. |
+| `test_costs.py` | Estimate and actuals arithmetic against the price table. |
+| `test_digest.py` | Digest rendering from a synthetic results file. |
+| `test_sweep.py` | Sweep cost math and grid well-formedness. |
+| `test_soundness_pass2.py` | Regressions from adversarial review: stale drafts surviving a retry, plausible-empty results for typo'd retailers, the amount gate's symmetry, the sweep preflight. |
+| `test_ui_data.py` | The UI's pure data layer (loaders, scorecard, bucket tables). |
+| `test_ui_app.py` | Renders the entire Streamlit app headlessly via `AppTest` — all four tabs execute without throwing. No browser, no API call. |
+
+### Conventions
+
+- **Stub, don't call.** API-shaped code (`run_agent.py`'s agent lifecycle) is
+  tested with stub client objects and `monkeypatch`; nothing in the suite can
+  spend money or touch the network.
+- **Real fixtures as test data.** The tool-server and index tests run against
+  the actual `fixtures/` tree, so they double as fixture-integrity checks.
+- **Regression tests pin found bugs.** When review finds a bug, the fix ships
+  with a test that fails on the old behavior (`test_soundness_pass2.py` is a
+  whole file of these, each documenting the bug it pins).
+- **The UI is tested headlessly.** Streamlit's `AppTest` executes `app.py` as a
+  script pass, catching template/data errors without a browser.
+
+**Where a new test goes:** follow §15's extending guide — new tool →
+`test_tools_server.py`; grader change → `test_graders.py` (and the gates must
+still pass); new case → usually no new test, `make gates` +
+`test_fixtures_index.py`'s assertions are the check; bug fix → a new pinned
+regression test in the file closest to the bug.
+
+---
+
+## 17. Demoing the project
+
+A live walkthrough for an audience: what to check beforehand, a ~12-minute
+script, the cases worth showing, and what to do when the network isn't on your
+side.
+
+### Pre-demo checklist (15 minutes, day of)
+
+```bash
+make lint test      # 71 passed
+make gates          # Gate A PASS, Gate B PASS
+export ANTHROPIC_API_KEY=sk-ant-...
+make ui             # boots at :8501; leave it running
+```
+
+- Confirm `runs/results.json` exists so the dashboard has real numbers, and
+  that `runs/` holds at least one good transcript to replay (if not:
+  `make phase-e` the day before, ~$2–3, then copy the best run into
+  `runs/curated/` per §11 Step 7 so it survives a `make clean` or a re-clone).
+- In the UI, pre-generate the **null baseline** on the dashboard tab so the
+  chart is one click away.
+- Bump the terminal font; keep one terminal on the repo root and the browser on
+  the UI.
+- Decide the fallback now, not mid-demo (see below).
+
+### The ~12-minute script
+
+**1. The problem (30s).** §1, verbatim if you like: retailers short-pay
+invoices claiming promo allowances; someone must check each claim against
+promos, contracts, POS, and history. This system investigates and **drafts** —
+approve / deny / partial / escalate — with cited evidence. It never moves
+money; anything it would pay above $10k routes to a human.
+
+**2. The worklist (2 min, UI → Case queue).** Show the 18 open deductions —
+this is what lands on an analyst's desk. Open **D-0009**: the remittance text
+exactly as the retailer wrote it, the claim detail (13,692 units × $0.65 =
+$8,899.80). Point out the audience can't tell whether it's legitimate by
+looking — that's the point.
+
+**3. Watch it work (3 min, UI → Live run).** Run D-0009 live (~$0.15, 1–3
+minutes). While it runs, narrate the architecture: the reasoning loop runs on
+Anthropic's side; every tool call comes back to this laptop as an event and is
+fulfilled from local fixtures (§5). When it finishes, open the **Investigation
+viewer**: step through the tool calls — deduction → promo search → POS pull —
+to the reconciliation: POS supports **8,492** of 13,692 claimed units, so it
+drafts **partial at $5,519.80**, citing the promo. Not approve, not deny — the
+math.
+
+**4. How we know that's right (3 min, same screen + dashboard).** The grader
+scorecard is right under the draft: five programmatic checks, pass/fail, live.
+Then the **Results dashboard**: pass^3 by bucket. Explain pass^3 in one line —
+a case only counts if *all three* trials got it right — and why buckets are
+read escalate-first: escalation is the safety behavior, and an agent that
+settles everything confidently is the failure mode this whole harness exists
+to catch.
+
+**5. Why the numbers are trustworthy (2 min).** Click *"Generate + grade the
+null baseline"*: an agent that blindly approves everything, graded by the same
+harness, failing every judgement bucket on screen. That's Gate B — the
+known-bad floor. Gate A is its mirror: all 18 hand-written reference solutions
+pass. Known-good scores perfect, known-bad scores floor → the ruler measures
+what it claims (§7). Mention the judge is calibrated too: it must fail three
+planted bad justifications before it's allowed to grade anything.
+
+**6. The engineering-decision layer (2 min, terminal or README).** The sweep:
+same eval across Haiku/Sonnet, cost-per-success as the deciding metric — the
+model choice is empirical, not a vibe. Close on the two design decisions that
+generalize (§13): the tool boundary is the security boundary (the answer key
+is unreachable by construction), and policy lives in code, not prompt (a deny's
+amount is nulled by the tool layer no matter what the model says).
+
+### Showcase cases — the cheat sheet
+
+| Case | Show it when you want to demonstrate | The facts |
+|---|---|---|
+| **D-0009** | Evidence-based partial — the flagship | Claim $8,899.80 (13,692 × $0.65); POS supports 8,492 units → drafts partial **$5,519.80**, cites `PROMO-2026-Q1-008`. |
+| **D-0008** | Duplicate detection via history | $12,000 slotting re-bill; invoice **VM-88214** already paid Sep 2025 as `SH-2025-Q4-011` → **deny**, citing the prior settlement. |
+| **D-0014** | The threshold as a hard rule | $42,000 slotting claim, *fully valid on the merits* → **escalate** anyway; correctness is irrelevant above $10k. |
+| **D-0013** | Knowing when not to decide | $8,200 MDF claim; ValuMax contract §5.2 is genuinely silent on digital placements → **escalate**, citing `contract:valumax:section-5.2`. |
+| **D-0017 / D-0018** | Memory: precedent recall | Demo billbacks missing Exhibit B; memory store carries precedent `SH-2025-Q4-007` (a $9,250 claim settled at $5,550 — 60%) → partial at 60%: **$4,500** and **$6,300**. D-0018's claim ($10,500) is above the threshold but its *draft* isn't. |
+| **D-0012** | Escalate on missing data | POS file simply doesn't exist; the tool says so → **escalate**, never guess. |
+
+If there's time for exactly one live run, D-0009 is the one — it shows
+investigation, arithmetic, and a non-obvious verdict in a single case. D-0008
+is the best second: a different tool (history) and a different verdict.
+
+### Offline fallback
+
+If the key or the network dies, everything except the Live-run tab still works:
+
+- **Investigation viewer** replays any existing run from `runs/` — the full
+  transcript walkthrough works identically on a replay. This is why the
+  checklist has you curate a run beforehand: `runs/curated/` is the committed,
+  survives-everything copy (§11 Step 7), and it starts empty until you put a
+  run there.
+- **Null baseline** generates and grades offline — the calibration story needs
+  no API at all.
+- The script above survives intact with step 3 swapped from "watch it live" to
+  "replay yesterday's run." Practice that version once.
+
+### Hard questions, honest answers
+
+**"The remittance text is retailer-supplied — what about prompt injection?"**
+Correct instinct: it's the untrusted field. Three bounds: the agent can only
+*draft* (worst case is a bad draft a human reviews, not money moved), the $10k
+threshold and the null-amount coercion are enforced in the tool layer where
+text can't override them, and every citation is checked against what tools
+actually returned. Adversarial remittance cases are a natural next bucket for
+the eval — the harness is exactly the tool for measuring that.
+
+**"It's all synthetic data — does this prove anything?"** It proves *coverage*,
+not realism: every case isolates one failure mode with a known answer,
+including planted traps you can't guarantee finding in a real sample. The
+gates calibrate the *harness*, not the world. The stated next step (§13) is
+rerunning the identical harness over anonymized real cases — the harness is
+the durable asset; the fixtures are interchangeable.
+
+**"What does this cost at volume?"** Recorded, not estimated: token usage is
+captured per run and priced in `src/costs.py`; a case runs ~$0.15 on Sonnet at
+current prices, and the sweep reports cost-per-success by model — the number a
+deployment decision actually needs. Latency is 1–3 minutes per case, which is
+fine for a queue measured in days.
+
+**"Why Managed Agents instead of writing the loop yourself?"** The loop is ten
+lines (§4); what MA buys is the operational shell around it — versioned,
+immutable agent configs (every past run traceable to its exact prompt),
+sessions, streaming, thinking and caching defaults, and the memory store.
+The custom-tool pattern keeps the data on our side regardless (§5). And the
+seam is clean: `tools_server.py` doesn't know who runs the loop, so a raw-API
+runner is a swap of `run_agent.py`, nothing else.
+
+**"An LLM grading an LLM — isn't that circular?"** The judge never grades
+correctness — actions, amounts, thresholds, and citations are checked by
+deterministic code against ground truth. The judge grades only justification
+*quality*, on a different model tier than the agent (self-preference), one
+isolated call per dimension (no smuggling), and it must fail three planted
+negatives before it's trusted at all (§7).
