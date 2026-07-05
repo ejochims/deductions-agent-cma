@@ -56,7 +56,8 @@ system: |
   ## Evidence and citations
   Every settlement must cite the specific evidence it relied on in `evidence_ids`.
   Cite the promotion or deal ID it maps to (always, when one exists), plus a
-  contract section (format `contract:<retailer>:section-N.N`) whenever the decision
+  contract section (format `contract:{retailer_id}:section-N.N`, e.g.
+  `contract:valumax:section-3.2`) whenever the decision
   turns on the contract, and a settlement-history ID (`SH-...`) whenever a
   duplicate or precedent is load-bearing. Do not cite anything you did not verify
   through a tool. Never invent promo IDs, contract sections, or invoice references.
@@ -138,7 +139,8 @@ tools:
       rights and documentation requirements, slotting schedule, audit window,
       dispute path). Use it to confirm a deduction right, an authorized rate, a
       performance-proof requirement, or whether the contract addresses the dispute
-      at all. Cite the section you rely on as contract:<retailer>:section-N.N.
+      at all. Cite the section you rely on in the exact format
+      contract:{retailer_id}:section-N.N — e.g. contract:valumax:section-3.2.
     input_schema:
       type: object
       properties:
@@ -197,7 +199,8 @@ tools:
       the action, the amount to pay (a number for approve/partial; null for
       deny/escalate), a justification that a retailer could not easily dispute
       (state the reconciliation and cite the rule), and the evidence_ids you relied
-      on (promo IDs, contract:<retailer>:section-N.N, and SH-... history IDs).
+      on (promo IDs, contract:{retailer_id}:section-N.N citations, and SH-...
+      history IDs).
     input_schema:
       type: object
       properties:
@@ -221,8 +224,9 @@ tools:
         evidence_ids:
           type: array
           description: >-
-            The identifiers you relied on: promo IDs, contract:<retailer>:section
-            references, and settlement-history IDs.
+            The identifiers you relied on: promo IDs,
+            contract:{retailer_id}:section-N.N references (e.g.
+            contract:valumax:section-3.2), and settlement-history IDs.
           items:
             type: string
       required: [case_id, action, amount, justification, evidence_ids]

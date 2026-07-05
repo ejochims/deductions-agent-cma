@@ -76,7 +76,7 @@ def valid_evidence_ids() -> frozenset[str]:
     invented by the agent. Three namespaces:
       - PROMO-... promotion ids (fixtures/promotions.json)
       - SH-...    settlement-history ids (fixtures/settlement_history.json)
-      - contract:<retailer>:section-N.N  numbered contract sections
+      - contract:{retailer_id}:section-N.N  numbered contract sections
     """
     ids: set[str] = set()
 
