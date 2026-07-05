@@ -1,5 +1,8 @@
 # Status
 
+**Coming back to this project?** Start at `WALKTHROUGH.md` §14 (the 30-minute
+re-orientation), then §15 for the code tour, §16 for the tests, §17 to demo it.
+
 ## Implemented and offline-verified (no API key required)
 - **Fixtures + ground truth** — 18 cases across 6 buckets; 12 promotions, 3
   contracts, POS (incl. one missing on purpose), settlement history (incl. the
