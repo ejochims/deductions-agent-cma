@@ -148,7 +148,7 @@ def all_pass(verdicts: list[Verdict]) -> bool:
 
 # --------------------------------------------------------------- calibration
 def known_negatives() -> list[tuple[str, dict]]:
-    """Three settlements a trustworthy judge MUST fail (§7 judge calibration)."""
+    """Three settlements a trustworthy judge MUST fail (judge calibration)."""
     return [
         ("empty_justification", {
             "case_id": "CAL-1", "action": "approve", "amount": 6800.0,

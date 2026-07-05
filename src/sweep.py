@@ -32,7 +32,7 @@ from fixtures_index import REPO_ROOT, all_case_ids
 RUNS_DIR = REPO_ROOT / "runs"
 SWEEP_DIR = RUNS_DIR / "sweep"
 
-# The sweep grid — model tiers the handoff names (Haiku / Sonnet; Fable is pricey,
+# The sweep grid — the candidate model tiers (Haiku / Sonnet; Fable is pricey,
 # opt in explicitly). Every entry runs with the shipped thinking config.
 GRID: list[dict] = [
     {"label": "haiku", "model": "claude-haiku-4-5"},
@@ -145,7 +145,7 @@ def run_sweep(trials: int, case_ids: list[str], *, use_judge: bool) -> list[dict
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Model x thinking sweep.")
+    parser = argparse.ArgumentParser(description="Model sweep (cost-per-success).")
     parser.add_argument("--trials", type=int, default=3)
     parser.add_argument("--judge", action="store_true")
     parser.add_argument("--quick", action="store_true",

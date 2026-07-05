@@ -7,8 +7,8 @@ attach it read/write to every case's session. The agent consults it before draft
 a partial and may append new precedents; because all case sessions share one store,
 a convention applied in one case is recalled in the next.
 
-Claude-Code-owned plumbing. Store id is cached in runs/.managed_ids.json alongside
-the agent/environment ids so the store is created and seeded once.
+The store id is cached in runs/.managed_ids.json alongside the agent/environment
+ids so the store is created and seeded once.
 """
 
 from __future__ import annotations
@@ -42,18 +42,22 @@ def create_or_load_memory_store(client) -> str:
     if ids.get("memory_store_id"):
         return ids["memory_store_id"]
 
+    import anthropic
+
     store = client.beta.memory_stores.create(
         name="Meridian Deductions Precedents",
         description="Settlement precedents and conventions for deduction analysts.",
     )
-    # Seed the pre-digested precedents. Path conflicts (already seeded) are ignored
-    # so re-seeding an existing store is harmless.
+    # Seed the pre-digested precedents. Only a 409 path conflict (already seeded)
+    # is ignored — any other failure means the store is missing its precedents,
+    # which must surface, not be swallowed.
     for note in json.loads(SEED_PATH.read_text()):
         try:
             client.beta.memory_stores.memories.create(
                 store.id, path=note["path"], content=note["content"])
-        except Exception:  # noqa: BLE001 — memory_path_conflict etc. are non-fatal
-            pass
+        except anthropic.APIStatusError as exc:
+            if exc.status_code != 409:
+                raise
 
     ids["memory_store_id"] = store.id
     _save_ids(ids)

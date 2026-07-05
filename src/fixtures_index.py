@@ -1,6 +1,6 @@
 """Mechanical data plumbing shared by the harness, graders, and judge.
 
-This is the Claude-Code-owned "what exists / what's expected" layer. It reads
+This is the "what exists / what's expected" layer. It reads
 fixtures/ and ground_truth/ (both legitimate on the HOST — only the agent's
 container is walled off from ground_truth) and hands clean data to graders.py and
 judge.py so those files carry only comparison / judgement logic.
@@ -19,7 +19,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 FIXTURES_DIR = REPO_ROOT / "fixtures"
 GROUND_TRUTH_DIR = REPO_ROOT / "ground_truth"
 
-# Case-id ranges -> bucket, straight from the §3 case matrix. Buckets drive the
+# Case-id ranges -> bucket (the case matrix). Buckets drive the
 # bucket-level aggregation the README must report (an agent that aces approvals
 # while failing escalations is a failing agent for this use case).
 _BUCKET_RANGES = [

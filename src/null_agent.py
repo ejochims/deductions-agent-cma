@@ -1,6 +1,6 @@
 """Null agent: always approve the full claimed amount.
 
-The known-bad calibration baseline (§6). It runs no model — it just emits a
+The known-bad calibration baseline. It runs no model — it just emits a
 settlement per case. Because it approves everything, it MUST fail the deny,
 partial, escalate, and ambiguous buckets; if the harness reports it doing well on
 those, the harness (or the graders) is broken. It should look ~correct only on the
