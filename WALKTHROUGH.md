@@ -31,7 +31,7 @@ you send:    { model, system prompt, messages: [ ...conversation so far... ], to
 model sends: one new assistant message
 ```
 
-Four facts that shape everything else:
+Six facts that shape everything else:
 
 1. **The model is stateless.** It remembers nothing between calls. Every request
    re-sends the entire conversation. "Memory," "sessions," "agents" — all of that
@@ -44,7 +44,19 @@ Four facts that shape everything else:
    every call and defines the role, the rules, and the policy. Ours carries the
    settlement policy: the four actions, the $10k threshold, the citation rule,
    "insufficient evidence → escalate, never guess."
-4. **The model only ever emits text/structured output.** It cannot read files,
+4. **The model can "think" before it answers.** Extended thinking gives the
+   model a private scratchpad: it generates reasoning tokens (billed like output)
+   before and between its visible replies and tool calls. For multi-step work
+   like reconciliation arithmetic this measurably improves reliability, which is
+   why our agent runs with thinking on — the Managed Agents default, and the
+   config the eval measures.
+5. **Re-sending the conversation is cheaper than it looks.** Providers cache the
+   prompt *prefix*: on each turn, the unchanged early part of the conversation is
+   served as a cache read at roughly a tenth of the fresh-input price, and only
+   the new tail costs full rate. Managed Agents applies this automatically; the
+   recorded usage splits cache reads/writes out (our cost accounting folds them
+   into input at the headline rate — deliberately conservative).
+6. **The model only ever emits text/structured output.** It cannot read files,
    query databases, or move money. Which leads to tool use.
 
 ## 3. Tool use: the model asks, your code acts
@@ -103,6 +115,15 @@ running it server-side. Three resources:
 | **Agent** | A persisted, versioned config: model, system prompt, tool declarations. Created once, referenced forever. Updating it creates a new immutable version. | `agent/agent.yaml` — one YAML that both the CLI and the SDK consume |
 | **Environment** | A sandbox template for the per-session container. | `agent/environment.yaml` — nothing mounted, no network egress |
 | **Session** | One live run of the agent. Sessions reference the agent by ID + version. | one session per (case, trial) |
+
+Two mechanics of the agent resource matter here. First, **updates never mutate
+in place** — every update publishes a new immutable version, and each session
+pins the version it runs, so any past run is traceable to the exact prompt it
+ran under. Second, our runner **fingerprints `agent.yaml`** (a hash of the
+config, cached beside the agent id): edit the system prompt and the next run
+automatically publishes a new version and pins to it. Without that, a stale
+cached agent would keep serving the old prompt and the eval would silently
+measure the wrong thing — the classic failure mode of prompt iteration.
 
 You talk to a session through **events** over a server-sent-event stream:
 
@@ -217,8 +238,12 @@ dimension can't mask a weak one:
 - **dispute_proof** — would it hold up if the retailer's analyst pushed back?
 - **no_unsupported** — does it assert anything the cited evidence doesn't show?
 
-Each call returns structured JSON (`pass | fail | unknown` + a one-line reason) —
-the response format is schema-constrained so parsing can't silently drift.
+Each call returns structured JSON (`pass | fail | unknown` + a one-line reason).
+That's not a parsing convention — it's **structured outputs**, an API feature:
+the request carries a JSON schema and the API constrains generation so the reply
+must validate against it. Short of a refusal or truncation, the verdict cannot
+be malformed — which is why an unparseable reply is treated as an infrastructure
+signal (`unknown`), not a quality failure.
 Mechanics that matter:
 
 - The judge sees the settlement and the fixture text behind each cited evidence
