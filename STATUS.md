@@ -14,7 +14,8 @@
 - **Tests** — `tests/` (pytest); CI runs them + calibration on every push.
 - **Local UI** — `ui/` (Streamlit, `make ui`): case queue, investigation
   replay + grader scorecard, results dashboard with offline null-baseline demo,
-  optional live-run panel (key-gated).
+  optional live-run panel (key-gated). Styled via a validated palette
+  (`.streamlit/config.toml` + `ui/theme.py`).
 - **Calibration** — Gate A: all 18 reference solutions pass the graders. Gate B: the
   null agent fails every non-approve case. `python src/calibration.py`.
 

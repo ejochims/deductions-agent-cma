@@ -15,57 +15,103 @@ import os
 
 import data
 import streamlit as st
+import theme
 
 st.set_page_config(page_title="Deductions Desk", page_icon="🧾", layout="wide")
+st.markdown(theme.CSS, unsafe_allow_html=True)
+
+cases = data.load_cases()
+total_at_issue = sum(c["amount"] for c in cases)
+over_threshold = sum(1 for c in cases if c["amount"] > 10_000)
 
 st.title("Deductions Desk")
-st.caption(
+st.markdown(
+    f"<div style='margin:-6px 0 4px 0;color:{theme.INK_2};'>"
     "Trade-promotion deduction settlement with bounded autonomy — the agent "
-    "**drafts** (never executes) and anything above $10,000 routes to a human."
+    "<b>drafts</b>, never executes; anything above &#36;10,000 routes to a human."
+    "</div>",
+    unsafe_allow_html=True,
 )
+st.markdown(
+    theme.chip(f"{len(cases)} OPEN DEDUCTIONS", theme.INK_2, "#f0efec") + " " +
+    theme.chip(f"{theme.money(total_at_issue, 0)} AT ISSUE", theme.ACCENT_DEEP, "#e7f0fb") + " " +
+    theme.chip(f"{over_threshold} ABOVE &#36;10K THRESHOLD", "#3a2d85", "#edeafa") + " " +
+    theme.chip("DRAFT-ONLY · HUMAN EXECUTES", "#006300", "#eaf6ea"),
+    unsafe_allow_html=True,
+)
+st.write("")
+
+RATE_COLUMNS = {
+    "mean pass rate": st.column_config.NumberColumn("Mean pass rate", format="percent"),
+    "pass^k": st.column_config.NumberColumn("pass^k", format="percent"),
+    "bucket": st.column_config.TextColumn("Bucket"),
+    "cases": st.column_config.NumberColumn("Cases"),
+}
 
 tab_queue, tab_investigation, tab_dashboard, tab_live = st.tabs(
-    ["📥 Case queue", "🔍 Investigation viewer", "📊 Results dashboard", "▶️ Live run"]
+    ["Case queue", "Investigation viewer", "Results dashboard", "Live run"]
 )
-
-ACTION_BADGE = {"approve": "🟢 approve", "deny": "🔴 deny",
-                "partial": "🟡 partial", "escalate": "⬆️ escalate"}
 
 
 # ------------------------------------------------------------------ case queue
 with tab_queue:
-    st.subheader("Open deductions")
-    st.caption("The worklist as a deductions analyst would see it — click into a "
-               "case to see the claim exactly as the agent receives it.")
-    cases = data.load_cases()
-    st.dataframe(data.queue_rows(cases), use_container_width=True, hide_index=True)
+    m1, m2, m3, m4 = st.columns(4)
+    m1.metric("Open deductions", len(cases))
+    m2.metric("Dollars at issue", f"${total_at_issue:,.0f}")
+    m3.metric("Largest claim", f"${max(c['amount'] for c in cases):,.0f}")
+    m4.metric("Retailers", len({c["retailer_id"] for c in cases}))
+    st.write("")
+
+    st.dataframe(
+        data.queue_rows(cases),
+        use_container_width=True,
+        hide_index=True,
+        column_config={
+            "case": st.column_config.TextColumn("Case"),
+            "retailer": st.column_config.TextColumn("Retailer"),
+            "amount": st.column_config.NumberColumn("Deducted", format="dollar"),
+            "type": st.column_config.TextColumn("Type"),
+            "date": st.column_config.TextColumn("Date"),
+            "bucket": st.column_config.TextColumn("Bucket"),
+        },
+    )
 
     case_ids = [c["case_id"] for c in cases]
     picked = st.selectbox("Inspect a case", case_ids, key="queue_case")
     case = next(c for c in cases if c["case_id"] == picked)
 
-    left, right = st.columns([1, 1])
-    with left:
-        st.metric("Deducted", f"${case['amount']:,.2f}")
-        st.write(f"**Retailer:** {case['retailer_id']}  \n"
-                 f"**Type:** {case['deduction_type']}  \n"
-                 f"**Reference:** {case.get('claimed_reference', '—')}  \n"
-                 f"**Date:** {case.get('deduction_date', '—')}")
-        st.write("**Remittance text (as the retailer wrote it):**")
-        st.code(case.get("remittance_text", ""), language=None)
-    with right:
-        st.write("**Claim detail:**")
-        st.json(case.get("claim_detail", {}))
-        attachments = case.get("attachments", [])
-        if attachments:
-            st.write("**Attachments:**")
-            for a in attachments:
-                st.write(f"- *{a.get('type')}*: {a.get('description')}")
+    with st.container(border=True):
+        head_l, head_r = st.columns([3, 1])
+        head_l.markdown(f"#### {case['case_id']} · {case['retailer_id']}")
+        head_r.markdown(
+            f"<div style='text-align:right;font-size:1.35rem;font-weight:700;"
+            f"color:{theme.INK};'>{theme.money(case['amount'])}</div>",
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            theme.chip(case["deduction_type"].replace("_", " ").upper(),
+                       theme.INK_2, "#f0efec") + " " +
+            theme.chip(case.get("deduction_date", ""), theme.INK_2, "#f0efec") + " " +
+            theme.chip(str(case.get("claimed_reference", "—")),
+                       theme.ACCENT_DEEP, "#e7f0fb"),
+            unsafe_allow_html=True,
+        )
+        left, right = st.columns([1, 1])
+        with left:
+            st.write("**Remittance text** *(as the retailer wrote it)*")
+            st.code(case.get("remittance_text", ""), language=None)
+            attachments = case.get("attachments", [])
+            if attachments:
+                st.write("**Attachments**")
+                for a in attachments:
+                    st.markdown(f"- *{a.get('type')}* — {a.get('description')}")
+        with right:
+            st.write("**Claim detail**")
+            st.json(case.get("claim_detail", {}))
 
 
 # --------------------------------------------------------- investigation viewer
 with tab_investigation:
-    st.subheader("Replay an investigation")
     runs = data.list_runs()
     if not runs:
         st.info(
@@ -83,10 +129,10 @@ with tab_investigation:
             st.write("**Investigation steps**")
             for i, step in enumerate(data.transcript_steps(record), 1):
                 if step["kind"] == "agent_text":
-                    st.markdown(f"**{i}. 💬 Agent:** {step['body']}")
+                    st.markdown(f"**{i}.** 💬 {step['body']}")
                 else:
-                    flag = " ⚠️ error" if step.get("is_error") else ""
-                    with st.expander(f"{i}. 🔧 {step['title']}{flag}"):
+                    flag = "  ⚠️ error" if step.get("is_error") else ""
+                    with st.expander(f"{i} · 🔧 {step['title']}{flag}"):
                         st.write("Input:")
                         st.json(step["body"])
                         if "result" in step:
@@ -104,43 +150,59 @@ with tab_investigation:
                        "writes drafts only.)")
 
         if settlement:
-            st.divider()
-            st.write("**Drafted settlement** *(draft only — nothing executes)*")
-            badge = ACTION_BADGE.get(settlement.get("action", ""), settlement.get("action"))
-            amount = settlement.get("amount")
-            st.markdown(
-                f"### {badge}"
-                + (f" — ${amount:,.2f}" if isinstance(amount, (int, float)) else "")
-            )
-            st.write(settlement.get("justification", ""))
-            st.write("**Cited evidence:** " + (", ".join(
-                f"`{e}`" for e in settlement.get("evidence_ids", [])) or "—"))
-
-            st.write("**Grader scorecard**")
-            passed, checks = data.scorecard(settlement, case_id)
-            for c in checks:
-                if not c["applicable"]:
-                    icon, note = "⚪", " (not applicable — skipped)"
-                else:
-                    icon, note = ("✅", "") if c["passed"] else ("❌", "")
-                st.write(f"{icon} `{c['name']}`{note} — {c.get('detail', '')}")
-            st.markdown(f"**Overall: {'✅ PASS' if passed else '❌ FAIL'}**")
+            with st.container(border=True):
+                amount = settlement.get("amount")
+                amount_txt = (f"&nbsp;·&nbsp;<b>{theme.money(amount)}</b>"
+                              if isinstance(amount, (int, float)) else "")
+                st.markdown(
+                    f"<div style='font-size:1.02rem;margin-bottom:6px;'>"
+                    f"Drafted settlement {theme.action_chip(settlement.get('action', ''))}"
+                    f"{amount_txt}"
+                    f"<span style='color:{theme.MUTED};font-size:0.8rem;'>"
+                    f"&nbsp;&nbsp;draft only — nothing executes</span></div>",
+                    unsafe_allow_html=True,
+                )
+                st.markdown(theme.esc_md(settlement.get("justification", "")))
+                evidence = settlement.get("evidence_ids", [])
+                st.markdown(
+                    "**Cited evidence:**&nbsp; " + (" ".join(
+                        theme.chip(e, theme.ACCENT_DEEP, "#e7f0fb")
+                        for e in evidence) or "—"),
+                    unsafe_allow_html=True,
+                )
+                st.write("")
+                passed, checks = data.scorecard(settlement, case_id)
+                verdict = theme.chip("PASS", "#006300", "#eaf6ea") if passed \
+                    else theme.chip("FAIL", "#a02020", "#fbeaea")
+                st.markdown("**Grader scorecard** " + verdict, unsafe_allow_html=True)
+                st.markdown(
+                    " ".join(theme.check_chip(c["name"], c["passed"], c["applicable"])
+                             for c in checks),
+                    unsafe_allow_html=True,
+                )
+                fails = [c for c in checks if c["applicable"] and not c["passed"]]
+                for c in fails:
+                    st.caption(f"✕ {c['name']}: {c.get('detail', '')}")
 
 
 # -------------------------------------------------------------------- dashboard
 with tab_dashboard:
-    st.subheader("Eval results")
     results = data.load_results()
     if results:
         st.caption(
-            f"Last full eval — trials={len(results.get('trials', []))}, "
-            f"judge={'on' if results.get('used_judge') else 'off'}, "
+            f"Last full eval — trials={len(results.get('trials', []))} · "
+            f"judge={'on' if results.get('used_judge') else 'off'} · "
             f"memory={'on' if results.get('used_memory', True) else 'off'}"
         )
         rows = data.bucket_table(results["summary"])
-        st.dataframe(rows, use_container_width=True, hide_index=True)
-        chart_rows = {r["bucket"]: r["pass^k"] or 0 for r in rows if r["bucket"] != "OVERALL"}
-        st.bar_chart(chart_rows, x_label="bucket", y_label="pass^k")
+        overall = next(r for r in rows if r["bucket"] == "OVERALL")
+        k1, k2, k3 = st.columns(3)
+        k1.metric("Overall pass^k", f"{(overall['pass^k'] or 0):.0%}")
+        k2.metric("Mean pass rate", f"{(overall['mean pass rate'] or 0):.0%}")
+        k3.metric("Cases", overall["cases"])
+        st.altair_chart(theme.bucket_bar(rows), use_container_width=True)
+        st.dataframe(rows, use_container_width=True, hide_index=True,
+                     column_config=RATE_COLUMNS)
     else:
         st.info("No `runs/results.json` yet — run the eval (`make phase-e` / "
                 "`make phase-f`) to populate this.")
@@ -150,17 +212,15 @@ with tab_dashboard:
              "approves every claim. It must fail every non-approve bucket; that's "
              "the harness's known-bad calibration, visualized. Free, no API key.")
     if st.button("Generate + grade the null baseline"):
-        trial = data.generate_null_baseline()
-        st.session_state["null_trial"] = trial
+        st.session_state["null_trial"] = data.generate_null_baseline()
     null_trial = st.session_state.get("null_trial")
     if null_trial:
         agg = data.grade_trial(null_trial)
         if agg:
             rows = data.bucket_table(agg)
-            st.dataframe(rows, use_container_width=True, hide_index=True)
-            chart_rows = {r["bucket"]: (r["pass^k"] if r["pass^k"] is not None else 0)
-                          for r in rows if r["bucket"] != "OVERALL"}
-            st.bar_chart(chart_rows, x_label="bucket", y_label="pass^k")
+            st.altair_chart(theme.bucket_bar(rows), use_container_width=True)
+            st.dataframe(rows, use_container_width=True, hide_index=True,
+                         column_config=RATE_COLUMNS)
             st.caption("Reading: the approve bucket scores where blind approval "
                        "happens to be right; every judgement bucket fails. A real "
                        "agent must beat this floor everywhere.")
@@ -168,11 +228,10 @@ with tab_dashboard:
 
 # --------------------------------------------------------------------- live run
 with tab_live:
-    st.subheader("Run the agent on a case (live)")
     has_key = bool(os.environ.get("ANTHROPIC_API_KEY"))
     st.write("Drives one Managed Agents session end to end: the agent "
              "investigates via its six tools (fulfilled locally from fixtures) "
-             "and drafts a settlement. **Costs ~$0.15 and takes 1–3 minutes.**")
+             "and drafts a settlement. **Costs ~\\$0.15 and takes 1–3 minutes.**")
     if not has_key:
         st.warning("`ANTHROPIC_API_KEY` is not set — set it and restart the UI "
                    "to enable live runs. Everything else in this app works "

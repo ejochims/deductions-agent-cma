@@ -1,0 +1,19 @@
+# Deductions Desk UI theme — values from the validated reference palette
+# (warm-neutral surfaces, single blue accent, near-black ink).
+[theme]
+base = "light"
+primaryColor = "#2a78d6"          # accent: categorical blue slot 1
+backgroundColor = "#f9f9f7"       # page plane
+secondaryBackgroundColor = "#f0efec"  # widget/secondary plane (neutral gray)
+textColor = "#0b0b0b"             # primary ink
+linkColor = "#1c5cab"
+font = "sans serif"
+baseRadius = "10px"
+borderColor = "#e1e0d9"           # hairline
+showWidgetBorder = true
+
+[server]
+headless = true
+
+[browser]
+gatherUsageStats = false
