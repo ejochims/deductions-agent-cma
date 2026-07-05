@@ -78,6 +78,11 @@ class ToolServer:
         sku: str | None = None,
     ) -> dict:
         rid = self._resolve_retailer(retailer)
+        if rid is None:
+            # A typo'd retailer must be an ERROR, not a plausible-empty result —
+            # "0 promotions found" would read as "unauthorized deduction" and
+            # steer the agent toward a wrong deny.
+            raise ToolError(f"Unknown retailer '{retailer}'.")
         results = [p for p in self.promotions if p["retailer_id"] == rid]
         if sku:
             results = [p for p in results if sku in p.get("skus", [])]
@@ -131,6 +136,10 @@ class ToolServer:
         self, retailer: str, invoice_ref: str | None = None
     ) -> dict:
         rid = self._resolve_retailer(retailer)
+        if rid is None:
+            # Same rule as search_promotions: an empty history for a typo'd
+            # retailer would masquerade as "no duplicate exists".
+            raise ToolError(f"Unknown retailer '{retailer}'.")
         results = [s for s in self.history if s["retailer_id"] == rid]
         if invoice_ref:
             needle = invoice_ref.lower()
@@ -165,6 +174,14 @@ class ToolServer:
             )
         if action in ("deny", "escalate"):
             amount = None
+        elif not isinstance(amount, (int, float)) or isinstance(amount, bool) \
+                or amount <= 0:
+            # Symmetric with the null coercion above: the gate enforces policy in
+            # code, so an approve/partial without a positive dollar amount is
+            # rejected back to the agent rather than recorded as a broken draft.
+            raise ToolError(
+                f"{action} requires a positive numeric amount, got {amount!r}."
+            )
         settlement = {
             "case_id": case_id,
             "action": action,

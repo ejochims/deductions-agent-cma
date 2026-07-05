@@ -298,6 +298,12 @@ def run_session_for_case(client, agent_id: str, agent_version: int, env_id: str,
 
 
 # --------------------------------------------------------------- orchestration
+def clear_prior_draft(trial: str, case_id: str) -> None:
+    """Remove a settlement.json left by an earlier attempt of this (trial, case)."""
+    path = RUNS_DIR / trial / case_id / "settlement.json"
+    path.unlink(missing_ok=True)
+
+
 def run_one_case(case_id: str, trial: str, client=None, *,
                  use_memory: bool = True, agent_override: dict | None = None) -> TrialRecorder:
     """Run a single case end to end and persist its record.
@@ -310,6 +316,12 @@ def run_one_case(case_id: str, trial: str, client=None, *,
     agent_cfg = load_agent_config()
     env_cfg = load_environment_config()
     assert_tools_consistent(agent_cfg)
+
+    # Clear any draft left by a previous attempt of this same (trial, case).
+    # Without this, a run that drafts and THEN hits an infra error leaves a
+    # settlement.json behind — and if the retry finishes without drafting, the
+    # harness would grade the stale draft as the retry's output.
+    clear_prior_draft(trial, case_id)
 
     tools = ToolServer(FIXTURES_DIR, RUNS_DIR)
     recorder = TrialRecorder(case_id, trial)
