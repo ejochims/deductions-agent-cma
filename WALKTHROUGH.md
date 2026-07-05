@@ -314,7 +314,7 @@ Paid runs follow a fixed cheap-first ladder (`Makefile`), each phase one command
 
 | Phase | Command | Cost | What it proves |
 |---|---|---|---|
-| a | `make phase-a` | free | 46 unit tests + tool-declaration/fulfilment consistency |
+| a | `make phase-a` | free | the unit-test suite + tool-declaration/fulfilment consistency |
 | b | `make phase-b` | free | calibration gates A + B |
 | c | `make phase-c` | ~cents | the judge fails all three known negatives |
 | d | `make phase-d` | ~cents | ONE case end to end — stop and read the transcript |
@@ -363,7 +363,7 @@ src/
   sweep.py            model grid + cost-per-success
   costs.py            price table, pre-run estimates, post-run actuals
   digest.py           failure digest (reports, never fixes)
-tests/                46 pytest tests; run with calibration in CI on every push
+tests/                pytest suite; run with calibration in CI on every push
 runs/                 per-run transcripts and drafts (git-ignored, except curated/)
 ```
 

@@ -1,10 +1,10 @@
-"""Orchestrate the eval: N trials x 16 cases -> results.json.
+"""Orchestrate the eval: N trials x all cases -> results.json.
 
-Claude-Code-owned. It drives run_agent per (case, trial), grades each drafted
-settlement with graders.py, optionally judges it with judge.py, and aggregates
-into mean pass rate +/- spread and pass^k, reported overall AND per bucket.
+Drives run_agent per (case, trial), grades each drafted settlement with
+graders.py, optionally judges it with judge.py, and aggregates into mean pass
+rate +/- spread and pass^k, reported overall AND per bucket.
 
-Doctrine baked in (§6):
+Doctrine baked in:
   - infra_error is kept SEPARATE from pass/fail: excluded from the pass rate,
     counted on its own, and retried once.
   - pass^k per case = 1 iff all k ok-trials passed; overall/bucket pass^k is the
@@ -65,10 +65,24 @@ def grade_settlement(settlement: dict | None, case_id: str) -> tuple[bool, list]
     return passed_all(results), [asdict(r) for r in results]
 
 
+_judge_client = None  # lazily constructed once; the judge is a plain Messages call
+
+
 def judge_settlement_safe(client, settlement: dict | None) -> list:
-    """Run the LLM judge if enabled; tolerate its absence during early phases."""
+    """Run the LLM judge over one settlement.
+
+    `client` may be None (run_one_case builds its own client internally, so the
+    harness often passes None through) — construct and cache one here rather
+    than crashing on the first judged settlement.
+    """
     if settlement is None:
         return []
+    global _judge_client
+    if client is None:
+        if _judge_client is None:
+            import anthropic
+            _judge_client = anthropic.Anthropic()
+        client = _judge_client
     from judge import judge_settlement
     return [asdict(v) for v in judge_settlement(client, settlement)]
 

@@ -20,7 +20,7 @@
 - Judge calibration: `python src/judge.py --calibrate`
 - Full eval: `python src/eval_runner.py --trials 3 --judge`
 - Memory delta: add `--no-memory` to compare
-- Model × thinking sweep: `python src/sweep.py --trials 3`
+- Model sweep: `python src/sweep.py --trials 3`
 - Then paste the pass^3-by-bucket numbers and the two sweep PNGs into `README.md`
   §7 and §9.
 

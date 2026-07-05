@@ -14,6 +14,7 @@ The eval harness (src/eval_runner.py) imports and calls run_one_case across
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 import time
@@ -169,18 +170,35 @@ def _as_dict(obj) -> dict:
     return {"repr": repr(obj)}
 
 
+def _agent_fingerprint(agent_cfg: dict) -> str:
+    """Stable hash of the agent config, so a changed agent.yaml is detected."""
+    canonical = json.dumps(agent_cfg, sort_keys=True).encode()
+    return hashlib.sha256(canonical).hexdigest()[:16]
+
+
 def create_or_load_agent(client, agent_cfg: dict) -> tuple[str, int]:
-    """Create the agent from agent_cfg once, or reuse the cached id."""
+    """Create the agent once; publish a new version whenever agent.yaml changes.
+
+    The cached id alone is not enough: if agent.yaml is edited (a prompt
+    iteration) but the cached agent keeps serving the old system prompt, the
+    eval silently measures the wrong agent. So the config fingerprint is cached
+    alongside the id — on mismatch, agents.update publishes a new immutable
+    version and sessions pin to it.
+    """
     ids = _load_ids()
-    if ids.get("agent_id") and ids.get("agent_version") is not None:
+    fp = _agent_fingerprint(agent_cfg)
+    if ids.get("agent_id") and ids.get("agent_fingerprint") == fp:
         return ids["agent_id"], ids["agent_version"]
-    agent = client.beta.agents.create(
-        name=agent_cfg["name"],
-        model=agent_cfg["model"],
-        system=agent_cfg["system"],
-        tools=agent_cfg["tools"],
-    )
-    ids.update({"agent_id": agent.id, "agent_version": agent.version})
+
+    fields = {"model": agent_cfg["model"], "system": agent_cfg["system"],
+              "tools": agent_cfg["tools"]}
+    if ids.get("agent_id"):
+        agent = client.beta.agents.update(
+            ids["agent_id"], version=ids["agent_version"], **fields)
+    else:
+        agent = client.beta.agents.create(name=agent_cfg["name"], **fields)
+    ids.update({"agent_id": agent.id, "agent_version": agent.version,
+                "agent_fingerprint": fp})
     _save_ids(ids)
     return agent.id, agent.version
 
@@ -201,9 +219,9 @@ def create_environment(client, env_cfg: dict) -> str:
 def _agent_ref(agent_id: str, agent_version: int, override: dict | None) -> dict:
     """Session agent reference — pinned version, or agent_with_overrides for the sweep.
 
-    `override` is e.g. {"model": "claude-haiku-4-5"} or
-    {"model": ..., "thinking": {"type": "adaptive"}}; it replaces those fields for
-    this session only without creating a new agent version.
+    `override` is e.g. {"model": "claude-haiku-4-5"}; it replaces those fields for
+    this session only, without creating a new agent version. Managed Agents allows
+    overriding model / system / tools / mcp_servers / skills only.
     """
     if not override:
         return {"type": "agent", "id": agent_id, "version": agent_version}
@@ -211,10 +229,18 @@ def _agent_ref(agent_id: str, agent_version: int, override: dict | None) -> dict
             "version": agent_version, **override}
 
 
+# Hard ceiling on one case's session. A session that exceeds it is raised as a
+# TimeoutError and recorded as infra_error (excluded from pass rates, retried
+# once) — a hung run must never look like a graded failure. The check fires as
+# events arrive; a fully silent stream is bounded by the SDK/HTTP layer instead.
+MAX_SESSION_SECONDS = 900
+
+
 def run_session_for_case(client, agent_id: str, agent_version: int, env_id: str,
                          case_id: str, trial: str, tools: ToolServer,
                          recorder: TrialRecorder, resources: list | None = None,
-                         agent_override: dict | None = None) -> None:
+                         agent_override: dict | None = None,
+                         max_session_s: float = MAX_SESSION_SECONDS) -> None:
     """Drive one session to completion for one case (stream-first, Pattern 5 gate)."""
     session = client.beta.sessions.create(
         agent=_agent_ref(agent_id, agent_version, agent_override),
@@ -228,8 +254,9 @@ def run_session_for_case(client, agent_id: str, agent_version: int, env_id: str,
                f"get_deduction first, gather the evidence you need, then call "
                f"draft_settlement exactly once.")
 
-    # Stream-first: open the stream, THEN send the kickoff, so no early events are
-    # missed (shared/managed-agents-events.md § stream-first ordering).
+    # Stream-first: open the stream, THEN send the kickoff, so no early events
+    # are missed (the stream has no replay).
+    deadline = time.monotonic() + max_session_s
     with client.beta.sessions.events.stream(session_id=session.id) as stream:
         client.beta.sessions.events.send(
             session_id=session.id,
@@ -237,6 +264,9 @@ def run_session_for_case(client, agent_id: str, agent_version: int, env_id: str,
                      "content": [{"type": "text", "text": kickoff}]}],
         )
         for event in stream:
+            if time.monotonic() > deadline:
+                raise TimeoutError(
+                    f"session for {case_id} exceeded {max_session_s:.0f}s")
             recorder.record_event(_as_dict(event))
             etype = getattr(event, "type", None)
 

@@ -130,7 +130,7 @@ escalate, never guess."
 **approval gate** — it writes a draft to `runs/<trial>/<case>/settlement.json` and
 executes nothing.
 
-Default model `claude-sonnet-4-6`; the sweep (§7) decides the production answer
+Default model `claude-sonnet-4-6`; the sweep (§9) decides the production answer
 empirically.
 
 ---
