@@ -869,8 +869,10 @@ export ANTHROPIC_API_KEY=sk-ant-...
 make ui             # boots at :8501; leave it running
 ```
 
-- Confirm `runs/results.json` exists so the dashboard has real numbers (if not:
-  `make phase-e` the day before, ~$2–3, or fall back to curated runs).
+- Confirm `runs/results.json` exists so the dashboard has real numbers, and
+  that `runs/` holds at least one good transcript to replay (if not:
+  `make phase-e` the day before, ~$2–3, then copy the best run into
+  `runs/curated/` per §11 Step 7 so it survives a `make clean` or a re-clone).
 - In the UI, pre-generate the **null baseline** on the dashboard tab so the
   chart is one click away.
 - Bump the terminal font; keep one terminal on the repo root and the browser on
@@ -942,9 +944,11 @@ is the best second: a different tool (history) and a different verdict.
 
 If the key or the network dies, everything except the Live-run tab still works:
 
-- **Investigation viewer** replays any existing run from `runs/` (curated runs
-  are committed for exactly this) — the full transcript walkthrough works
-  identically on a replay.
+- **Investigation viewer** replays any existing run from `runs/` — the full
+  transcript walkthrough works identically on a replay. This is why the
+  checklist has you curate a run beforehand: `runs/curated/` is the committed,
+  survives-everything copy (§11 Step 7), and it starts empty until you put a
+  run there.
 - **Null baseline** generates and grades offline — the calibration story needs
   no API at all.
 - The script above survives intact with step 3 swapped from "watch it live" to
