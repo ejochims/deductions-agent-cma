@@ -466,6 +466,12 @@ panel (drives one case end to end; disabled unless `ANTHROPIC_API_KEY` is set,
 with the cost stated up front). There is deliberately no way to execute a
 settlement from the UI — drafts only, same as the system.
 
+The look is a deliberate system, not Streamlit defaults: `.streamlit/config.toml`
+applies a validated palette (warm-neutral surfaces, near-black ink, one blue
+accent, hairline borders), and `ui/theme.py` centralizes every color role, the
+status chips, and the chart styling — status colors are reserved for state
+(approve/deny/partial/escalate, pass/fail) and never reused as series colors.
+
 ### Troubleshooting
 
 | Symptom | Meaning / fix |
@@ -505,6 +511,11 @@ src/
   sweep.py            model grid + cost-per-success
   costs.py            price table, pre-run estimates, post-run actuals
   digest.py           failure digest (reports, never fixes)
+ui/
+  app.py              local review UI (queue, investigation replay, dashboard, live run)
+  data.py             the UI's pure data layer (reads fixtures/ and runs/; no Streamlit)
+  theme.py            the visual system: palette roles, status chips, chart theme
+.streamlit/           app theme config (validated palette — surfaces, ink, one accent)
 tests/                pytest suite; run with calibration in CI on every push
 runs/                 per-run transcripts and drafts (git-ignored, except curated/)
 ```

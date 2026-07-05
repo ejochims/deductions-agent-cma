@@ -288,7 +288,9 @@ fixtures/        agent-facing universe (company, retailers, promos, contracts, p
 ground_truth/    NEVER mounted — labels.json + one reference solution per case
 agent/           agent.yaml · environment.yaml · tools_server.py · memory_seed.json
 src/             run_agent · graders · judge · eval_runner · calibration · null_agent · sweep · memory_store · costs · digest · fixtures_index
-tests/           pytest suite (graders, calibration, tools, aggregation, costs, digest, config)
+tests/           pytest suite (graders, calibration, tools, aggregation, costs, digest, config, UI)
+ui/              local review UI (app.py · data.py · theme.py) — `make ui`
+.streamlit/      app theme (validated palette: surfaces, ink, accent, hairlines)
 runs/            transcripts + drafts (git-ignored except results.json, digest.md, curated/)
 ITERATIONS.md    log of eval-driven prompt/grader changes with before/after deltas
 ```
