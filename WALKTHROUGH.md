@@ -10,8 +10,8 @@ prior knowledge of the Anthropic API.
 read §1–§10 in order. Coming back after time away: start at **§14** (the
 30-minute re-orientation). Running it: **§11** is the operator's runbook.
 Reading or changing the code: **§15** is the module-by-module tour. Running or
-writing tests: **§16**. Presenting it live to someone else: **§17** is the demo
-script, showcase cases, and fallback plan.
+writing tests: **§16**. Demoing the POC: **§17** is the demo script, showcase
+cases, and offline fallback.
 
 ---
 
@@ -665,7 +665,7 @@ Everything the graders check is a mechanization of a sentence in this block.
 **6. Go deeper as needed.**
 
 Concepts fuzzy → §2–§7. Ready to spend money → §11 from Step 2 (the estimate)
-onward. Changing code → §15. Presenting it → §17.
+onward. Changing code → §15. Demoing it → §17.
 
 **Signs something is wrong, and what they mean:**
 
@@ -856,11 +856,11 @@ regression test in the file closest to the bug.
 
 ## 17. Demoing the project
 
-A live walkthrough for an audience: what to check beforehand, a ~12-minute
+A guided walkthrough of the POC end to end: what to check beforehand, a short
 script, the cases worth showing, and what to do when the network isn't on your
 side.
 
-### Pre-demo checklist (15 minutes, day of)
+### Pre-demo checklist
 
 ```bash
 make lint test      # 71 passed
@@ -879,7 +879,7 @@ make ui             # boots at :8501; leave it running
   the UI.
 - Decide the fallback now, not mid-demo (see below).
 
-### The ~12-minute script
+### A short demo script (~12 minutes)
 
 **1. The problem (30s).** §1, verbatim if you like: retailers short-pay
 invoices claiming promo allowances; someone must check each claim against
@@ -890,7 +890,7 @@ money; anything it would pay above $10k routes to a human.
 **2. The worklist (2 min, UI → Case queue).** Show the 18 open deductions —
 this is what lands on an analyst's desk. Open **D-0009**: the remittance text
 exactly as the retailer wrote it, the claim detail (13,692 units × $0.65 =
-$8,899.80). Point out the audience can't tell whether it's legitimate by
+$8,899.80). Point out that you can't tell whether it's legitimate just by
 looking — that's the point.
 
 **3. Watch it work (3 min, UI → Live run).** Run D-0009 live (~$0.15, 1–3
@@ -925,7 +925,7 @@ generalize (§13): the tool boundary is the security boundary (the answer key
 is unreachable by construction), and policy lives in code, not prompt (a deny's
 amount is nulled by the tool layer no matter what the model says).
 
-### Showcase cases — the cheat sheet
+### Showcase cases
 
 | Case | Show it when you want to demonstrate | The facts |
 |---|---|---|
@@ -952,9 +952,9 @@ If the key or the network dies, everything except the Live-run tab still works:
 - **Null baseline** generates and grades offline — the calibration story needs
   no API at all.
 - The script above survives intact with step 3 swapped from "watch it live" to
-  "replay yesterday's run." Practice that version once.
+  "replay yesterday's run."
 
-### Hard questions, honest answers
+### Design questions, answered
 
 **"The remittance text is retailer-supplied — what about prompt injection?"**
 Correct instinct: it's the untrusted field. Three bounds: the agent can only
