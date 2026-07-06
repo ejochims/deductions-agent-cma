@@ -11,3 +11,8 @@ runs/*
 __pycache__/
 *.pyc
 .venv/
+
+# Local secrets — never commit. Holds ANTHROPIC_API_KEY. `source` it before running.
+.env
+local.env
+*.env
