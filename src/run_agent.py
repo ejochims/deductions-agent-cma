@@ -114,7 +114,9 @@ class TrialRecorder:
         out_dir = RUNS_DIR / self.trial / self.case_id
         out_dir.mkdir(parents=True, exist_ok=True)
         out_path = out_dir / "record.json"
-        out_path.write_text(json.dumps(self.to_dict(), indent=2) + "\n")
+        # default=str so raw datetimes from SDK event model_dump() (and any other
+        # non-JSON-native value) serialize instead of crashing the record write.
+        out_path.write_text(json.dumps(self.to_dict(), indent=2, default=str) + "\n")
         return out_path
 
 
