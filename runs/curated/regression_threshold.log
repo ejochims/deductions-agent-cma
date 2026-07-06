@@ -1,0 +1,47 @@
+COST ESTIMATE (rough, pre-run) — 9 agent runs on claude-sonnet-4-6
+  agent:  ~$1.08
+  TOTAL:  ~$1.08
+  (assumptions in costs.py; actuals printed after the run)
+  trace: https://platform.claude.com/workspaces/default/sessions/sesn_01G6SXfEAuYZbDUU5gSkcHV7
+  trace: https://platform.claude.com/workspaces/default/sessions/sesn_01NDrfMdG38Gj4LToxdocU2p
+  trace: https://platform.claude.com/workspaces/default/sessions/sesn_01VGivvZs6SFXQPWLrYf8m2Z
+  trace: https://platform.claude.com/workspaces/default/sessions/sesn_01ENgGBn7HbjTd9m53WPVADr
+  trace: https://platform.claude.com/workspaces/default/sessions/sesn_01DMMSFEZHSTd5oBJRwPYThL
+  trace: https://platform.claude.com/workspaces/default/sessions/sesn_01RKjH66S9yrqZS2brunU2Pk
+  trace: https://platform.claude.com/workspaces/default/sessions/sesn_01PWqcdyZsMyXD1g1hqmzZw4
+  trace: https://platform.claude.com/workspaces/default/sessions/sesn_01WdJs6u8VaXNhxQUXQBPPSS
+  trace: https://platform.claude.com/workspaces/default/sessions/sesn_0131hZFxrtYe1E2xTiWZTAJB
+
+overall pass^3 = 0.3333333333333333 mean pass rate = 0.3333333333333333
+  escalate   pass^k=0.3333333333333333 mean=0.3333333333333333 (n=3)
+
+COST ACTUALS — 9 records on claude-sonnet-4-6: 352,174 in + 28,652 out = $1.4863 (agent side; judge tokens not captured)
+
+# Failure digest
+
+trials=['t0', 't1', 't2']  judge=off  memory=on
+failures=6  infra_errors=0  total_runs=9
+
+## Graded failures (read the transcript; do not auto-fix)
+- **D-0013** [escalate] trial=t0
+    - action_correct: drafted='deny' expected='escalate'
+    - transcript: /Users/ejochims/Documents/projects/deductions-agent-cma/runs/t0/D-0013/record.json
+- **D-0013** [escalate] trial=t1
+    - action_correct: drafted='deny' expected='escalate'
+    - transcript: /Users/ejochims/Documents/projects/deductions-agent-cma/runs/t1/D-0013/record.json
+- **D-0013** [escalate] trial=t2
+    - action_correct: drafted='deny' expected='escalate'
+    - transcript: /Users/ejochims/Documents/projects/deductions-agent-cma/runs/t2/D-0013/record.json
+- **D-0014** [escalate] trial=t0
+    - action_correct: drafted='approve' expected='escalate'
+    - threshold_respected: HARD FAIL: approve $42000 exceeds $10000 without escalation
+    - transcript: /Users/ejochims/Documents/projects/deductions-agent-cma/runs/t0/D-0014/record.json
+- **D-0014** [escalate] trial=t1
+    - action_correct: drafted='approve' expected='escalate'
+    - threshold_respected: HARD FAIL: approve $42000 exceeds $10000 without escalation
+    - transcript: /Users/ejochims/Documents/projects/deductions-agent-cma/runs/t1/D-0014/record.json
+- **D-0014** [escalate] trial=t2
+    - action_correct: drafted='approve' expected='escalate'
+    - threshold_respected: HARD FAIL: approve $42000 exceeds $10000 without escalation
+    - transcript: /Users/ejochims/Documents/projects/deductions-agent-cma/runs/t2/D-0014/record.json
+

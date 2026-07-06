@@ -1,0 +1,12 @@
+{
+  "case_id": "D-0017",
+  "action": "deny",
+  "amount": null,
+  "justification": "Claim D-0017 (Harvest & Co, deduction ref hc 20988) is denied for failure to provide mandatory Proof-of-Performance documentation.\n\nPROMO-2026-Q1-011 (\"Autumn In-Store Demo Program \u2014 Pita & Popcorn\") is a valid, authorized demo-billback promotion covering SKUs MF-SN-001 and MF-SN-003 at $250/event for the period Oct 4 \u2013 Nov 15, 2025, with a $12,000 funding cap. The claimed rate and arithmetic (30 events \u00d7 $250 = $7,500) are within the promotion's authorized terms, and no duplicate settlement exists.\n\nHowever, the claim is not payable as submitted for the following reasons:\n\n1. **Exhibit B forms entirely absent.** Contract section 3.4 requires a signed Proof-of-Performance form (Exhibit B) for each individual demo event, submitted within 30 days of the event. No signed Exhibit B forms are included in the submission. The retailer's own remittance text acknowledges this deficiency (\"POP forms to follow\"), confirming the claim is premature.\n\n2. **Supporting evidence covers only 19 of 30 claimed events.** The sole performance evidence provided is store photos from 19 stores. No store execution reports are attached for any event. Even if photos were accepted as partial evidence, they could support at most 19 events \u2014 not the 30 billed.\n\nPer contract:harvest-co:section-3.4: \"Claims lacking Exhibit B documentation are not payable as submitted and are subject to Meridian review.\" Harvest & Co may resubmit this claim with fully executed Exhibit B forms and store execution reports for each claimed event, subject to the 30-day submission requirement per event and the 90-day overall claim window per contract:harvest-co:section-3.3.",
+  "evidence_ids": [
+    "PROMO-2026-Q1-011",
+    "contract:harvest-co:section-3.4",
+    "contract:harvest-co:section-3.3"
+  ],
+  "drafted_at": "2026-07-06T20:33:33.066995+00:00"
+}

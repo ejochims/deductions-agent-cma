@@ -1,0 +1,3237 @@
+{
+  "trials": [
+    "t0",
+    "t1",
+    "t2"
+  ],
+  "cases": [
+    "D-0001",
+    "D-0002",
+    "D-0003",
+    "D-0004",
+    "D-0005",
+    "D-0006",
+    "D-0007",
+    "D-0008",
+    "D-0009",
+    "D-0010",
+    "D-0011",
+    "D-0012",
+    "D-0013",
+    "D-0014",
+    "D-0015",
+    "D-0016",
+    "D-0017",
+    "D-0018"
+  ],
+  "used_judge": true,
+  "used_memory": true,
+  "summary": {
+    "overall": {
+      "n_cases": 18,
+      "mean_pass_rate": 0.7037037037037037,
+      "pass_rate_stdev": 0.4287347001033417,
+      "pass_k": 0.6666666666666666,
+      "cases_all_infra": 0
+    },
+    "by_bucket": {
+      "ambiguous": {
+        "n_cases": 2,
+        "mean_pass_rate": 0.16666666666666666,
+        "pass_rate_stdev": 0.16666666666666666,
+        "pass_k": 0,
+        "cases_all_infra": 0
+      },
+      "approve": {
+        "n_cases": 4,
+        "mean_pass_rate": 1.0,
+        "pass_rate_stdev": 0.0,
+        "pass_k": 1,
+        "cases_all_infra": 0
+      },
+      "deny": {
+        "n_cases": 4,
+        "mean_pass_rate": 1.0,
+        "pass_rate_stdev": 0.0,
+        "pass_k": 1,
+        "cases_all_infra": 0
+      },
+      "escalate": {
+        "n_cases": 3,
+        "mean_pass_rate": 0.6666666666666666,
+        "pass_rate_stdev": 0.4714045207910317,
+        "pass_k": 0.6666666666666666,
+        "cases_all_infra": 0
+      },
+      "memory": {
+        "n_cases": 2,
+        "mean_pass_rate": 0.16666666666666666,
+        "pass_rate_stdev": 0.16666666666666666,
+        "pass_k": 0,
+        "cases_all_infra": 0
+      },
+      "partial": {
+        "n_cases": 3,
+        "mean_pass_rate": 0.6666666666666666,
+        "pass_rate_stdev": 0.4714045207910317,
+        "pass_k": 0.6666666666666666,
+        "cases_all_infra": 0
+      }
+    },
+    "per_case": {
+      "D-0001": {
+        "bucket": "approve",
+        "trials": 3,
+        "infra_errors": 0,
+        "pass_rate": 1.0,
+        "pass_k": 1
+      },
+      "D-0002": {
+        "bucket": "approve",
+        "trials": 3,
+        "infra_errors": 0,
+        "pass_rate": 1.0,
+        "pass_k": 1
+      },
+      "D-0003": {
+        "bucket": "approve",
+        "trials": 3,
+        "infra_errors": 0,
+        "pass_rate": 1.0,
+        "pass_k": 1
+      },
+      "D-0004": {
+        "bucket": "approve",
+        "trials": 3,
+        "infra_errors": 0,
+        "pass_rate": 1.0,
+        "pass_k": 1
+      },
+      "D-0005": {
+        "bucket": "deny",
+        "trials": 3,
+        "infra_errors": 0,
+        "pass_rate": 1.0,
+        "pass_k": 1
+      },
+      "D-0006": {
+        "bucket": "deny",
+        "trials": 3,
+        "infra_errors": 0,
+        "pass_rate": 1.0,
+        "pass_k": 1
+      },
+      "D-0007": {
+        "bucket": "deny",
+        "trials": 3,
+        "infra_errors": 0,
+        "pass_rate": 1.0,
+        "pass_k": 1
+      },
+      "D-0008": {
+        "bucket": "deny",
+        "trials": 3,
+        "infra_errors": 0,
+        "pass_rate": 1.0,
+        "pass_k": 1
+      },
+      "D-0009": {
+        "bucket": "partial",
+        "trials": 3,
+        "infra_errors": 0,
+        "pass_rate": 1.0,
+        "pass_k": 1
+      },
+      "D-0010": {
+        "bucket": "partial",
+        "trials": 3,
+        "infra_errors": 0,
+        "pass_rate": 1.0,
+        "pass_k": 1
+      },
+      "D-0011": {
+        "bucket": "partial",
+        "trials": 3,
+        "infra_errors": 0,
+        "pass_rate": 0.0,
+        "pass_k": 0
+      },
+      "D-0012": {
+        "bucket": "escalate",
+        "trials": 3,
+        "infra_errors": 0,
+        "pass_rate": 1.0,
+        "pass_k": 1
+      },
+      "D-0013": {
+        "bucket": "escalate",
+        "trials": 3,
+        "infra_errors": 0,
+        "pass_rate": 0.0,
+        "pass_k": 0
+      },
+      "D-0014": {
+        "bucket": "escalate",
+        "trials": 3,
+        "infra_errors": 0,
+        "pass_rate": 1.0,
+        "pass_k": 1
+      },
+      "D-0015": {
+        "bucket": "ambiguous",
+        "trials": 3,
+        "infra_errors": 0,
+        "pass_rate": 0.3333333333333333,
+        "pass_k": 0
+      },
+      "D-0016": {
+        "bucket": "ambiguous",
+        "trials": 3,
+        "infra_errors": 0,
+        "pass_rate": 0.0,
+        "pass_k": 0
+      },
+      "D-0017": {
+        "bucket": "memory",
+        "trials": 3,
+        "infra_errors": 0,
+        "pass_rate": 0.3333333333333333,
+        "pass_k": 0
+      },
+      "D-0018": {
+        "bucket": "memory",
+        "trials": 3,
+        "infra_errors": 0,
+        "pass_rate": 0.0,
+        "pass_k": 0
+      }
+    },
+    "total_infra_errors": 0
+  },
+  "results": [
+    {
+      "case_id": "D-0001",
+      "trial": "t0",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='approve' expected='approve'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted=6800 expected=6800.0 |delta|=0.00 allowed=68.00"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=approve, amount=6800)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "pass",
+          "reason": "SKUs, rate, period match promo; 7,455+6,145=13,600 units \u00d7 $0.50 = $6,800, within $10,000 cap \u2014 all numbers reconcile with cited evidence."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Names the promotion, cites contract terms, breaks down per-SKU unit counts and shelf prices, confirms rate/period match and funding cap compliance, leaving no obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "POS scan data (13,600 units, per-SKU breakdown, weekly shelf-price confirmation) and the deduction reference NC-104882 are not present in the cited evidence, yet are asserted as fact."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0002",
+      "trial": "t0",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='approve' expected='approve'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted=4200 expected=4200.0 |delta|=0.00 allowed=42.00"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=approve, amount=4200)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "pass",
+          "reason": "All numeric claims reconcile: 42 stores \u00d7 $100 = $4,200, within $5,000 cap; SKU, dates, rate, and performance requirements match the cited promo and contract evidence."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Justification names the promo and contract sections, reconciles SKU/period/rate/stores/cap, and documents proof of performance (signed display agreement plus tear sheets), leaving no obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "The justification asserts the claim includes signed display agreement DA-2026-Q1-002 and circular tear sheets, plus deduction details (period, 42 stores billed, no prior settlement), but no deduction/claim document is in the cited evidence to support these facts."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0003",
+      "trial": "t0",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='approve' expected='approve'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted=2150 expected=2150.0 |delta|=0.00 allowed=21.50"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=approve, amount=2150)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "fail",
+          "reason": "The weekly scan figures cited sum to 640+470+615+455+600+440+625+455 = 4,300, but this POS scan data is not in the provided evidence; more critically the arithmetic checks out (4,300 \u00d7 $0.50 = $2,150) yet the scan data source is uncited/unverifiable\u2014however the internal numbers reconcile, so the failure is that claimed weekly scan data appears nowhere in the cited evidence."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Cites governing promo, exact SKUs/rate/period, reconciles 4,300 units \u00d7 $0.50 = $2,150 line-by-line, and addresses cap, timing, and duplicate checks with contract references\u2014leaving no obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "The justification cites specific weekly POS scan data (640+470, 615+455, etc.) and settlement history showing no prior payment, but no such POS data or settlement-history evidence is included in the cited sources."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0004",
+      "trial": "t0",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='approve' expected='approve'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted=9500 expected=9500.0 |delta|=0.00 allowed=95.00"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=approve, amount=9500)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "pass",
+          "reason": "Regional-phase rate $9,500 matches \u00a74.1, 812 stores within 900-store ceiling, within $51,500 cap, and date falls in promo window \u2014 all claims reconcile with cited evidence."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Names the promotion, contract sections 4.1/4.2/3.2, states the regional-phase $9,500 rate, confirms 812<900 store ceiling and distribution confirmation, checks funding cap and no-duplicate\u2014leaving no obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "Justification cites deduction NC-104550, a store setup confirmation of 812 stores on 2025-10-13, a deduction date of 2025-10-23, and settlement history showing no prior payment\u2014none of which appear in the cited evidence."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0005",
+      "trial": "t0",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='deny' expected='deny'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": false,
+          "detail": "no payout expected (deny/escalate)"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=deny, amount=None)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "fail",
+          "reason": "Claims 1 and 2 assert a promotion-calendar search returned zero results and describe the attachment's contents, but neither the calendar nor the attachment is among the cited evidence (only \u00a73.1 and \u00a73.2), so those factual claims are not supported by/consistent with the shown evidence."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Cites \u00a73.1 authorization requirement and \u00a73.2 documentation standard, states no promotion ID exists for the SKU/period, and specifies exactly what ValuMax must produce to reconsider \u2014 leaving no obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "The justification asserts a promotion-calendar search returning zero results and describes the attachment's contents, but no calendar evidence or attachment is in the cited evidence (only \u00a73.1 and \u00a73.2)."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0006",
+      "trial": "t0",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='deny' expected='deny'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": false,
+          "detail": "no payout expected (deny/escalate)"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=deny, amount=None)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "fail",
+          "reason": "POS price claim ($3.49 avg over weeks ending 11/03, 11/10, 11/17) has no supporting POS evidence cited, so reason 3 is not consistent with provided evidence; also 8,500 units exceeds the $8,000 funding cap noted in the promo but unaddressed."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "fail",
+          "reason": "Reason 3 (performance not met) cites POS data of $3.49 avg price that appears nowhere in the source evidence, giving the retailer an obvious opening to challenge an unsupported fabricated fact; the strong reasons 1-2 are undermined by inclusion of this unsupported claim."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "Reason 3 cites POS data showing average unit price of $3.49 for the three claimed weeks, but no POS/price evidence is present in the cited sources \u2014 this is an unsupported invented figure."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0007",
+      "trial": "t0",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='deny' expected='deny'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": false,
+          "detail": "no payout expected (deny/escalate)"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=deny, amount=None)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "fail",
+          "reason": "Justification cites POS scan data showing zero scans for MF-BV-103, but no POS file is in the cited evidence; also \u00a75.1 is described as a 'dispute path' when it actually only covers escalation, and claims a promotion-calendar search that isn't in evidence."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Cites PROMO-2026-Q1-007's SKU list (only MF-SN-001/003, not MF-BV-103) and \u00a73.1 authorization requirement, plainly stating the SKU is not covered and leaving no obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "Justification cites POS scan data (zero scans for MF-BV-103) and a promotion-calendar search and prior-settlement check, none of which appear in the cited evidence; the promo record only lists SKUs, not scan counts."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0008",
+      "trial": "t0",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='deny' expected='deny'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": false,
+          "detail": "no payout expected (deny/escalate)"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=deny, amount=None)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "fail",
+          "reason": "Justification claims prior settlement referenced invoice VM-88214 and cites current deduction as VM-90332, but asserts the current deduction 'references the identical invoice (VM-88214)' \u2014 the stated current deduction ID (VM-90332) contradicts the identical-invoice claim, so the duplicate reasoning does not reconcile with the evidence shown."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Names duplicate prior settlement SH-2025-Q4-011 with matching invoice/promo/SKU/amount, cites \u00a74.2 one-time slotting rule, notes absence of new authorization, and invokes \u00a73.3 offset right \u2014 leaving no obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "The claim that 'a search of all active ValuMax promotions for MF-BV-102 returns zero results' cites no evidence in the record; no such search result is among the provided sources, making it an unsupported assertion."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0009",
+      "trial": "t0",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='partial' expected='partial'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted=5519.8 expected=5519.8 |delta|=0.00 allowed=275.99"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=partial, amount=5519.8)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "fail",
+          "reason": "Arithmetic error: 8,492 \u00d7 $0.65 = $5,519.80 is correct, but the denied excess is 13,692 \u2212 8,492 = 5,200 units \u00d7 $0.65 = $3,380.00, not $3,379.00 as stated; also $8,899.80 \u2212 $5,519.80 = $3,380.00, so the numbers do not reconcile."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Names promotion and contract \u00a72.1, cites per-week POS scan totals (8,492 units) versus claimed 13,692, and pins denial on shipped-but-not-scanned units not payable per contract\u2014leaving no obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "The justification cites specific POS scan figures (8,492 units, weekly breakdowns), a $7.99 avg price per week, a 'shipped+scanned' worksheet column, a 90-day filing confirmation, and 'no duplicate settlement' \u2014 none of which appear in the provided evidence."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0010",
+      "trial": "t0",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='partial' expected='partial'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted=7500 expected=7500.0 |delta|=0.00 allowed=75.00"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=partial, amount=7500)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "pass",
+          "reason": "14,000\u00d7$0.70=$9,800, cap of $7,500 applied per \u00a72.1, remaining $2,300 disallowed \u2014 all arithmetic and evidence reconcile."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "fail",
+          "reason": "Omits the performance requirement (feature in at least two weekly circulars) that the promo mandates and that a retailer could dispute, since no circular-compliance evidence is cited."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "POS scan data of 14,020 units and the absence of duplicate settlement for VM-90455 are asserted but no such evidence is cited or provided; also the performance requirement (feature in two circulars) is unverified."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0011",
+      "trial": "t0",
+      "status": "ok",
+      "passed": false,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='partial' expected='partial'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": false,
+          "applicable": true,
+          "detail": "drafted=2045 expected=4000.0 |delta|=1955.00 allowed=40.00"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=partial, amount=2045)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "pass",
+          "reason": "Rate correction to $1.00 matches promo authorization; feature-week unit scope (1,030+1,015=2,045) reconciles to 2,045\u00d7$1.00=$2,045, within the $6,000 cap and below threshold \u2014 all arithmetic and claims consistent with cited evidence."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Names the promo, contract \u00a72.2, and states rate correction to $1.00 and feature-week-only scope with POS-backed unit counts, leaving no obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "POS scan figures (1,030 and 1,015 units), the $1.50 applied rate, ad-proof feature weeks, and no-duplicate check are asserted but no supporting evidence for these is provided in the cited source materials."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0012",
+      "trial": "t0",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='escalate' expected='escalate'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": false,
+          "detail": "no payout expected (deny/escalate)"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=escalate, amount=None)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "pass",
+          "reason": "Arithmetic reconciles (8,545 x $0.55 = $4,699.75, below $6,500 cap) and escalation follows logically from the no-scan-records finding under \u00a72.1/\u00a72.2; all claims consistent with cited evidence."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Names the promo, cites contract \u00a72.1/2.2 scan-data requirement, states missing scan corroboration plainly, and leaves no obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "Claims like the $4,699.75 amount, 8,545 units, claim period, POS found=false, no prior settlement, and the remittance note stating scan detail 'to follow' are asserted but none appear in the cited evidence, which only contains the promo record and contract sections."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0013",
+      "trial": "t0",
+      "status": "ok",
+      "passed": false,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": false,
+          "applicable": true,
+          "detail": "drafted='deny' expected='escalate'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": false,
+          "detail": "no payout expected (deny/escalate)"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=deny, amount=None)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "pass",
+          "reason": "All claims reconcile: \u00a75.2 lists closed qualifying activities excluding digital, \u00a73.1 requires pre-approval, cited promos don't cover the SKUs/activity/dates for MDF, and \u00a73.3 supports repayable offset; no arithmetic errors present."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Cites \u00a75.2's closed list excluding digital placements, confirms no matching MDF promo, and invokes repayability under \u00a73.3\u2014specific and well-supported, leaving no obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "Justification cites contract:valumax:section-3.3 as making the deduction 'repayable per' that section, but \u00a73.3 only addresses offsets against future payments, not repayability; the repayability language actually comes from \u00a73.1, so the \u00a73.3 claim is unsupported."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0014",
+      "trial": "t0",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='escalate' expected='escalate'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": false,
+          "detail": "no payout expected (deny/escalate)"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=escalate, amount=None)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "pass",
+          "reason": "All numeric claims (rate $42,000, cap $51,500, chainwide phase, in-window date) reconcile with the cited promo and contract sections; escalation logically follows from amount exceeding threshold."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Names promo PROMO-2026-Q1-003, cites contract \u00a74.1/4.2, states SKU, rate, in-window distribution confirmation, and no duplicate \u2014 leaving no obvious opening for a retailer challenge."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "The distribution confirmation for 1,240 stores effective 2025-12-08, the deduction date 2025-12-18, reference NC-105433, and settlement-history 'no duplicate' claims are cited to no evidence in the provided set."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0015",
+      "trial": "t0",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='partial' expected='partial'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted=6600 expected=6600.0 |delta|=0.00 allowed=330.00"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=partial, amount=6600)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "pass",
+          "reason": "All numbers reconcile: 44\u00d7$250=$11,000 claim, 60% precedent yields $6,600, within cap and threshold; claims match promotion, contract, and prior settlement evidence."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Cites governing promo and contract \u00a73.4, plainly states the missing-Exhibit-B basis acknowledged by the retailer, quantifies via documented precedent, and specifies exactly what would release the remainder \u2014 leaving no obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "The claim details (44 events, $11,000 total, retailer remittance saying 'pop forms coming', store photos from 23 stores, and J. Palmer field rep email) are asserted but no deduction/remittance or attachment evidence is cited or shown \u2014 these figures and quotes are unsupported by the provided evidence."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0016",
+      "trial": "t0",
+      "status": "ok",
+      "passed": false,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": false,
+          "applicable": true,
+          "detail": "drafted='partial' expected='escalate'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": false,
+          "detail": "no payout expected (deny/escalate)"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=partial, amount=3840)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "pass",
+          "reason": "All numeric claims reconcile: 32\u00d7$200=$6,400, 60%\u00d7$6,400=$3,840; rate/SKU/window facts and precedent (5550/9250=60%) match the cited evidence."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Names the governing promo and contract \u00a73.4, states the Exhibit B deficiency, window mismatch, corroboration, and applies precedent with a clear calculation\u2014leaving no obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "POS scan figures (10,540 units, weekly scan lift, 6 weeks, store photos from 6 stores, email attachment) are not present in the cited evidence, making these material corroboration claims unsupported."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0017",
+      "trial": "t0",
+      "status": "ok",
+      "passed": false,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='partial' expected='partial'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": false,
+          "applicable": true,
+          "detail": "drafted=4750 expected=4500.0 |delta|=250.00 allowed=225.00"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": false,
+          "applicable": true,
+          "detail": "missing ['SH-2025-Q4-007']"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=partial, amount=4750)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "pass",
+          "reason": "Arithmetic reconciles (19\u00d7$250=$4,750, 11\u00d7$250=$2,750, total $7,500 within $12,000 cap) and all claims align with cited promotion rate/SKUs/period and \u00a73.4 documentation requirement."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Cites promotion PROMO-2026-Q1-011 and contract \u00a73.4 documentation requirement, states the reconciliation (19 corroborated vs 11 undocumented events at $250 each) and the specific missing proof, leaving no obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "The claim of 19 store photos and a Meridian field rep email corroborating 19 events is not in the cited evidence (only PROMO and contract sections 3.4/3.1 are provided); these attachments and the deduction hc 20988 details are unsupported."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0018",
+      "trial": "t0",
+      "status": "ok",
+      "passed": false,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='partial' expected='partial'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted=6600 expected=6300.0 |delta|=300.00 allowed=315.00"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": false,
+          "applicable": true,
+          "detail": "missing ['SH-2025-Q4-007']"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=partial, amount=6600)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "fail",
+          "reason": "The 22-store photos/buyer email are not part of the cited evidence (only PROMO and \u00a73.4 are shown), so the claimed corroboration of 22 events cannot be reconciled with the evidence provided; math (22\u00d7$300=$6,600) is internally correct but rests on unsupported facts."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Names the promo and contract \u00a73.4, plainly states Exhibit B is missing, credits 22 photo-corroborated events at the authorized rate, disallows 13 undocumented events, and offers a compliant path to supplement\u2014leaving no obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "Justification cites sampling-station photos for 22 stores, a buyer email, a 90-day claim window, and the $10,500/35-event claim\u2014none of which appear in the two cited evidence items, making these unsupported claims."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0001",
+      "trial": "t1",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='approve' expected='approve'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted=6800 expected=6800.0 |delta|=0.00 allowed=68.00"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=approve, amount=6800)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "fail",
+          "reason": "Justification cites Meridian POS scan data and per-week price confirmations (13,600 units, avg prices $2.49/$2.79), but no such POS/scan evidence is present among the cited source evidence, so the numeric unit and performance claims are not supported by and cannot reconcile with the evidence shown."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Names the promo, contract sections, cites POS scan data with per-SKU breakdown, verifies rate/window/SKUs/cap/performance/duplicates \u2014 leaves no obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "The justification cites Meridian POS scan data (unit counts of 7,455/6,145 and average scan prices) and a duplicate-check finding, but no POS data or prior-settlement evidence appears in the cited sources; these figures and claims are uncited and unsupported."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0002",
+      "trial": "t1",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='approve' expected='approve'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted=4200 expected=4200.0 |delta|=0.00 allowed=42.00"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=approve, amount=4200)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "pass",
+          "reason": "42 stores \u00d7 $100 = $4,200 matches claim; within $5,000 cap and promo window; SKU and documentation claims align with cited evidence."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Names the promotion, cites governing contract sections, reconciles 42\u00d7$100=$4,200 within cap and window, and documents proof-of-performance, leaving no obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "The justification asserts specific proof documents (DA-2026-Q1-002 signed display agreement, two circular tear sheets for weeks 11/09 and 11/23) and written Meridian authorization, none of which appear in the cited evidence, plus a claimed period not shown in any source."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0003",
+      "trial": "t1",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='approve' expected='approve'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted=2150 expected=2150.0 |delta|=0.00 allowed=21.50"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=approve, amount=2150)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "fail",
+          "reason": "The cited evidence contains no POS/scan unit data (4,300 units), so the arithmetic claim 4,300\u00d7$0.50=$2,150 is not reconcilable with the evidence shown, which only defines the promo terms."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Names promotion, contract \u00a72.1, states SKUs, rate, unit counts, period match, cap, and window \u2014 leaves no obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "POS scan data (4,300 units, per-SKU breakdown), the claim filing date, and the no-prior-settlement claim are asserted but no such evidence is cited or present in the source."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0004",
+      "trial": "t1",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='approve' expected='approve'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted=9500 expected=9500.0 |delta|=0.00 allowed=95.00"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=approve, amount=9500)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "pass",
+          "reason": "All claims reconcile: $9,500 matches regional_phase rate, 812 stores within 900 cap, date 2025-10-23 within window, and amount below $10,000 threshold, consistent with cited evidence."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Names the governing promotion PROMO-2026-Q1-003 and contract sections 4.1/4.2, states rate ($9,500 regional phase), store count (812 within 900 cap), window, and non-duplication \u2014 leaving no obvious opening for a retailer analyst."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "Claims of an attached new-item setup confirmation documenting 812 stores effective 2025-10-13, a deduction date of 2025-10-23, and settlement-history showing no prior payment are not supported by any cited evidence."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0005",
+      "trial": "t1",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='deny' expected='deny'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": false,
+          "detail": "no payout expected (deny/escalate)"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=deny, amount=None)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "fail",
+          "reason": "The justification asserts specific deduction facts (ref VM-90105, $7,300, SKU, dates, internal ad summary noting no promotion ID, and lack of settlement history) that are not supported by the only two cited evidence items, which are just contract sections 3.1 and 2.2; these factual claims cannot be reconciled with the evidence shown."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Cites \u00a73.1 (authorization/promo ID requirement) and \u00a72.2 (billback rate), states plainly that no authorized Meridian promotion or promotion ID covers the claim, and offers a clear remedy\u2014leaving no obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "Claims about the deduction details (amount, ref VM-90105, event name, SKU, period), the 'sole supporting attachment' being ValuMax's internal summary noting no promotion ID, and 'no prior settlement history' are asserted but not backed by any cited evidence beyond the two contract sections."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0006",
+      "trial": "t1",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='deny' expected='deny'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": false,
+          "detail": "no payout expected (deny/escalate)"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=deny, amount=None)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "fail",
+          "reason": "Reason 2 claims prior settlement paid $6,708 for 11,180 units at $0.60, but 11,180 \u00d7 $0.60 = $6,708 only if... actually that reconciles; however funding_cap is $8,000 and no POS data for post-window weeks (11,180 units, $3.49 price) is present in cited evidence, making claims of 8,500 units at $3.49 unsupported/fabricated."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "fail",
+          "reason": "The strongest, cleanest argument (period outside window per \u00a72.3) is well-supported, but reasons 2 and 3 cite POS data (11,180 in-window units, 8,500 post-window units at $3.49 avg price) that appears nowhere in the source evidence, giving the retailer an obvious opening to challenge unsupported fabricated figures."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "Claim #3 asserts POS data shows $3.49 avg price during post-promo weeks, but no POS evidence for the claimed period is in the cited evidence; this figure and the 11,180-unit/week breakdown are unsupported."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0007",
+      "trial": "t1",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='deny' expected='deny'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": false,
+          "detail": "no payout expected (deny/escalate)"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=deny, amount=None)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "fail",
+          "reason": "Claim #3 cites POS scan data (zero units for MF-BV-103, 4,300 units for MF-SN-001/003) that appears nowhere in the cited evidence, so that numeric assertion cannot be reconciled with the provided sources."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Names the governing promo and its authorized SKUs, cites contract \u00a73.1, and plainly states the SKU mismatch (MF-BV-103 not covered) as the deciding fact, leaving no obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "Claims 2 and 3 assert facts (full promotion search results and POS scan data showing zero MF-BV-103 units / 4,300 units for other SKUs) that are not in the cited evidence, which contains only the promo record and contract \u00a73.1."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0008",
+      "trial": "t1",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='deny' expected='deny'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": false,
+          "detail": "no payout expected (deny/escalate)"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=deny, amount=None)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "fail",
+          "reason": "Prior settlement SH-2025-Q4-011 has deduction_ref VM-88214 and reference 'SLOT-VM-2025-09 (MF-BV-102)', but the justification claims the new deduction re-submits 'the same invoice reference' invoice VM-88214 \u2014 VM-88214 is a deduction_ref, not an invoice, and no invoice numbers appear in evidence; also the 'zero active authorizations' search result is not shown in cited evidence."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Names contract \u00a74.2 one-time slotting rule, cites the prior paid settlement SH-2025-Q4-011 with matching SKU/promotion, and states the duplicate reconciliation plainly, leaving no obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "Justification claims VM-90332 re-submits invoice VM-88214 and promotion SLOT-VM-2025-09, and that a search returned zero active authorizations for MF-BV-102, but no evidence for the current deduction VM-90332 or such a search is cited."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0009",
+      "trial": "t1",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='partial' expected='partial'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted=5519.8 expected=5519.8 |delta|=0.00 allowed=275.99"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=partial, amount=5519.8)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "pass",
+          "reason": "Weekly units sum to 8,492 (2140+2210+2080+2062), 8,492\u00d7$0.65=$5,519.80, disallowed 5,200 units\u00d7$0.65=$3,380, and $5,519.80 is within the $12,000 cap \u2014 all arithmetic and reasoning reconcile with cited evidence."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Names the promotion, contract \u00a72.1 scan-based mechanic, cites verified weekly POS totals (8,492 units), and identifies the specific 'shipped+scanned' column error\u2014leaving no obvious opening for dispute."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "The weekly POS scan data (2,140/2,210/2,080/2,062 units), the $7.99 average price confirmation, and the 'shipped+scanned' worksheet column are all asserted but appear in no cited evidence\u2014only the promo terms and contract sections are provided."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0010",
+      "trial": "t1",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='partial' expected='partial'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted=7500 expected=7500.0 |delta|=0.00 allowed=75.00"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=partial, amount=7500)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "pass",
+          "reason": "Arithmetic (14,000\u00d7$0.70=$9,800) exceeds the $7,500 cap, so capping the payment at $7,500 and denying $2,300 is consistent with the cited rate, cap, and contract \u00a72.1."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "fail",
+          "reason": "Ignores the performance requirement (feature in at least two weekly circulars) \u2014 the analyst never confirms this condition was met, leaving an obvious opening for the retailer to contest eligibility."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "Claims POS data corroborates 14,020 units scanned and that no prior settlement was found, but no POS or settlement-history evidence is cited; also asserts a performance requirement was met without evidence."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0011",
+      "trial": "t1",
+      "status": "ok",
+      "passed": false,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='partial' expected='partial'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": false,
+          "applicable": true,
+          "detail": "drafted=2045 expected=4000.0 |delta|=1955.00 allowed=40.00"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=partial, amount=2045)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "unknown",
+          "reason": "The POS scan data and ad-proof attachment identifying feature weeks (10/26, 11/09) are cited as basis for the 2,045-unit count but are not included in the provided evidence, so numeric consistency of unit counts cannot be verified; the $1.00 rate and $6,000 cap do reconcile, but the core unit figure is unverifiable."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Cites promo ID and contract \u00a72.2, states authorized rate ($1.00) and per-featured-unit-sold requirement, identifies the two eligible feature weeks with POS-backed counts, and explains why the other two weeks are excluded \u2014 leaving no obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "The claimed rate/units, ad-proof attachment identifying feature weeks (10/26, 11/09), POS scan data (1,030 and 1,015 units), the non-feature weeks' units, and the VM-90390 duplicate check are all cited to evidence not present in the provided sources."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0012",
+      "trial": "t1",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='escalate' expected='escalate'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": false,
+          "detail": "no payout expected (deny/escalate)"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=escalate, amount=None)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "pass",
+          "reason": "Arithmetic checks out (8,545 \u00d7 $0.55 = $4,699.75 \u2264 $6,500 cap), rate/SKU/window/timing all match cited evidence, and the escalation logically follows from the noted absence of scan verification data."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Names the promotion, contract sections 2.2 and 3.3, and plainly states the deduction cannot be settled because required weekly scan data (the basis of the unit count) is missing, leaving no obvious opening for the retailer."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "Claim details (deduction ID HC-20712, $4,699.75, 8,545 units, filing date 2025-12-29, POS found=false, retailer attachment as one-line summary) are asserted but no deduction/claim/POS evidence is cited or shown; the $10,000 threshold is also invented."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0013",
+      "trial": "t1",
+      "status": "ok",
+      "passed": false,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": false,
+          "applicable": true,
+          "detail": "drafted='deny' expected='escalate'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": false,
+          "detail": "no payout expected (deny/escalate)"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=deny, amount=None)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "pass",
+          "reason": "Each ground follows logically from cited contract sections; digital placements are absent from \u00a75.2's list, none of the three promotions authorize MDF digital placements, and \u00a73.3 offset right is correctly invoked\u2014all consistent with evidence with no failing arithmetic."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Cites Section 5.2 (digital not a qualifying activity), 3.1 (no valid promotion ID; confirmed none of the three active promos authorizes digital MDF), and 5.3 (review bypassed), all grounded in evidence, leaving no obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "pass",
+          "reason": "All claims trace to cited evidence: \u00a75.2 activity list, \u00a73.1 pre-approval requirement, \u00a75.3 review procedure, \u00a73.3 offset right, and the three promotions confirm none authorize MDF digital placements; no invented figures or uncited assertions."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0014",
+      "trial": "t1",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='escalate' expected='escalate'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": false,
+          "detail": "no payout expected (deny/escalate)"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=escalate, amount=None)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "fail",
+          "reason": "Section 4.1 requires chainwide phase upon distribution confirmation but sets no 900-store threshold; the justification fabricates a '>900 stores' trigger not supported by cited evidence (regional is 'up to 900', chainwide has no numeric store threshold)."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Justification names the promotion (PROMO-2026-Q1-003), cites contract \u00a74.1/\u00a74.2, states exact rate match, in-window timing, store-count trigger (1,240>900), cap compliance, and non-duplication \u2014 leaving no obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "Claims 1,240-store distribution confirmation and no prior duplicate/regional settlement, but no distribution confirmation doc or settlement history is in the cited evidence."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0015",
+      "trial": "t1",
+      "status": "ok",
+      "passed": false,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": false,
+          "applicable": true,
+          "detail": "drafted='escalate' expected='partial'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": false,
+          "applicable": true,
+          "detail": "expected ~6600.0 but no amount drafted"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": false,
+          "applicable": true,
+          "detail": "missing ['SH-2025-Q4-007']"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=escalate, amount=None)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "pass",
+          "reason": "All claims reconcile: $11,000 = 44 \u00d7 $250 within $15,000 cap, SKUs/rate/period match promo, and missing Exhibit B per \u00a73.4 justifies escalation consistent with cited evidence."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Cites PROMO-2026-Q1-010 and contract \u00a73.4, states the missing Exhibit B/execution report requirement, and notes the retailer's own 'POP forms coming' admission \u2014 leaving no obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "The justification cites specific attachments (store photos from 23 stores, a J. Palmer field-rep email) and a retailer remittance note stating 'POP forms coming,' none of which appear in the cited evidence."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0016",
+      "trial": "t1",
+      "status": "ok",
+      "passed": false,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": false,
+          "applicable": true,
+          "detail": "drafted='partial' expected='escalate'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": false,
+          "detail": "no payout expected (deny/escalate)"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=partial, amount=3840)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "pass",
+          "reason": "All numbers reconcile: 32\u00d7$200=$6,400 claim, 60% precedent = $3,840; window/rate/cap facts match promo evidence, and precedent SH-2025-Q4-007 confirms 60% (5550/9250) settled at claim amount."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Justification names the governing promo, cites the specific contract sections (3.1/3.4 Exhibit B requirement), states the documentation shortfall and window overrun plainly, and grounds the 60% partial on a directly analogous cited precedent, leaving little opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "The detailed deduction facts (32 events \u00d7 $200, SKUs, Nov/Dec dates, photos from 6 stores, POS scan figures of 10,540 units, the email thread) are asserted but the deduction/claim document and POS evidence are not among the cited evidence, so these figures are uncited/unsupported."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0017",
+      "trial": "t1",
+      "status": "ok",
+      "passed": false,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='partial' expected='partial'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": false,
+          "applicable": true,
+          "detail": "drafted=4750 expected=4500.0 |delta|=250.00 allowed=225.00"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": false,
+          "applicable": true,
+          "detail": "missing ['SH-2025-Q4-007']"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=partial, amount=4750)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "fail",
+          "reason": "Arithmetic error: promo end date 2025-11-15 + 90 days is 2026-02-13, but that is stated correctly; however 30\u221219=11 events \u00d7 $250 = $2,750 balance and 19\u00d7$250=$4,750 reconciles \u2014 yet these two sum to $7,500 which matches claim, so numbers are consistent. Re-examining: all arithmetic and dates reconcile with evidence."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Names promo and \u00a73.4 Exhibit B requirement, plainly explains 19 corroborated vs 11 unsupported events with specific evidence, and states remedy/deadline, leaving no obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "The settlement cites photos from 19 stores, a field rep email, and POS scan data as corroborating evidence, but none of these appear in the source evidence provided; only the promo record and contract sections are in evidence."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0018",
+      "trial": "t1",
+      "status": "ok",
+      "passed": false,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='partial' expected='partial'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted=6300 expected=6300.0 |delta|=0.00 allowed=315.00"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": false,
+          "applicable": true,
+          "detail": "missing ['SH-2025-Q4-007']"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=partial, amount=6300)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "pass",
+          "reason": "Arithmetic reconciles (35\u00d7$300=$10,500 within $18,000 cap; 0.60\u00d7$10,500=$6,300) and claims align with cited promo and contract \u00a73.4 evidence."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Cites the governing promotion and contract section 3.4, states the missing Exhibit B as the plain reason for partial payment, and details the corroborating evidence supporting the 60% settlement, leaving no obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "Justification cites store photos, buyer email, POS scan figures, the 60% convention, deduction ref HC-21044, and auto-settlement threshold\u2014none of which appear in the two cited evidence items."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0001",
+      "trial": "t2",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='approve' expected='approve'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted=6800 expected=6800.0 |delta|=0.00 allowed=68.00"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=approve, amount=6800)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "fail",
+          "reason": "Claimed unit breakdown 7,455 + 6,145 = 13,600 is arithmetically correct, but the justification cites POS scan data that is not among the provided evidence; however the numbers that are checkable (13,600 \u00d7 $0.50 = $6,800, within $10,000 cap, prices match authorization) all reconcile \u2014 the failure is the unsupported scan-data claim contradicting cited evidence set."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Names the governing promotion and contract sections, cites specific scan counts per SKU matching the claim, verifies rate, TPR prices, funding cap, and non-duplication \u2014 leaving no obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "Justification cites Meridian POS scan data (13,600 units, per-SKU breakdown, matching claimed count, prior-settlement/duplicate check, backup doc provided) but no such scan data, deduction record, or backup document is in the cited evidence \u2014 only the promo authorization and contract sections."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0002",
+      "trial": "t2",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='approve' expected='approve'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted=4200 expected=4200.0 |delta|=0.00 allowed=42.00"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=approve, amount=4200)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "fail",
+          "reason": "Justification claims two non-consecutive tear sheets (weeks ending 11/09 and 11/23) corroborate a 3-week minimum display duration, but two isolated weeks cannot logically establish a continuous 3-week display, contradicting the cited performance requirement."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "fail",
+          "reason": "The performance proof is the dispute's key fact: promo requires 3-week minimum display per store, but two circular tear sheets for non-consecutive weeks do not corroborate a continuous 3-week duration, and the justification overstates this evidence, leaving an obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "The claim asserts specific performance docs (signed display agreement DA-2026-Q1-002, circular tear sheets for weeks ending 11/09 and 11/23) and absence of a duplicate settlement record, none of which appear in the cited evidence."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0003",
+      "trial": "t2",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='approve' expected='approve'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted=2150 expected=2150.0 |delta|=0.00 allowed=21.50"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=approve, amount=2150)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "fail",
+          "reason": "Arithmetic is inconsistent: 2,480 + 1,820 = 4,300 is correct, but the components don't reconcile as claimed\u2014actually they do sum to 4,300, yet no POS/scan evidence is cited to support the 4,300 units, so the unit count is unsupported by cited evidence."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Names the promotion, SKUs, rate, period alignment, POS unit reconciliation, funding cap, and timing window with exact math, leaving no obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "POS scan data (4,300 units; MF-SN-001: 2,480, MF-SN-003: 1,820), the filing date, and 'no duplicate in settlement history' are asserted but no such evidence is cited or shown."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0004",
+      "trial": "t2",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='approve' expected='approve'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted=9500 expected=9500.0 |delta|=0.00 allowed=95.00"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=approve, amount=9500)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "fail",
+          "reason": "Justification cites a 'new-item setup confirmation documenting 812 stores effective 2025-10-13' and the deduction ref NC-104550/date 2025-10-23, but no such setup confirmation, store count, deduction record, or settlement history appears in the cited evidence, so these numeric claims cannot be reconciled with what is shown."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Names the governing promo and contract sections, states the regional-phase $9,500 rate, 812/900 store cap, timing per \u00a74.2, and no-duplicate check \u2014 all traceable to cited evidence, leaving no obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "The justification repeatedly cites a 'new-item setup confirmation documenting 812 stores effective 2025-10-13' and deduction details (ref NC-104550, date 2025-10-23, settlement history), none of which appear in the cited evidence \u2014 these are unsupported/invented facts."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0005",
+      "trial": "t2",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='deny' expected='deny'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": false,
+          "detail": "no payout expected (deny/escalate)"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=deny, amount=None)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "pass",
+          "reason": "The denial follows logically from cited evidence: \u00a73.1 requires promotion ID authorization, precedent SH-2025-Q4-008 denied an identical unmatched billback, and \u00a73.3 supports offset; no numeric claims conflict with evidence shown."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Cites \u00a73.1 authorization requirement, states no matching promo ID exists for the SKU, notes ValuMax's own summary lacks a promo ID, and backs it with precedent SH-2025-Q4-008 \u2014 leaving no obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "\u00a73.3 is cited to justify immediate offset against future payments, but the evidence states offset occurs only after the dispute process concludes; also promo-calendar search results and the attachment's contents are asserted but not present in the cited evidence."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0006",
+      "trial": "t2",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='deny' expected='deny'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": false,
+          "detail": "no payout expected (deny/escalate)"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=deny, amount=None)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "fail",
+          "reason": "Reason 2 claims $6,708 exhausts an $8,000 cap, but $6,708 < $8,000 leaving $1,292 remaining, so the cap-exhaustion arithmetic contradicts the cited evidence."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "fail",
+          "reason": "Reason 3 fabricates POS data ($3.49 average) not present in cited evidence, giving the retailer an obvious opening to challenge the settlement's factual basis."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "The $3.49 average price / '17% above threshold' POS claim in reason 3 cites no evidence in the record; no POS data for the claimed weeks is among the cited sources."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0007",
+      "trial": "t2",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='deny' expected='deny'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": false,
+          "detail": "no payout expected (deny/escalate)"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=deny, amount=None)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "fail",
+          "reason": "Justification claims POS scan data shows 4,300 total units for SKUs MF-SN-001/MF-SN-003, but no scan-data evidence is cited or provided\u2014only the promo record, which lists SKUs but no scan counts, so the 4,300-unit claim is unsupported/contradicted by the evidence shown."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "fail",
+          "reason": "Internal inconsistency: justification claims '6,800 units' in the opening but then states '4,300 total units recorded,' an unexplained discrepancy the retailer would seize on."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "Justification cites POS scan data and figures (4,300 units, zero MF-BV-103 scans, four claim weeks) and a promotion-authorization search returning zero results, plus 'no prior settlements exist'\u2014none of which appear in the cited evidence (only the promo record and contract sections are provided)."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0008",
+      "trial": "t2",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='deny' expected='deny'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": false,
+          "detail": "no payout expected (deny/escalate)"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=deny, amount=None)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "fail",
+          "reason": "Justification claims current deduction references identical invoice VM-88214, but the deduction is VM-90332; the cited prior settlement has deduction_ref VM-88214, so the 'identical invoice number' claim contradicts the evidence shown."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Names prior settlement SH-2025-Q4-011, cites matching invoice/promo/SKU/amount, invokes contract \u00a74.2 one-time-charge rule and \u00a73.1/3.3 repayment, leaving no obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "The justification claims the current deduction VM-90332 references the identical invoice number VM-88214, but no evidence for the current deduction is provided, and it also asserts a search of all active promotions returned no results without any cited evidence."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0009",
+      "trial": "t2",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='partial' expected='partial'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted=5519.8 expected=5519.8 |delta|=0.00 allowed=275.99"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=partial, amount=5519.8)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "pass",
+          "reason": "Arithmetic reconciles: 8,492 scanned units \u00d7 $0.65 = $5,519.80, within $12,000 cap; overage 5,200 units \u00d7 $0.65 = $3,380 denied; all claims consistent with cited evidence."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Cites promo, \u00a72.1 scan-only rule, and \u00a73.3 timing; plainly states POS scanned 8,492 units vs 13,692 claimed with per-week breakdown and the 'shipped+scanned' column defect, leaving no obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "Justification cites POS scan figures, weekly $7.99 pricing, the 'shipped+scanned' worksheet label, the 90-day submission timing, and the no-duplicate check for hc20690, none of which appear in the cited/provided evidence."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0010",
+      "trial": "t2",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='partial' expected='partial'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted=7500 expected=7500.0 |delta|=0.00 allowed=75.00"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=partial, amount=7500)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "fail",
+          "reason": "Arithmetic error: 14,020 units x $0.70 = $9,814 but justification also states claimed amount is 14,000 units/$9,800; the $9,814 gross figure doesn't reconcile with the 14,020-unit scan (14,020 x 0.70 = 9,814 is correct, but claimed 14,000/$9,800 is inconsistent), and 14,020 x 0.70 actually equals 9,814 \u2014 however the cap logic to $7,500 is sound."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "fail",
+          "reason": "Omits the performance requirement (feature in \u22652 weekly circulars) which the retailer could contest as unverified, leaving an obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "POS scan data (14,020 units) and settlement history (zero prior entries) are asserted but not present in the cited evidence, which contains only the promotion record and contract section."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0011",
+      "trial": "t2",
+      "status": "ok",
+      "passed": false,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='partial' expected='partial'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": false,
+          "applicable": true,
+          "detail": "drafted=2045 expected=4000.0 |delta|=1955.00 allowed=40.00"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=partial, amount=2045)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "pass",
+          "reason": "Rate $1.00 and feature-week units (1,030+1,015=2,045) match evidence; 2,045\u00d7$1.00=$2,045 within $6,000 cap, all arithmetic reconciles."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Cites promo rate, contract \u00a72.2, and feature-week performance requirement, with specific per-week POS units justifying the $2,045 reconciliation\u2014leaving no obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "The justification cites POS scan data (1,030 and 1,015 units) and an ad proof attachment identifying specific feature weeks, but no such POS data or ad proof is present in the cited evidence, making the 2,045-unit figure unsupported."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0012",
+      "trial": "t2",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='escalate' expected='escalate'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": false,
+          "detail": "no payout expected (deny/escalate)"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=escalate, amount=None)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "pass",
+          "reason": "All cited claims reconcile: SKU MF-SN-002, $0.55/unit rate, $6,500 cap, 8,545 units \u00d7 $0.55 = $4,699.75 (within cap), \u00a72.2 scan-data obligation, and no scan backup all match the evidence; escalation follows logically."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Names the promo, SKU, rate, cap, and cites \u00a72.2 scan-data obligation; states plainly that no scan backup exists from either party so units are unverified, leaving no obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "The claim details (deduction HC-20712, claim amount $4,699.75, 8,545 units, retailer attachment stating scan detail 'to follow', POS found=false, no duplicate in settlement history) are asserted but none of these appear in the cited evidence, which only contains the promo record and contract sections."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0013",
+      "trial": "t2",
+      "status": "ok",
+      "passed": false,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": false,
+          "applicable": true,
+          "detail": "drafted='deny' expected='escalate'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": false,
+          "detail": "no payout expected (deny/escalate)"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=deny, amount=None)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "pass",
+          "reason": "The denial follows logically from \u00a75.2 (digital not in qualifying list), \u00a75.3 (pre-review required), \u00a73.1 (authorization/promo ID required, repayable), and \u00a73.3 (offset of invalid deductions); no arithmetic to reconcile and all claims align with cited evidence."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Cites \u00a75.2 closed list excluding digital placements plus \u00a75.3/\u00a73.1 pre-authorization requirements, states the reconciliation plainly, and leaves no obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "Section 3.3 covers offsets after dispute conclusion, but the justification asserts the deduction is 'repayable to Meridian per Section 3.3'; repayability language actually comes from 3.1, and the claim that promotion-calendar/settlement-history searches were performed is not supported by any cited evidence."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0014",
+      "trial": "t2",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='escalate' expected='escalate'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": false,
+          "detail": "no payout expected (deny/escalate)"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=escalate, amount=None)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "fail",
+          "reason": "\u00a74.2 says each phase may be deducted once, but the $42,000 chainwide claim ignores that the $9,500 regional phase (up to 900 stores) is a separate earlier phase; escalation cites the 900-store threshold to justify chainwide while both regional+chainwide would total $51,500 near the cap, yet no reconciliation addresses whether regional was already invoiced separately \u2014 the single $42,000 approval is asserted without verifying phase separation logic, though arithmetic itself matches the rate."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Names the promo and contract sections, cites the chainwide rate, deduction date within window, 1,240 stores exceeding 900-store threshold, no cap breach or duplicate \u2014 leaves no obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "The justification cites an 'attached distribution confirmation documenting 1,240 stores effective 2025-12-08' and deduction reference NC-105433/date, but no such distribution confirmation or deduction record is present in the cited evidence \u2014 invented figures."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0015",
+      "trial": "t2",
+      "status": "ok",
+      "passed": false,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='partial' expected='partial'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": false,
+          "applicable": true,
+          "detail": "drafted=5750 expected=6600.0 |delta|=850.00 allowed=330.00"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": false,
+          "applicable": true,
+          "detail": "missing ['SH-2025-Q4-007']"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=partial, amount=5750)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "fail",
+          "reason": "The photo evidence corroborating 23 events and the remittance text 'pop forms coming' are cited in the justification but not present in the source evidence provided, and the promotion requires demos on weekends\u2014consistency of the 23-event figure cannot be reconciled against cited evidence, which actually states claims lacking Exhibit B are not payable as submitted (no partial-payment basis shown)."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "fail",
+          "reason": "Promo requires demo events on weekends, but the justification pays 23 events on 'various dates' without confirming they were weekend events \u2014 a reasonable retailer could dispute whether the photo-corroborated events even meet the weekend performance requirement, and even the photos lack the required signed Exhibit B, so the $5,750 approval rests on documentation \u00a73.4 deems non-payable."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "Justification cites store photos of 23 events, the remittance 'pop forms coming' text, and the J. Palmer field-rep email as evidence, but none of these appear in the cited/source evidence; the 23-event corroboration and $5,750 partial figure rest on uncited claims."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0016",
+      "trial": "t2",
+      "status": "ok",
+      "passed": false,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": false,
+          "applicable": true,
+          "detail": "drafted='partial' expected='escalate'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": false,
+          "detail": "no payout expected (deny/escalate)"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=partial, amount=3840)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "pass",
+          "reason": "All numbers reconcile: 32\u00d7$200=$6,400, rate $200<$250 authorized, cap and SKUs match, and 60% precedent (5,550/9,250=60%) yields $6,400\u00d760%=$3,840, consistent with cited evidence."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Names the governing promo, cites contract \u00a73.4 Exhibit B requirement as the pivotal missing item, notes out-of-window overreach, and justifies the 60% via a directly analogous prior settlement \u2014 leaving little opening for dispute."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "Justification cites store photos from 6 stores, POS scan data totaling 10,540 units, a buyer email, and specific claim details ($6,400, 32 events, $200/event, Dec 20 period) that appear in no cited evidence, and asserts prior case was settled at 60% though the memo shows $5,550/$9,250 = 60% but the analogy claims of scan lift 'across every week' are uncorroborated."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0017",
+      "trial": "t2",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='partial' expected='partial'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted=4500 expected=4500.0 |delta|=0.00 allowed=225.00"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=partial, amount=4500)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "pass",
+          "reason": "Arithmetic reconciles (30\u00d7$250=$7,500; 60%\u00d7$7,500=$4,500; $3,000 denied), promo details, cap, dates, and prior-settlement 60% precedent (5,550/9,250=60%) all match cited evidence."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Justification names the governing promo and contract \u00a73.4 Exhibit B requirement, plainly states the missing-documentation basis, cites corroborating evidence and the 60% precedent, and leaves the balance open for reconsideration\u2014leaving no obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "Justification cites specific store photos (19 of 30), a Meridian field rep email, POS scan figures, remittance note text, deduction ref, and 90-day window\u2014none of which appear in the cited evidence."
+        }
+      ],
+      "note": ""
+    },
+    {
+      "case_id": "D-0018",
+      "trial": "t2",
+      "status": "ok",
+      "passed": false,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='partial' expected='partial'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted=6300 expected=6300.0 |delta|=0.00 allowed=315.00"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": false,
+          "applicable": true,
+          "detail": "missing ['SH-2025-Q4-007']"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=partial, amount=6300)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [
+        {
+          "dimension": "consistent",
+          "verdict": "fail",
+          "reason": "The 60% partial rate is justified by photos covering 22 of 35 store-events, but 22/35 = 63%, not 60%, and no cited evidence supports a 60% convention; the numeric rationale does not reconcile with the stated corroboration."
+        },
+        {
+          "dimension": "dispute_proof",
+          "verdict": "pass",
+          "reason": "Names the promo and contract \u00a73.4 Exhibit B requirement, states the documentation gap plainly, quantifies corroboration (22 of 35 events, buyer email), and offers a contractual audit path\u2014leaving no obvious opening."
+        },
+        {
+          "dimension": "no_unsupported",
+          "verdict": "fail",
+          "reason": "Justification asserts specific uncited facts: store photos from 22 stores, buyer email acknowledgment, POS scan data for PROMO-2026-Q1-008, deduction reference HC-21044, and a 'Meridian partial-settlement convention' \u2014 none of which appear in the cited evidence."
+        }
+      ],
+      "note": ""
+    }
+  ]
+}

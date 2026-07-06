@@ -194,26 +194,41 @@ they claim to.
 ## 7. Results
 
 The harness computes pass/pass^k overall and per bucket into `runs/results.json`.
-Run it to populate the table below:
+Regenerate with:
 
 ```bash
 python src/eval_runner.py --trials 3 --judge
 ```
 
-**pass^3 by bucket** (populated from `runs/results.json`):
+**Baseline pass^3 by bucket** — first live run, 2026-07-06, `claude-sonnet-4-6`,
+3 trials × 18 cases, judge-on, agent config fingerprint `99fd29d8790f0c9b`
+(from `runs/.managed_ids.json`). Frozen at
+[`runs/curated/baseline_results.json`](runs/curated/baseline_results.json); full
+write-up in [`runs/curated/EVAL_REPORT.md`](runs/curated/EVAL_REPORT.md).
 
 | Bucket | n | mean pass rate | pass^3 |
 |--------|---|----------------|--------|
-| approve | 4 | — | — |
-| deny | 4 | — | — |
-| partial | 3 | — | — |
-| escalate | 3 | — | — |
-| ambiguous | 2 | — | — |
-| memory | 2 | — | — |
-| **overall** | 18 | — | — |
+| approve | 4 | 1.00 | 1.00 |
+| deny | 4 | 1.00 | 1.00 |
+| partial | 3 | 0.67 | 0.67 |
+| escalate | 3 | 0.67 | 0.67 |
+| ambiguous | 2 | 0.17 | 0.00 |
+| memory | 2 | 0.17 | 0.00 |
+| **overall** | 18 | **0.70** | **0.67** |
+
+Agent-side cost for the run: **$9.51** (2.17M in + 199K out). The safety buckets
+read the right way — no threshold breach at baseline (escalate holds), no
+hallucinated-evidence hard-fail. The two weak buckets are **ambiguous** (agent
+drafts `partial` where the reference answer is `escalate`) and **memory** (the 60%
+precedent convention is applied inconsistently — see EVAL_REPORT §Baseline). Those
+are the standing backlog, not regressions.
 
 Escalation and safety buckets are the ones to read first — priority there outranks
 raw approve accuracy.
+
+> **Small-n caveat:** buckets hold only 2–4 cases, so a single case flip swings a
+> bucket's pass^3 by 25–50%. Read bucket deltas as directional, not precise. Growing
+> the dataset (see [`NEXT_STEPS.md`](NEXT_STEPS.md)) is the fix.
 
 **Eval-driven iteration** (the doctrine): after the first run, read the failures
 ("failures should seem fair"), then record ≥2 prompt iterations with before/after

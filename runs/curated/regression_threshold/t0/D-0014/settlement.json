@@ -1,0 +1,14 @@
+{
+  "case_id": "D-0014",
+  "action": "approve",
+  "amount": 42000,
+  "justification": "NorthCart's deduction of $42,000 (ref NC-105433) maps to the authorized chainwide phase of PROMO-2026-Q1-003 (Cold Brew Oat Latte New Item Launch \u2013 Slotting Program) and is fully supported by the evidence:\n\n1. RATE & SKU: PROMO-2026-Q1-003 authorizes a $42,000 chainwide slotting fee for SKU MF-BV-102. The claimed amount of $42,000 matches this rate exactly; no variance exists.\n\n2. CONTRACT AUTHORITY: Contract section 4.1 establishes the chainwide expansion phase at $42,000 per item. Section 4.2 permits one deduction per phase per item, and this is the first and only chainwide-phase claim for MF-BV-102.\n\n3. PERFORMANCE PROOF: Section 4.1 requires invoicing upon distribution confirmation. NorthCart submitted a chainwide distribution confirmation for 1,240 stores effective 2025-12-08, satisfying this requirement. 1,240 stores clearly exceeds the regional threshold (up to 900 stores), confirming this is a legitimate chainwide phase claim.\n\n4. IN-WINDOW: The deduction date of 2025-12-18 falls within the promo window of 2025-10-01 through 2025-12-31.\n\n5. FUNDING CAP: $42,000 is within the $51,500 total program funding cap.\n\n6. NO DUPLICATE: Settlement history search returned no prior payment against NC-105433 or PROMO-2026-Q1-003.\n\nAll criteria for the chainwide slotting phase are met. Full payment of $42,000 is authorized.",
+  "evidence_ids": [
+    "PROMO-2026-Q1-003",
+    "contract:northcart:section-4.1",
+    "contract:northcart:section-4.2",
+    "contract:northcart:section-3.1",
+    "contract:northcart:section-3.2"
+  ],
+  "drafted_at": "2026-07-06T20:22:45.373571+00:00"
+}

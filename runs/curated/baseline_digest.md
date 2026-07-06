@@ -1,0 +1,80 @@
+# Failure digest
+
+trials=['t0', 't1', 't2']  judge=on  memory=on
+failures=16  infra_errors=0  total_runs=54
+
+## Graded failures (read the transcript; do not auto-fix)
+- **D-0011** [partial] trial=t0
+    - amount_within_tolerance: drafted=2045 expected=4000.0 |delta|=1955.00 allowed=40.00
+    - judge/no_unsupported: POS scan figures (1,030 and 1,015 units), the $1.50 applied rate, ad-proof feature weeks, and no-duplicate check are asserted but no supporting evidence for these is provided in the cited source materials.
+    - transcript: /Users/ejochims/Documents/projects/deductions-agent-cma/runs/t0/D-0011/record.json
+- **D-0011** [partial] trial=t1
+    - amount_within_tolerance: drafted=2045 expected=4000.0 |delta|=1955.00 allowed=40.00
+    - judge/no_unsupported: The claimed rate/units, ad-proof attachment identifying feature weeks (10/26, 11/09), POS scan data (1,030 and 1,015 units), the non-feature weeks' units, and the VM-90390 duplicate check are all cited to evidence not present in the provided sources.
+    - transcript: /Users/ejochims/Documents/projects/deductions-agent-cma/runs/t1/D-0011/record.json
+- **D-0011** [partial] trial=t2
+    - amount_within_tolerance: drafted=2045 expected=4000.0 |delta|=1955.00 allowed=40.00
+    - judge/no_unsupported: The justification cites POS scan data (1,030 and 1,015 units) and an ad proof attachment identifying specific feature weeks, but no such POS data or ad proof is present in the cited evidence, making the 2,045-unit figure unsupported.
+    - transcript: /Users/ejochims/Documents/projects/deductions-agent-cma/runs/t2/D-0011/record.json
+- **D-0013** [escalate] trial=t0
+    - action_correct: drafted='deny' expected='escalate'
+    - judge/no_unsupported: Justification cites contract:valumax:section-3.3 as making the deduction 'repayable per' that section, but §3.3 only addresses offsets against future payments, not repayability; the repayability language actually comes from §3.1, so the §3.3 claim is unsupported.
+    - transcript: /Users/ejochims/Documents/projects/deductions-agent-cma/runs/t0/D-0013/record.json
+- **D-0013** [escalate] trial=t1
+    - action_correct: drafted='deny' expected='escalate'
+    - transcript: /Users/ejochims/Documents/projects/deductions-agent-cma/runs/t1/D-0013/record.json
+- **D-0013** [escalate] trial=t2
+    - action_correct: drafted='deny' expected='escalate'
+    - judge/no_unsupported: Section 3.3 covers offsets after dispute conclusion, but the justification asserts the deduction is 'repayable to Meridian per Section 3.3'; repayability language actually comes from 3.1, and the claim that promotion-calendar/settlement-history searches were performed is not supported by any cited evidence.
+    - transcript: /Users/ejochims/Documents/projects/deductions-agent-cma/runs/t2/D-0013/record.json
+- **D-0015** [ambiguous] trial=t1
+    - action_correct: drafted='escalate' expected='partial'
+    - amount_within_tolerance: expected ~6600.0 but no amount drafted
+    - evidence_cited: missing ['SH-2025-Q4-007']
+    - judge/no_unsupported: The justification cites specific attachments (store photos from 23 stores, a J. Palmer field-rep email) and a retailer remittance note stating 'POP forms coming,' none of which appear in the cited evidence.
+    - transcript: /Users/ejochims/Documents/projects/deductions-agent-cma/runs/t1/D-0015/record.json
+- **D-0015** [ambiguous] trial=t2
+    - amount_within_tolerance: drafted=5750 expected=6600.0 |delta|=850.00 allowed=330.00
+    - evidence_cited: missing ['SH-2025-Q4-007']
+    - judge/consistent: The photo evidence corroborating 23 events and the remittance text 'pop forms coming' are cited in the justification but not present in the source evidence provided, and the promotion requires demos on weekends—consistency of the 23-event figure cannot be reconciled against cited evidence, which actually states claims lacking Exhibit B are not payable as submitted (no partial-payment basis shown).
+    - judge/dispute_proof: Promo requires demo events on weekends, but the justification pays 23 events on 'various dates' without confirming they were weekend events — a reasonable retailer could dispute whether the photo-corroborated events even meet the weekend performance requirement, and even the photos lack the required signed Exhibit B, so the $5,750 approval rests on documentation §3.4 deems non-payable.
+    - judge/no_unsupported: Justification cites store photos of 23 events, the remittance 'pop forms coming' text, and the J. Palmer field-rep email as evidence, but none of these appear in the cited/source evidence; the 23-event corroboration and $5,750 partial figure rest on uncited claims.
+    - transcript: /Users/ejochims/Documents/projects/deductions-agent-cma/runs/t2/D-0015/record.json
+- **D-0016** [ambiguous] trial=t0
+    - action_correct: drafted='partial' expected='escalate'
+    - judge/no_unsupported: POS scan figures (10,540 units, weekly scan lift, 6 weeks, store photos from 6 stores, email attachment) are not present in the cited evidence, making these material corroboration claims unsupported.
+    - transcript: /Users/ejochims/Documents/projects/deductions-agent-cma/runs/t0/D-0016/record.json
+- **D-0016** [ambiguous] trial=t1
+    - action_correct: drafted='partial' expected='escalate'
+    - judge/no_unsupported: The detailed deduction facts (32 events × $200, SKUs, Nov/Dec dates, photos from 6 stores, POS scan figures of 10,540 units, the email thread) are asserted but the deduction/claim document and POS evidence are not among the cited evidence, so these figures are uncited/unsupported.
+    - transcript: /Users/ejochims/Documents/projects/deductions-agent-cma/runs/t1/D-0016/record.json
+- **D-0016** [ambiguous] trial=t2
+    - action_correct: drafted='partial' expected='escalate'
+    - judge/no_unsupported: Justification cites store photos from 6 stores, POS scan data totaling 10,540 units, a buyer email, and specific claim details ($6,400, 32 events, $200/event, Dec 20 period) that appear in no cited evidence, and asserts prior case was settled at 60% though the memo shows $5,550/$9,250 = 60% but the analogy claims of scan lift 'across every week' are uncorroborated.
+    - transcript: /Users/ejochims/Documents/projects/deductions-agent-cma/runs/t2/D-0016/record.json
+- **D-0017** [memory] trial=t0
+    - amount_within_tolerance: drafted=4750 expected=4500.0 |delta|=250.00 allowed=225.00
+    - evidence_cited: missing ['SH-2025-Q4-007']
+    - judge/no_unsupported: The claim of 19 store photos and a Meridian field rep email corroborating 19 events is not in the cited evidence (only PROMO and contract sections 3.4/3.1 are provided); these attachments and the deduction hc 20988 details are unsupported.
+    - transcript: /Users/ejochims/Documents/projects/deductions-agent-cma/runs/t0/D-0017/record.json
+- **D-0017** [memory] trial=t1
+    - amount_within_tolerance: drafted=4750 expected=4500.0 |delta|=250.00 allowed=225.00
+    - evidence_cited: missing ['SH-2025-Q4-007']
+    - judge/consistent: Arithmetic error: promo end date 2025-11-15 + 90 days is 2026-02-13, but that is stated correctly; however 30−19=11 events × $250 = $2,750 balance and 19×$250=$4,750 reconciles — yet these two sum to $7,500 which matches claim, so numbers are consistent. Re-examining: all arithmetic and dates reconcile with evidence.
+    - judge/no_unsupported: The settlement cites photos from 19 stores, a field rep email, and POS scan data as corroborating evidence, but none of these appear in the source evidence provided; only the promo record and contract sections are in evidence.
+    - transcript: /Users/ejochims/Documents/projects/deductions-agent-cma/runs/t1/D-0017/record.json
+- **D-0018** [memory] trial=t0
+    - evidence_cited: missing ['SH-2025-Q4-007']
+    - judge/consistent: The 22-store photos/buyer email are not part of the cited evidence (only PROMO and §3.4 are shown), so the claimed corroboration of 22 events cannot be reconciled with the evidence provided; math (22×$300=$6,600) is internally correct but rests on unsupported facts.
+    - judge/no_unsupported: Justification cites sampling-station photos for 22 stores, a buyer email, a 90-day claim window, and the $10,500/35-event claim—none of which appear in the two cited evidence items, making these unsupported claims.
+    - transcript: /Users/ejochims/Documents/projects/deductions-agent-cma/runs/t0/D-0018/record.json
+- **D-0018** [memory] trial=t1
+    - evidence_cited: missing ['SH-2025-Q4-007']
+    - judge/no_unsupported: Justification cites store photos, buyer email, POS scan figures, the 60% convention, deduction ref HC-21044, and auto-settlement threshold—none of which appear in the two cited evidence items.
+    - transcript: /Users/ejochims/Documents/projects/deductions-agent-cma/runs/t1/D-0018/record.json
+- **D-0018** [memory] trial=t2
+    - evidence_cited: missing ['SH-2025-Q4-007']
+    - judge/consistent: The 60% partial rate is justified by photos covering 22 of 35 store-events, but 22/35 = 63%, not 60%, and no cited evidence supports a 60% convention; the numeric rationale does not reconcile with the stated corroboration.
+    - judge/no_unsupported: Justification asserts specific uncited facts: store photos from 22 stores, buyer email acknowledgment, POS scan data for PROMO-2026-Q1-008, deduction reference HC-21044, and a 'Meridian partial-settlement convention' — none of which appear in the cited evidence.
+    - transcript: /Users/ejochims/Documents/projects/deductions-agent-cma/runs/t2/D-0018/record.json
+
