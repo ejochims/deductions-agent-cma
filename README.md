@@ -47,13 +47,13 @@ container. When the agent calls a tool, the session emits `agent.custom_tool_use
 and idles; `run_agent.py` runs the lookup against `fixtures/` and returns the
 result as `user.custom_tool_result`.
 
-I chose this over mounting `fixtures/` into the container and letting the agent read
+We chose this over mounting `fixtures/` into the container and letting the agent read
 files, for two reasons:
 
 1. **Anti-leakage by construction.** `ground_truth/` (the answer key) can never leak
    into the agent's context, because *nothing* is mounted — the fixtures live only
    on the orchestrator host. The agent has no `bash`/`read`/`write` and makes no
-   outbound calls. The sandbox is walled off by design, not by a `.gitignore` I have
+   outbound calls. The sandbox is walled off by design, not by a `.gitignore` we have
    to remember.
 2. **A typed, auditable tool surface.** Every piece of evidence the agent sees
    arrives through one of six named tools with a schema, which is exactly what the
@@ -314,7 +314,7 @@ place — everything below the judgment layer:
   eval exposes its failure modes — e.g. a valid claim whose remittance text mimics a
   duplicate, to test that the agent checks history rather than pattern-matching.
 - **Judge robustness.** The judge is calibrated against three known negatives;
-  I'd expand to a labelled set of ~20 justifications and track judge precision/recall
+  we'd expand to a labelled set of ~20 justifications and track judge precision/recall
   over prompt changes, not just spot-check.
 - **Confidence + selective escalation.** Have the agent emit a confidence signal and
   study the precision/recall tradeoff of escalating low-confidence drafts — the
