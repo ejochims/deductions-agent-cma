@@ -142,10 +142,16 @@ workaround.
 
 ## Consequences
 
-- The agent now has a working, offline-testable path to precedents; the memory
-  bucket is expected to lift materially (empirical `pass^3` to be confirmed by a
-  paid re-run of D-0017/D-0018 — retrieval is unblocked and Gate A already proves
-  the target is graders-passable).
+- The agent now has a working, offline-testable path to precedents. **Confirmed by a
+  paid 3×18 judge-on run (2026-07-07, fingerprint `bc748e7bf9fa2807`):** the memory
+  bucket lifts `pass^3` from `0.00` to `1.00` (D-0017 settles $4,500, D-0018 $6,300,
+  both citing `SH-2025-Q4-007`) and ambiguous from `0.00` to `0.50` (D-0015 recovers
+  to `partial $6,600`); overall `pass^3` rises `0.667 → 0.778`. A `--no-memory` re-run
+  of the same cases scores `0.00` across the board — the agent recounts corroborated
+  events instead of applying 60%-of-claim and omits the `SH-2025-Q4-007` citation —
+  proving the tool, not the prompt, is load-bearing. No safety regressions (threshold
+  holds, no hallucinated-evidence fail). Full before/after in
+  [ITERATIONS.md](../../ITERATIONS.md) #1.
 - The system keeps a single, uniform security story: the tool boundary is the
   only surface the agent can act through.
 - Precedent management becomes a **content** task (edit `fixtures/precedents.json`)

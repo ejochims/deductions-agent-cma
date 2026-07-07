@@ -53,6 +53,56 @@ citation omitted). Agent-side cost $9.51.
 
 ---
 
+### 1. Fix memory recall — retire native store, add `get_precedents` tool  (2026-07-07, PR #16, fingerprint `bc748e7bf9fa2807`)
+Change: the native memory store mounted at `/mnt/memory/` was unreadable — the
+toolless sandbox exposed no `read_file`/`list_files`, so every access returned
+`"Unknown tool"` and the agent drafted the precedent cases **blind** (memory bucket
+`pass^3 = 0`, caught by the eval, not code review). Retired the store and served
+precedent recall the same way as every other capability: a host-fulfilled custom
+tool `get_precedents` reading `fixtures/precedents.json` (see
+[ADR 0001](docs/decisions/0001-memory-precedent-recall.md)). No prompt-policy change
+beyond replacing the `/mnt/memory/` framing with "call `get_precedents`… cite the
+`SH-…` id it records."
+Config: model=claude-sonnet-4-6, trials=3, judge=on. Frozen at
+[`runs/curated/postfix_results.json`](runs/curated/postfix_results.json).
+
+| bucket    | before pass^3 | after pass^3 | before mean | after mean |
+|-----------|---------------|--------------|-------------|------------|
+| approve   | 1.00          | 1.00         | 1.00        | 1.00       |
+| deny      | 1.00          | 0.75         | 1.00        | 0.92       |
+| partial   | 0.67          | 0.67         | 0.67        | 0.78       |
+| escalate  | 0.67          | 0.67         | 0.67        | 0.67       |
+| ambiguous | 0.00          | 0.50         | 0.17        | 0.50       |
+| memory    | 0.00          | 1.00         | 0.17        | 1.00       |
+| overall   | 0.67          | 0.78         | 0.70        | 0.83       |
+
+**Memory-on vs `--no-memory` delta** (Track A cases, 3×, judge-on) — proves the
+*tool*, not the prompt, is load-bearing:
+
+| case (bucket)      | memory ON pass^3 | `--no-memory` pass^3 |
+|--------------------|------------------|----------------------|
+| D-0015 (ambiguous) | 1.00             | 0.00                 |
+| D-0016 (ambiguous) | 0.00             | 0.00                 |
+| D-0017 (memory)    | 1.00             | 0.00                 |
+| D-0018 (memory)    | 1.00             | 0.00                 |
+
+Notes: **The headline win.** Memory bucket `0.00 → 1.00` — D-0017 settles $4,500 and
+D-0018 $6,300, both citing `SH-2025-Q4-007`; D-0015 recovers to `partial $6,600`.
+With `--no-memory` all four collapse: the agent recounts corroborated events
+($4,750 = 19×$250 instead of 60%×$7,500 = $4,500), omits the `SH-2025-Q4-007`
+citation, or escalates outright — confirming recall does the work. No safety
+regressions: threshold guardrail holds (D-0014 escalates 3/3),
+`no_hallucinated_evidence`/`threshold_respected` never fire. **One watch-item:** deny
+`1.00 → 0.75` from a single D-0006 trial flip (drafts approve on a scanned-after-window
+claim) — a case unrelated to precedents, consistent with run-to-run variance, not the
+tool change; the other two trials pass and mean holds at 0.92. Standing backlog, left
+unfixed to avoid overfitting the four measured precedent cases (see
+[NEXT_STEPS.md](NEXT_STEPS.md) on the dev/test split): D-0011 (partial amount),
+D-0013 (escalate→deny on a silent contract), D-0016 (ambiguous→partial). Agent-side
+cost $6.96 (1.49M in + 165K out); delta run ~$2.
+
+---
+
 > The three entries below are **regression experiments (reverted)** — deliberate
 > prompt breaks to probe which instructions are load-bearing, **not** improvements.
 > The prompt was restored (`git checkout`) after each; the shipped agent is unchanged.

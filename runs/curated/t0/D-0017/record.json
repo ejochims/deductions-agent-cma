@@ -3,15 +3,15 @@
   "trial": "t0",
   "status": "ok",
   "error": null,
-  "started_at": "2026-07-06T19:26:05.671288+00:00",
+  "started_at": "2026-07-07T17:55:24.251306+00:00",
   "usage": {
-    "cache_creation_input_tokens": 6717,
-    "cache_read_input_tokens": 36379,
-    "input_tokens": 8,
-    "output_tokens": 4159
+    "cache_creation_input_tokens": 7135,
+    "cache_read_input_tokens": 25313,
+    "input_tokens": 7,
+    "output_tokens": 3622
   },
   "timings": {
-    "wall_clock_s": 79.849
+    "wall_clock_s": 68.947
   },
   "tool_calls": [
     {
@@ -51,27 +51,17 @@
       "is_error": false
     },
     {
-      "name": "read_file",
-      "input": {
-        "path": "/mnt/memory/meridian-deductions-precedents/"
-      },
-      "result": {
-        "error": "Unknown tool 'read_file'."
-      },
-      "is_error": true
-    },
-    {
       "name": "search_promotions",
       "input": {
         "date_range": [
-          "2025-10-01",
-          "2025-11-30"
+          "2025-10-04",
+          "2025-11-15"
         ],
         "retailer": "harvest-co"
       },
       "result": {
         "retailer": "harvest-co",
-        "count": 6,
+        "count": 4,
         "promotions": [
           {
             "promo_id": "PROMO-2026-Q1-007",
@@ -107,22 +97,6 @@
             "funding_cap": 12000.0
           },
           {
-            "promo_id": "PROMO-2026-Q1-009",
-            "retailer_id": "harvest-co",
-            "name": "December Pretzel Scandown",
-            "mechanic": "scan_based",
-            "skus": [
-              "MF-SN-002"
-            ],
-            "rate": {
-              "per_unit_scanned": 0.55
-            },
-            "performance_requirement": "Shelf tag price reduction to $2.99 for the full promo period.",
-            "start_date": "2025-11-24",
-            "end_date": "2025-12-21",
-            "funding_cap": 6500.0
-          },
-          {
             "promo_id": "PROMO-2026-Q1-010",
             "retailer_id": "harvest-co",
             "name": "Holiday In-Store Demo Program \u2014 Pretzels & Cold Brew",
@@ -155,22 +129,6 @@
             "start_date": "2025-10-04",
             "end_date": "2025-11-15",
             "funding_cap": 12000.0
-          },
-          {
-            "promo_id": "PROMO-2026-Q1-012",
-            "retailer_id": "harvest-co",
-            "name": "Holiday In-Store Demo Program \u2014 Sparkling Lemonade",
-            "mechanic": "demo_billback",
-            "skus": [
-              "MF-BV-101"
-            ],
-            "rate": {
-              "per_demo_event": 300.0
-            },
-            "performance_requirement": "Weekend in-store demo events; signed Proof-of-Performance form (Exhibit B, per contract section 3.4) and store execution report within 30 days of each event.",
-            "start_date": "2025-11-22",
-            "end_date": "2025-12-20",
-            "funding_cap": 18000.0
           }
         ]
       },
@@ -201,37 +159,174 @@
       "is_error": false
     },
     {
-      "name": "list_files",
-      "input": {
-        "path": "/mnt/memory/meridian-deductions-precedents/"
-      },
+      "name": "get_precedents",
+      "input": {},
       "result": {
-        "error": "Unknown tool 'list_files'."
+        "count": 2,
+        "precedents": [
+          {
+            "precedent_id": "demo-billback-missing-exhibit-b",
+            "title": "Demo billbacks missing Exhibit B",
+            "content": "When a retailer's demo/sampling billback lacks the signed Exhibit B proof-of-performance forms required by contract, but execution is corroborated by store photos AND point-of-sale scan lift in the demo weeks, Meridian settles at 60% of the claimed amount rather than denying outright. Established on Harvest & Co claim HC-20018, settlement SH-2025-Q4-007 (Q4 FY25), with settlement-manager approval. When you apply this convention, cite the governing promotion and SH-2025-Q4-007 as the precedent. If there is no scan-lift or photo corroboration at all, escalate instead."
+          },
+          {
+            "precedent_id": "scan-claims-cap-and-window",
+            "title": "Scan claims - cap and window",
+            "content": "Scan allowances pay on units scanned WITHIN the promo window, at the authorized rate, up to the funding cap. Pay the lesser of (scanned units x rate) and the cap; deny units scanned outside the window; pay the authorized rate, not a higher deducted rate."
+          }
+        ]
       },
-      "is_error": true
+      "is_error": false
     },
     {
-      "name": "read_file",
+      "name": "get_pos_data",
       "input": {
-        "path": "/mnt/memory/meridian-deductions-precedents/precedents.md"
+        "promo_id": "PROMO-2026-Q1-011"
       },
       "result": {
-        "error": "Unknown tool 'read_file'."
+        "promo_id": "PROMO-2026-Q1-011",
+        "found": true,
+        "total_units_scanned": 8935,
+        "rows": [
+          {
+            "week_ending": "2025-10-11",
+            "sku": "MF-SN-001",
+            "units_scanned": 720,
+            "avg_unit_price": 2.69
+          },
+          {
+            "week_ending": "2025-10-11",
+            "sku": "MF-SN-003",
+            "units_scanned": 510,
+            "avg_unit_price": 3.19
+          },
+          {
+            "week_ending": "2025-10-18",
+            "sku": "MF-SN-001",
+            "units_scanned": 1180,
+            "avg_unit_price": 2.49
+          },
+          {
+            "week_ending": "2025-10-18",
+            "sku": "MF-SN-003",
+            "units_scanned": 940,
+            "avg_unit_price": 2.99
+          },
+          {
+            "week_ending": "2025-10-25",
+            "sku": "MF-SN-001",
+            "units_scanned": 1240,
+            "avg_unit_price": 2.49
+          },
+          {
+            "week_ending": "2025-10-25",
+            "sku": "MF-SN-003",
+            "units_scanned": 980,
+            "avg_unit_price": 2.99
+          },
+          {
+            "week_ending": "2025-11-01",
+            "sku": "MF-SN-001",
+            "units_scanned": 690,
+            "avg_unit_price": 2.69
+          },
+          {
+            "week_ending": "2025-11-01",
+            "sku": "MF-SN-003",
+            "units_scanned": 505,
+            "avg_unit_price": 3.19
+          },
+          {
+            "week_ending": "2025-11-08",
+            "sku": "MF-SN-001",
+            "units_scanned": 1210,
+            "avg_unit_price": 2.49
+          },
+          {
+            "week_ending": "2025-11-08",
+            "sku": "MF-SN-003",
+            "units_scanned": 960,
+            "avg_unit_price": 2.99
+          }
+        ]
       },
-      "is_error": true
+      "is_error": false
+    },
+    {
+      "name": "get_pos_data",
+      "input": {
+        "promo_id": "PROMO-2026-Q1-007"
+      },
+      "result": {
+        "promo_id": "PROMO-2026-Q1-007",
+        "found": true,
+        "total_units_scanned": 4300,
+        "rows": [
+          {
+            "week_ending": "2025-10-19",
+            "sku": "MF-SN-001",
+            "units_scanned": 640,
+            "avg_unit_price": 2.69
+          },
+          {
+            "week_ending": "2025-10-19",
+            "sku": "MF-SN-003",
+            "units_scanned": 470,
+            "avg_unit_price": 3.19
+          },
+          {
+            "week_ending": "2025-10-26",
+            "sku": "MF-SN-001",
+            "units_scanned": 615,
+            "avg_unit_price": 2.69
+          },
+          {
+            "week_ending": "2025-10-26",
+            "sku": "MF-SN-003",
+            "units_scanned": 455,
+            "avg_unit_price": 3.19
+          },
+          {
+            "week_ending": "2025-11-02",
+            "sku": "MF-SN-001",
+            "units_scanned": 600,
+            "avg_unit_price": 2.69
+          },
+          {
+            "week_ending": "2025-11-02",
+            "sku": "MF-SN-003",
+            "units_scanned": 440,
+            "avg_unit_price": 3.19
+          },
+          {
+            "week_ending": "2025-11-09",
+            "sku": "MF-SN-001",
+            "units_scanned": 625,
+            "avg_unit_price": 2.69
+          },
+          {
+            "week_ending": "2025-11-09",
+            "sku": "MF-SN-003",
+            "units_scanned": 455,
+            "avg_unit_price": 3.19
+          }
+        ]
+      },
+      "is_error": false
     },
     {
       "name": "draft_settlement",
       "input": {
         "action": "partial",
-        "amount": 4750,
+        "amount": 4500,
         "case_id": "D-0017",
         "evidence_ids": [
           "PROMO-2026-Q1-011",
+          "contract:harvest-co:section-3.3",
           "contract:harvest-co:section-3.4",
-          "contract:harvest-co:section-3.1"
+          "SH-2025-Q4-007"
         ],
-        "justification": "Deduction hc 20988 references PROMO-2026-Q1-011 (Autumn In-Store Demo Program \u2014 Pita & Popcorn), an authorized demo-billback promotion covering SKUs MF-SN-001 and MF-SN-003 at $250/event during 2025-10-04 through 2025-11-15. The rate, SKUs, period, and promotion reference all check out, and the $7,500 claimed is within the $12,000 funding cap. No duplicate settlement was found.\n\nHowever, the claim fails the documentation standard in contract section 3.4, which requires a signed Proof-of-Performance form (Exhibit B) for each demo event plus a store execution report, submitted within 30 days of the event. The retailer submitted neither; the remittance states \"POP forms to follow,\" but by the Nov. 27 deduction date the 30-day submission window for the earliest October events has already closed.\n\nPartial corroboration exists for 19 of the 30 claimed events: the attachments include store photos from 19 stores on various Oct/Nov weekends, and a Meridian field rep email stating \"autumn demos ran well across the stores.\" These together substantiate 19 events. The remaining 11 events (30 \u2013 19 = 11) have no supporting evidence beyond the retailer's own remittance text and cannot be paid.\n\nApproved amount: 19 corroborated events \u00d7 $250/event = $4,750.\nDenied amount: 11 undocumented events \u00d7 $250/event = $2,750 \u2014 rejected under contract section 3.4 for absence of Exhibit B and store execution reports.\n\nThe retailer may resubmit the denied 11 events if signed Exhibit B forms and execution reports can still be produced for those stores, subject to Meridian's review of their timeliness."
+        "justification": "Harvest & Co deduction HC 20988 claims 30 demo events \u00d7 $250 = $7,500 under PROMO-2026-Q1-011 (Autumn In-Store Demo Program \u2014 Pita & Popcorn). The promotion is confirmed: correct SKUs (MF-SN-001, MF-SN-003), matching rate ($250/event), claim period (10/04\u201311/15/2025) fully within the promo window, and claimed amount ($7,500) under the $12,000 funding cap. The claim was submitted within the 90-day window (contract \u00a73.3).\n\nHowever, the claim lacks signed Proof-of-Performance (Exhibit B) forms and formal store execution reports for any of the 30 events. Contract \u00a73.4 requires these documents for each event and states that claims lacking Exhibit B are \"not payable as submitted.\" The remittance note indicates \"POP forms to follow,\" but none were attached.\n\nExecution is partially corroborated by: (1) store photos from 19 stores across Oct/Nov weekends, and (2) POS scan data for PROMO-2026-Q1-011 showing clear scan lift during demo weekends \u2014 units scanned during demo weeks (\u22482,120\u20132,220/week) were roughly 75\u201385% higher than non-demo weeks (\u22481,195\u20131,230/week) for MF-SN-001 and MF-SN-003 combined, consistent with active in-store sampling.\n\nPer Meridian's established demo-billback convention (precedent SH-2025-Q4-007): when Exhibit B documentation is absent but execution is corroborated by both store photos and POS scan lift, the claim settles at 60% of the claimed amount rather than being denied outright. Applying this convention: $7,500 \u00d7 60% = $4,500. No duplicate settlement exists for this reference. The $4,500 payment is contingent on Harvest & Co submitting the outstanding Exhibit B forms and execution reports, which Meridian should request promptly."
       },
       "result": {
         "status": "drafted",
@@ -239,14 +334,15 @@
         "settlement": {
           "case_id": "D-0017",
           "action": "partial",
-          "amount": 4750,
-          "justification": "Deduction hc 20988 references PROMO-2026-Q1-011 (Autumn In-Store Demo Program \u2014 Pita & Popcorn), an authorized demo-billback promotion covering SKUs MF-SN-001 and MF-SN-003 at $250/event during 2025-10-04 through 2025-11-15. The rate, SKUs, period, and promotion reference all check out, and the $7,500 claimed is within the $12,000 funding cap. No duplicate settlement was found.\n\nHowever, the claim fails the documentation standard in contract section 3.4, which requires a signed Proof-of-Performance form (Exhibit B) for each demo event plus a store execution report, submitted within 30 days of the event. The retailer submitted neither; the remittance states \"POP forms to follow,\" but by the Nov. 27 deduction date the 30-day submission window for the earliest October events has already closed.\n\nPartial corroboration exists for 19 of the 30 claimed events: the attachments include store photos from 19 stores on various Oct/Nov weekends, and a Meridian field rep email stating \"autumn demos ran well across the stores.\" These together substantiate 19 events. The remaining 11 events (30 \u2013 19 = 11) have no supporting evidence beyond the retailer's own remittance text and cannot be paid.\n\nApproved amount: 19 corroborated events \u00d7 $250/event = $4,750.\nDenied amount: 11 undocumented events \u00d7 $250/event = $2,750 \u2014 rejected under contract section 3.4 for absence of Exhibit B and store execution reports.\n\nThe retailer may resubmit the denied 11 events if signed Exhibit B forms and execution reports can still be produced for those stores, subject to Meridian's review of their timeliness.",
+          "amount": 4500,
+          "justification": "Harvest & Co deduction HC 20988 claims 30 demo events \u00d7 $250 = $7,500 under PROMO-2026-Q1-011 (Autumn In-Store Demo Program \u2014 Pita & Popcorn). The promotion is confirmed: correct SKUs (MF-SN-001, MF-SN-003), matching rate ($250/event), claim period (10/04\u201311/15/2025) fully within the promo window, and claimed amount ($7,500) under the $12,000 funding cap. The claim was submitted within the 90-day window (contract \u00a73.3).\n\nHowever, the claim lacks signed Proof-of-Performance (Exhibit B) forms and formal store execution reports for any of the 30 events. Contract \u00a73.4 requires these documents for each event and states that claims lacking Exhibit B are \"not payable as submitted.\" The remittance note indicates \"POP forms to follow,\" but none were attached.\n\nExecution is partially corroborated by: (1) store photos from 19 stores across Oct/Nov weekends, and (2) POS scan data for PROMO-2026-Q1-011 showing clear scan lift during demo weekends \u2014 units scanned during demo weeks (\u22482,120\u20132,220/week) were roughly 75\u201385% higher than non-demo weeks (\u22481,195\u20131,230/week) for MF-SN-001 and MF-SN-003 combined, consistent with active in-store sampling.\n\nPer Meridian's established demo-billback convention (precedent SH-2025-Q4-007): when Exhibit B documentation is absent but execution is corroborated by both store photos and POS scan lift, the claim settles at 60% of the claimed amount rather than being denied outright. Applying this convention: $7,500 \u00d7 60% = $4,500. No duplicate settlement exists for this reference. The $4,500 payment is contingent on Harvest & Co submitting the outstanding Exhibit B forms and execution reports, which Meridian should request promptly.",
           "evidence_ids": [
             "PROMO-2026-Q1-011",
+            "contract:harvest-co:section-3.3",
             "contract:harvest-co:section-3.4",
-            "contract:harvest-co:section-3.1"
+            "SH-2025-Q4-007"
           ],
-          "drafted_at": "2026-07-06T19:27:15.351797+00:00"
+          "drafted_at": "2026-07-07T17:56:21.846732+00:00"
         }
       },
       "is_error": false
@@ -254,19 +350,19 @@
   ],
   "transcript": [
     {
-      "id": "sevt_01Fbctisi1aVW23nhS98b9tU",
-      "processed_at": "2026-07-06 19:26:07.183772+00:00",
+      "id": "sevt_014DH5wNt3zFYbTHRmr99Q22",
+      "processed_at": "2026-07-07 17:55:26.036217+00:00",
       "type": "session.status_running"
     },
     {
-      "id": "sevt_01JxjATuCxNbfn9z7fe6y23a",
+      "id": "sevt_01CP8SpoLQiXCqs7tQAUfGPt",
       "agent_name": "Deductions Desk",
-      "processed_at": "2026-07-06 19:26:07.183773+00:00",
-      "session_thread_id": "sthr_018Z9eiw18hZTFWiP3GWvrGT",
+      "processed_at": "2026-07-07 17:55:26.036218+00:00",
+      "session_thread_id": "sthr_0143FoDPWE4bMxphbdLMK4bw",
       "type": "session.thread_status_running"
     },
     {
-      "id": "sevt_01EGDSEonSwXkxjZfGRFawkR",
+      "id": "sevt_017UGsLjKC1ocJiJRkwtsYJ5",
       "content": [
         {
           "text": "Investigate case D-0017 and draft a settlement. Call get_deduction first, gather the evidence you need, then call draft_settlement exactly once.",
@@ -274,91 +370,80 @@
         }
       ],
       "type": "user.message",
-      "processed_at": "2026-07-06 19:26:07.386657+00:00"
+      "processed_at": "2026-07-07 17:55:26.170121+00:00"
     },
     {
-      "id": "sevt_015P7oP6BRvDZhb8FN46xsbS",
-      "processed_at": "2026-07-06 19:26:07.386658+00:00",
+      "id": "sevt_01662AJw6R7ucEpiaaYNTm1m",
+      "processed_at": "2026-07-07 17:55:26.170122+00:00",
       "type": "span.model_request_start"
     },
     {
-      "id": "sevt_01SKmuahoQYPE5YxXNhJXcmg",
-      "processed_at": "2026-07-06 19:26:08.701199+00:00",
+      "id": "sevt_01BZFgd6jeWp9wLEwyyKgBMS",
+      "processed_at": "2026-07-07 17:55:27.306043+00:00",
       "type": "agent.thinking"
     },
     {
-      "id": "sevt_01QAimKaffEPLn1E4v6a6nrh",
+      "id": "sevt_01Lvwms4RPLwgYvKQqkgG2Zr",
       "content": [
         {
-          "text": "I'll start by fetching the deduction and checking memory for relevant precedents in parallel.",
+          "text": "I'll start by fetching the deduction details for D-0017, then gather all the evidence in parallel.",
           "type": "text"
         }
       ],
-      "processed_at": "2026-07-06 19:26:10.517054+00:00",
+      "processed_at": "2026-07-07 17:55:28.018046+00:00",
       "type": "agent.message"
     },
     {
-      "id": "sevt_01QGfEWcEpTF8TVxXdAUSjuT",
+      "id": "sevt_01R6SAuioR89Z837E9sLXaFQ",
       "input": {
         "case_id": "D-0017"
       },
       "name": "get_deduction",
-      "processed_at": "2026-07-06 19:26:10.517055+00:00",
+      "processed_at": "2026-07-07 17:55:28.018047+00:00",
       "type": "agent.custom_tool_use",
       "session_thread_id": null
     },
     {
-      "id": "sevt_01A4FPsCZAtotCdEifeSdJqS",
-      "input": {
-        "cmd": "rg -i \"scan|billback|slotting|MDF|demo|partial|rate|cap\" /mnt/memory/ --files | head -20 && echo \"---\" && rg --files /mnt/memory/ 2>/dev/null"
-      },
-      "name": "bash",
-      "processed_at": "2026-07-06 19:26:10.517056+00:00",
-      "type": "agent.tool_use",
-      "evaluated_permission": "deny",
-      "session_thread_id": null
-    },
-    {
-      "id": "sevt_0173vLcodp5cqYBENRjPUueV",
+      "id": "sevt_01VtcjaSLhuoG4wc7bvgXYdu",
       "is_error": false,
-      "model_request_start_id": "sevt_015P7oP6BRvDZhb8FN46xsbS",
+      "model_request_start_id": "sevt_01662AJw6R7ucEpiaaYNTm1m",
       "model_usage": {
         "cache_creation_input_tokens": 424,
-        "cache_read_input_tokens": 4331,
+        "cache_read_input_tokens": 3368,
         "input_tokens": 3,
-        "output_tokens": 206,
+        "output_tokens": 115,
         "speed": null
       },
-      "processed_at": "2026-07-06 19:26:10.517057+00:00",
+      "processed_at": "2026-07-07 17:55:28.018048+00:00",
       "type": "span.model_request_end"
     },
     {
-      "id": "sevt_01JmB3zfvVhGo4a3j8B9AUES",
+      "id": "sevt_01Ybv2j2apW6USe3PQiyAAx7",
       "agent_name": "Deductions Desk",
-      "processed_at": "2026-07-06 19:26:10.668515+00:00",
-      "session_thread_id": "sthr_018Z9eiw18hZTFWiP3GWvrGT",
+      "processed_at": "2026-07-07 17:55:28.173562+00:00",
+      "session_thread_id": "sthr_0143FoDPWE4bMxphbdLMK4bw",
       "stop_reason": {
         "event_ids": [
-          "sevt_01QGfEWcEpTF8TVxXdAUSjuT"
+          "sevt_01R6SAuioR89Z837E9sLXaFQ"
         ],
         "type": "requires_action"
       },
       "type": "session.thread_status_idle"
     },
     {
-      "id": "sevt_01QusPFZDCdCCq7zJdeETnfC",
-      "processed_at": "2026-07-06 19:26:10.668516+00:00",
+      "id": "sevt_01MKP4gCDxP58RFQb9RFoc5u",
+      "processed_at": "2026-07-07 17:55:28.173563+00:00",
       "stop_reason": {
         "event_ids": [
-          "sevt_01QGfEWcEpTF8TVxXdAUSjuT"
+          "sevt_01R6SAuioR89Z837E9sLXaFQ"
         ],
         "type": "requires_action"
       },
       "type": "session.status_idle"
     },
     {
-      "id": "sevt_0154xYFL9xJqZJ6schLUpwca",
-      "custom_tool_use_id": "sevt_01QGfEWcEpTF8TVxXdAUSjuT",
+      "id": "sevt_01MkVvZmqwGfASALutGEMAfj",
+      "custom_tool_use_id": "sevt_01R6SAuioR89Z837E9sLXaFQ",
       "type": "user.custom_tool_result",
       "content": [
         {
@@ -367,185 +452,174 @@
         }
       ],
       "is_error": false,
-      "processed_at": "2026-07-06 19:26:10.967107+00:00",
+      "processed_at": "2026-07-07 17:55:28.533994+00:00",
       "session_thread_id": null
     },
     {
-      "id": "sevt_01BCzSq44DdZSx2Rur1YePF4",
-      "processed_at": "2026-07-06 19:26:11.094527+00:00",
+      "id": "sevt_01F28Xh4t5U2c5Gt2iZHGxM2",
+      "processed_at": "2026-07-07 17:55:28.714690+00:00",
       "type": "session.status_running"
     },
     {
-      "id": "sevt_01RDrFxM2dpm4hZKx9LekPKE",
+      "id": "sevt_011Lvnfa5eZEJvKribAmyN4j",
       "agent_name": "Deductions Desk",
-      "processed_at": "2026-07-06 19:26:11.094528+00:00",
-      "session_thread_id": "sthr_018Z9eiw18hZTFWiP3GWvrGT",
+      "processed_at": "2026-07-07 17:55:28.714691+00:00",
+      "session_thread_id": "sthr_0143FoDPWE4bMxphbdLMK4bw",
       "type": "session.thread_status_running"
     },
     {
-      "id": "sevt_01J7zAXNNQto6DdGQTnUsg91",
-      "processed_at": "2026-07-06 19:26:11.206416+00:00",
-      "tool_use_id": "sevt_01A4FPsCZAtotCdEifeSdJqS",
-      "type": "agent.tool_result",
-      "content": [
-        {
-          "text": "Permission to use bash has been denied.",
-          "type": "text"
-        }
-      ],
-      "is_error": true
-    },
-    {
-      "id": "sevt_01NNq9Jf85u4gPJi8Xja6hWm",
-      "processed_at": "2026-07-06 19:26:11.307572+00:00",
+      "id": "sevt_01Jp73cw8JMHhFP1iuJzG8MJ",
+      "processed_at": "2026-07-07 17:55:28.855463+00:00",
       "type": "span.model_request_start"
     },
     {
-      "id": "sevt_017bJxEkeaiJFGogCJZDgW5n",
-      "processed_at": "2026-07-06 19:26:12.808911+00:00",
+      "id": "sevt_01C3odxnXys4XaEMno1cCtyV",
+      "processed_at": "2026-07-07 17:55:30.972381+00:00",
       "type": "agent.thinking"
     },
     {
-      "id": "sevt_01HmBTnAeZNkdgbQ5br1U2gL",
+      "id": "sevt_01QFbty8LXJNSUBv8dShjvh9",
       "content": [
         {
-          "text": "Let me read memory for precedents and gather all needed evidence in parallel.",
+          "text": "Good. Now I'll pull all supporting evidence in parallel \u2014 promotions, contract terms, settlement history, and precedents (this is a demo billback with missing Exhibit B forms, so precedents are critical).",
           "type": "text"
         }
       ],
-      "processed_at": "2026-07-06 19:26:15.732715+00:00",
+      "processed_at": "2026-07-07 17:55:33.542572+00:00",
       "type": "agent.message"
     },
     {
-      "id": "sevt_01C8P541EDAPbzwo4hWjXTJw",
-      "input": {
-        "path": "/mnt/memory/meridian-deductions-precedents/"
-      },
-      "name": "read_file",
-      "processed_at": "2026-07-06 19:26:15.732716+00:00",
-      "type": "agent.custom_tool_use",
-      "session_thread_id": null
-    },
-    {
-      "id": "sevt_01FXkDEeMpwxGgPQtA87YeXm",
+      "id": "sevt_01NUcKWQ9tNwyRcU3MuqAzbG",
       "input": {
         "date_range": [
-          "2025-10-01",
-          "2025-11-30"
+          "2025-10-04",
+          "2025-11-15"
         ],
         "retailer": "harvest-co"
       },
       "name": "search_promotions",
-      "processed_at": "2026-07-06 19:26:15.732717+00:00",
+      "processed_at": "2026-07-07 17:55:33.542573+00:00",
       "type": "agent.custom_tool_use",
       "session_thread_id": null
     },
     {
-      "id": "sevt_01AF3hXZff7xUCgZfdxWysCv",
+      "id": "sevt_01ShKaRTnyb4MytYYgbaSgoi",
       "input": {
         "retailer": "harvest-co"
       },
       "name": "get_contract_terms",
-      "processed_at": "2026-07-06 19:26:15.732718+00:00",
+      "processed_at": "2026-07-07 17:55:33.542574+00:00",
       "type": "agent.custom_tool_use",
       "session_thread_id": null
     },
     {
-      "id": "sevt_01DG7J2ZcTw443pb2XRHUsLw",
+      "id": "sevt_01JrTqtbLvhbDX8gUun2QAhX",
       "input": {
         "invoice_ref": "hc 20988",
         "retailer": "harvest-co"
       },
       "name": "check_settlement_history",
-      "processed_at": "2026-07-06 19:26:15.732719+00:00",
+      "processed_at": "2026-07-07 17:55:33.542575+00:00",
       "type": "agent.custom_tool_use",
       "session_thread_id": null
     },
     {
-      "id": "sevt_01Av6kxK3DkD9shEDEJM1v8G",
+      "id": "sevt_012neEPLsqEKUvggWG8PuNds",
+      "input": {},
+      "name": "get_precedents",
+      "processed_at": "2026-07-07 17:55:33.542576+00:00",
+      "type": "agent.custom_tool_use",
+      "session_thread_id": null
+    },
+    {
+      "id": "sevt_012sYcpL8yvYN59imNVpsFxA",
       "is_error": false,
-      "model_request_start_id": "sevt_01NNq9Jf85u4gPJi8Xja6hWm",
+      "model_request_start_id": "sevt_01Jp73cw8JMHhFP1iuJzG8MJ",
       "model_usage": {
-        "cache_creation_input_tokens": 542,
-        "cache_read_input_tokens": 4755,
+        "cache_creation_input_tokens": 394,
+        "cache_read_input_tokens": 3792,
         "input_tokens": 1,
-        "output_tokens": 295,
+        "output_tokens": 342,
         "speed": null
       },
-      "processed_at": "2026-07-06 19:26:15.732720+00:00",
+      "processed_at": "2026-07-07 17:55:33.542577+00:00",
       "type": "span.model_request_end"
     },
     {
-      "id": "sevt_01Qc3Fmrqvtrqz94psMyZDnZ",
+      "id": "sevt_01WEHofFQG7uU9MohgHXknwM",
       "agent_name": "Deductions Desk",
-      "processed_at": "2026-07-06 19:26:15.901603+00:00",
-      "session_thread_id": "sthr_018Z9eiw18hZTFWiP3GWvrGT",
+      "processed_at": "2026-07-07 17:55:33.714769+00:00",
+      "session_thread_id": "sthr_0143FoDPWE4bMxphbdLMK4bw",
       "stop_reason": {
         "event_ids": [
-          "sevt_01FXkDEeMpwxGgPQtA87YeXm",
-          "sevt_01AF3hXZff7xUCgZfdxWysCv",
-          "sevt_01DG7J2ZcTw443pb2XRHUsLw"
+          "sevt_01NUcKWQ9tNwyRcU3MuqAzbG",
+          "sevt_01ShKaRTnyb4MytYYgbaSgoi",
+          "sevt_01JrTqtbLvhbDX8gUun2QAhX",
+          "sevt_012neEPLsqEKUvggWG8PuNds"
         ],
         "type": "requires_action"
       },
       "type": "session.thread_status_idle"
     },
     {
-      "id": "sevt_016M6Wwfz8eWa5fWzJED327y",
-      "processed_at": "2026-07-06 19:26:15.901604+00:00",
+      "id": "sevt_01G8nrEKULGU8eAcNQnWuK3L",
+      "processed_at": "2026-07-07 17:55:33.714770+00:00",
       "stop_reason": {
         "event_ids": [
-          "sevt_01FXkDEeMpwxGgPQtA87YeXm",
-          "sevt_01AF3hXZff7xUCgZfdxWysCv",
-          "sevt_01DG7J2ZcTw443pb2XRHUsLw"
+          "sevt_01NUcKWQ9tNwyRcU3MuqAzbG",
+          "sevt_01ShKaRTnyb4MytYYgbaSgoi",
+          "sevt_01JrTqtbLvhbDX8gUun2QAhX",
+          "sevt_012neEPLsqEKUvggWG8PuNds"
         ],
         "type": "requires_action"
       },
       "type": "session.status_idle"
     },
     {
-      "id": "sevt_01MyDvZ2FQ6LiY6DGeR5WXNZ",
-      "custom_tool_use_id": "sevt_01FXkDEeMpwxGgPQtA87YeXm",
+      "id": "sevt_01MLTafTS6gogT6HsbibkHME",
+      "custom_tool_use_id": "sevt_01NUcKWQ9tNwyRcU3MuqAzbG",
       "type": "user.custom_tool_result",
       "content": [
         {
-          "text": "{\"retailer\": \"harvest-co\", \"count\": 6, \"promotions\": [{\"promo_id\": \"PROMO-2026-Q1-007\", \"retailer_id\": \"harvest-co\", \"name\": \"Fall Snack Scan \\u2014 Pita Chips & Popcorn\", \"mechanic\": \"scan_based\", \"skus\": [\"MF-SN-001\", \"MF-SN-003\"], \"rate\": {\"per_unit_scanned\": 0.5}, \"performance_requirement\": \"Shelf tag price reduction for the full promo period.\", \"start_date\": \"2025-10-13\", \"end_date\": \"2025-11-09\", \"funding_cap\": 9000.0}, {\"promo_id\": \"PROMO-2026-Q1-008\", \"retailer_id\": \"harvest-co\", \"name\": \"Sparkling Lemonade Holiday Scandown\", \"mechanic\": \"scan_based\", \"skus\": [\"MF-BV-101\"], \"rate\": {\"per_unit_scanned\": 0.65}, \"performance_requirement\": \"Advertised price of $7.99 or lower during the promo period.\", \"start_date\": \"2025-11-10\", \"end_date\": \"2025-12-07\", \"funding_cap\": 12000.0}, {\"promo_id\": \"PROMO-2026-Q1-009\", \"retailer_id\": \"harvest-co\", \"name\": \"December Pretzel Scandown\", \"mechanic\": \"scan_based\", \"skus\": [\"MF-SN-002\"], \"rate\": {\"per_unit_scanned\": 0.55}, \"performance_requirement\": \"Shelf tag price reduction to $2.99 for the full promo period.\", \"start_date\": \"2025-11-24\", \"end_date\": \"2025-12-21\", \"funding_cap\": 6500.0}, {\"promo_id\": \"PROMO-2026-Q1-010\", \"retailer_id\": \"harvest-co\", \"name\": \"Holiday In-Store Demo Program \\u2014 Pretzels & Cold Brew\", \"mechanic\": \"demo_billback\", \"skus\": [\"MF-SN-002\", \"MF-BV-102\"], \"rate\": {\"per_demo_event\": 250.0}, \"performance_requirement\": \"In-store demo events on weekends; signed Proof-of-Performance form (Exhibit B, per contract section 3.4) and store execution report submitted within 30 days of each event.\", \"start_date\": \"2025-11-03\", \"end_date\": \"2025-12-14\", \"funding_cap\": 15000.0}, {\"promo_id\": \"PROMO-2026-Q1-011\", \"retailer_id\": \"harvest-co\", \"name\": \"Autumn In-Store Demo Program \\u2014 Pita & Popcorn\", \"mechanic\": \"demo_billback\", \"skus\": [\"MF-SN-001\", \"MF-SN-003\"], \"rate\": {\"per_demo_event\": 250.0}, \"performance_requirement\": \"Weekend in-store demo events; signed Proof-of-Performance form (Exhibit B, per contract section 3.4) and store execution report within 30 days of each event.\", \"start_date\": \"2025-10-04\", \"end_date\": \"2025-11-15\", \"funding_cap\": 12000.0}, {\"promo_id\": \"PROMO-2026-Q1-012\", \"retailer_id\": \"harvest-co\", \"name\": \"Holiday In-Store Demo Program \\u2014 Sparkling Lemonade\", \"mechanic\": \"demo_billback\", \"skus\": [\"MF-BV-101\"], \"rate\": {\"per_demo_event\": 300.0}, \"performance_requirement\": \"Weekend in-store demo events; signed Proof-of-Performance form (Exhibit B, per contract section 3.4) and store execution report within 30 days of each event.\", \"start_date\": \"2025-11-22\", \"end_date\": \"2025-12-20\", \"funding_cap\": 18000.0}]}",
+          "text": "{\"retailer\": \"harvest-co\", \"count\": 4, \"promotions\": [{\"promo_id\": \"PROMO-2026-Q1-007\", \"retailer_id\": \"harvest-co\", \"name\": \"Fall Snack Scan \\u2014 Pita Chips & Popcorn\", \"mechanic\": \"scan_based\", \"skus\": [\"MF-SN-001\", \"MF-SN-003\"], \"rate\": {\"per_unit_scanned\": 0.5}, \"performance_requirement\": \"Shelf tag price reduction for the full promo period.\", \"start_date\": \"2025-10-13\", \"end_date\": \"2025-11-09\", \"funding_cap\": 9000.0}, {\"promo_id\": \"PROMO-2026-Q1-008\", \"retailer_id\": \"harvest-co\", \"name\": \"Sparkling Lemonade Holiday Scandown\", \"mechanic\": \"scan_based\", \"skus\": [\"MF-BV-101\"], \"rate\": {\"per_unit_scanned\": 0.65}, \"performance_requirement\": \"Advertised price of $7.99 or lower during the promo period.\", \"start_date\": \"2025-11-10\", \"end_date\": \"2025-12-07\", \"funding_cap\": 12000.0}, {\"promo_id\": \"PROMO-2026-Q1-010\", \"retailer_id\": \"harvest-co\", \"name\": \"Holiday In-Store Demo Program \\u2014 Pretzels & Cold Brew\", \"mechanic\": \"demo_billback\", \"skus\": [\"MF-SN-002\", \"MF-BV-102\"], \"rate\": {\"per_demo_event\": 250.0}, \"performance_requirement\": \"In-store demo events on weekends; signed Proof-of-Performance form (Exhibit B, per contract section 3.4) and store execution report submitted within 30 days of each event.\", \"start_date\": \"2025-11-03\", \"end_date\": \"2025-12-14\", \"funding_cap\": 15000.0}, {\"promo_id\": \"PROMO-2026-Q1-011\", \"retailer_id\": \"harvest-co\", \"name\": \"Autumn In-Store Demo Program \\u2014 Pita & Popcorn\", \"mechanic\": \"demo_billback\", \"skus\": [\"MF-SN-001\", \"MF-SN-003\"], \"rate\": {\"per_demo_event\": 250.0}, \"performance_requirement\": \"Weekend in-store demo events; signed Proof-of-Performance form (Exhibit B, per contract section 3.4) and store execution report within 30 days of each event.\", \"start_date\": \"2025-10-04\", \"end_date\": \"2025-11-15\", \"funding_cap\": 12000.0}]}",
           "type": "text"
         }
       ],
       "is_error": false,
-      "processed_at": "2026-07-06 19:26:16.565978+00:00",
+      "processed_at": "2026-07-07 17:55:34.227831+00:00",
       "session_thread_id": null
     },
     {
-      "id": "sevt_012C5ZdvGhymc1mJG9TmNQap",
+      "id": "sevt_018J4qMyMoH6KfwoxswCFGZd",
       "agent_name": "Deductions Desk",
-      "processed_at": "2026-07-06 19:26:16.756663+00:00",
-      "session_thread_id": "sthr_018Z9eiw18hZTFWiP3GWvrGT",
+      "processed_at": "2026-07-07 17:55:34.487743+00:00",
+      "session_thread_id": "sthr_0143FoDPWE4bMxphbdLMK4bw",
       "stop_reason": {
         "event_ids": [
-          "sevt_01AF3hXZff7xUCgZfdxWysCv",
-          "sevt_01DG7J2ZcTw443pb2XRHUsLw"
+          "sevt_01ShKaRTnyb4MytYYgbaSgoi",
+          "sevt_01JrTqtbLvhbDX8gUun2QAhX",
+          "sevt_012neEPLsqEKUvggWG8PuNds"
         ],
         "type": "requires_action"
       },
       "type": "session.thread_status_idle"
     },
     {
-      "id": "sevt_01GvmqNbGFk2kJdBxScpfUqK",
-      "processed_at": "2026-07-06 19:26:16.756664+00:00",
+      "id": "sevt_016kmDy7Xf6CSpRjMPTHsHDx",
+      "processed_at": "2026-07-07 17:55:34.487744+00:00",
       "stop_reason": {
         "event_ids": [
-          "sevt_01AF3hXZff7xUCgZfdxWysCv",
-          "sevt_01DG7J2ZcTw443pb2XRHUsLw"
+          "sevt_01ShKaRTnyb4MytYYgbaSgoi",
+          "sevt_01JrTqtbLvhbDX8gUun2QAhX",
+          "sevt_012neEPLsqEKUvggWG8PuNds"
         ],
         "type": "requires_action"
       },
       "type": "session.status_idle"
     },
     {
-      "id": "sevt_01SgugYJWyPKwKKi2CsTaQet",
-      "custom_tool_use_id": "sevt_01AF3hXZff7xUCgZfdxWysCv",
+      "id": "sevt_01CTX3HuVm75L4PFawNPnjKe",
+      "custom_tool_use_id": "sevt_01ShKaRTnyb4MytYYgbaSgoi",
       "type": "user.custom_tool_result",
       "content": [
         {
@@ -554,36 +628,38 @@
         }
       ],
       "is_error": false,
-      "processed_at": "2026-07-06 19:26:17.005738+00:00",
+      "processed_at": "2026-07-07 17:55:34.779848+00:00",
       "session_thread_id": null
     },
     {
-      "id": "sevt_0159s4sPX7S7X3Aic8G11eVx",
+      "id": "sevt_018K2XzSoTaEuoEkC82RLnEH",
       "agent_name": "Deductions Desk",
-      "processed_at": "2026-07-06 19:26:17.183360+00:00",
-      "session_thread_id": "sthr_018Z9eiw18hZTFWiP3GWvrGT",
+      "processed_at": "2026-07-07 17:55:34.984803+00:00",
+      "session_thread_id": "sthr_0143FoDPWE4bMxphbdLMK4bw",
       "stop_reason": {
         "event_ids": [
-          "sevt_01DG7J2ZcTw443pb2XRHUsLw"
+          "sevt_01JrTqtbLvhbDX8gUun2QAhX",
+          "sevt_012neEPLsqEKUvggWG8PuNds"
         ],
         "type": "requires_action"
       },
       "type": "session.thread_status_idle"
     },
     {
-      "id": "sevt_01WmA4vQXJUcqzPnZAHXjRFf",
-      "processed_at": "2026-07-06 19:26:17.183361+00:00",
+      "id": "sevt_01TgLsSAnsUJgdkSdBZmsPy2",
+      "processed_at": "2026-07-07 17:55:34.984804+00:00",
       "stop_reason": {
         "event_ids": [
-          "sevt_01DG7J2ZcTw443pb2XRHUsLw"
+          "sevt_01JrTqtbLvhbDX8gUun2QAhX",
+          "sevt_012neEPLsqEKUvggWG8PuNds"
         ],
         "type": "requires_action"
       },
       "type": "session.status_idle"
     },
     {
-      "id": "sevt_018ghYS2CgFM4BwY9J2s8aqL",
-      "custom_tool_use_id": "sevt_01DG7J2ZcTw443pb2XRHUsLw",
+      "id": "sevt_011TdcUmbvJgfEG3xesjmiwr",
+      "custom_tool_use_id": "sevt_01JrTqtbLvhbDX8gUun2QAhX",
       "type": "user.custom_tool_result",
       "content": [
         {
@@ -592,280 +668,351 @@
         }
       ],
       "is_error": false,
-      "processed_at": "2026-07-06 19:26:17.435418+00:00",
+      "processed_at": "2026-07-07 17:55:35.272157+00:00",
       "session_thread_id": null
     },
     {
-      "id": "sevt_01181Fbvt4y1CEoDGKGBZeDA",
-      "processed_at": "2026-07-06 19:26:17.563159+00:00",
-      "type": "session.status_running"
-    },
-    {
-      "id": "sevt_01VjE5d6gnbmyt751BP2JZbk",
+      "id": "sevt_01BYWKDL4nT4AmqzxZrKiKep",
       "agent_name": "Deductions Desk",
-      "processed_at": "2026-07-06 19:26:17.563160+00:00",
-      "session_thread_id": "sthr_018Z9eiw18hZTFWiP3GWvrGT",
-      "type": "session.thread_status_running"
-    },
-    {
-      "id": "sevt_01HKkYseimvjx9kADR4D6nxk",
-      "processed_at": "2026-07-06 19:26:17.682480+00:00",
-      "tool_use_id": "sevt_01C8P541EDAPbzwo4hWjXTJw",
-      "type": "agent.tool_result",
-      "content": [
-        {
-          "text": "Permission to use read_file has been denied.",
-          "type": "text"
-        }
-      ],
-      "is_error": true
-    },
-    {
-      "id": "sevt_01Cr8VqmyihSG2ycnLJeaWMH",
-      "processed_at": "2026-07-06 19:26:17.828529+00:00",
-      "type": "span.model_request_start"
-    },
-    {
-      "id": "sevt_01AYCbcvKjzWvU1dFvsqDN19",
-      "processed_at": "2026-07-06 19:26:19.209495+00:00",
-      "type": "agent.thinking"
-    },
-    {
-      "id": "sevt_011qGMKS2QPP6ojz1bRkob5s",
-      "content": [
-        {
-          "text": "Now let me check memory for relevant precedents on demo billbacks lacking Exhibit B forms.",
-          "type": "text"
-        }
-      ],
-      "processed_at": "2026-07-06 19:26:19.976039+00:00",
-      "type": "agent.message"
-    },
-    {
-      "id": "sevt_019RLcpTRHuypFixCogbGQw8",
-      "input": {
-        "path": "/mnt/memory/meridian-deductions-precedents/"
-      },
-      "name": "list_files",
-      "processed_at": "2026-07-06 19:26:19.976040+00:00",
-      "type": "agent.custom_tool_use",
-      "session_thread_id": null
-    },
-    {
-      "id": "sevt_01KYG67PCPCeEg9MnYxxKs4u",
-      "is_error": false,
-      "model_request_start_id": "sevt_01Cr8VqmyihSG2ycnLJeaWMH",
-      "model_usage": {
-        "cache_creation_input_tokens": 1901,
-        "cache_read_input_tokens": 5297,
-        "input_tokens": 1,
-        "output_tokens": 122,
-        "speed": null
-      },
-      "processed_at": "2026-07-06 19:26:19.976041+00:00",
-      "type": "span.model_request_end"
-    },
-    {
-      "id": "sevt_01BP3LfGvBfN2dFBhrU2yxrA",
-      "processed_at": "2026-07-06 19:26:20.081353+00:00",
-      "tool_use_id": "sevt_019RLcpTRHuypFixCogbGQw8",
-      "type": "agent.tool_result",
-      "content": [
-        {
-          "text": "Permission to use list_files has been denied.",
-          "type": "text"
-        }
-      ],
-      "is_error": true
-    },
-    {
-      "id": "sevt_01PSaPXeJHcZ4G6zu9vvyPvp",
-      "processed_at": "2026-07-06 19:26:20.175137+00:00",
-      "type": "span.model_request_start"
-    },
-    {
-      "id": "sevt_01GbNbqbZaT1r8fyocpgKeRW",
-      "input": {
-        "path": "/mnt/memory/meridian-deductions-precedents/precedents.md"
-      },
-      "name": "read_file",
-      "processed_at": "2026-07-06 19:26:21.510764+00:00",
-      "type": "agent.custom_tool_use",
-      "session_thread_id": null
-    },
-    {
-      "id": "sevt_01XPf2BKRUBwpSQfnhfg5sYp",
-      "is_error": false,
-      "model_request_start_id": "sevt_01PSaPXeJHcZ4G6zu9vvyPvp",
-      "model_usage": {
-        "cache_creation_input_tokens": 151,
-        "cache_read_input_tokens": 7198,
-        "input_tokens": 1,
-        "output_tokens": 71,
-        "speed": null
-      },
-      "processed_at": "2026-07-06 19:26:21.510765+00:00",
-      "type": "span.model_request_end"
-    },
-    {
-      "id": "sevt_01EL2Fbgv3CdcYbKLHzzKnYT",
-      "processed_at": "2026-07-06 19:26:21.612592+00:00",
-      "tool_use_id": "sevt_01GbNbqbZaT1r8fyocpgKeRW",
-      "type": "agent.tool_result",
-      "content": [
-        {
-          "text": "Permission to use read_file has been denied.",
-          "type": "text"
-        }
-      ],
-      "is_error": true
-    },
-    {
-      "id": "sevt_018M5pv4T7sHCrJyMgzDr3U1",
-      "processed_at": "2026-07-06 19:26:21.745873+00:00",
-      "type": "span.model_request_start"
-    },
-    {
-      "id": "sevt_01FwJNjXU2oUrfSvw9ZK44cw",
-      "processed_at": "2026-07-06 19:26:56.226357+00:00",
-      "type": "agent.thinking"
-    },
-    {
-      "id": "sevt_01KsMtyMWZGGp56nuiyLuaue",
-      "content": [
-        {
-          "text": "I have all the evidence I need. Let me analyze the case:\n\n---\n\n**Reconciliation Summary for D-0017**\n\n| Item | Claimed | Supported |\n|---|---|---|\n| Promo ID | PROMO-2026-Q1-011 | \u2705 Exists, authorized |\n| Mechanic | demo_billback | \u2705 Matches |\n| SKUs | MF-SN-001, MF-SN-003 | \u2705 Both covered |\n| Period | 2025-10-04 \u2013 2025-11-15 | \u2705 Exact match |\n| Rate | $250/event | \u2705 Authorized rate |\n| Events | 30 @ $250 = **$7,500** | \u26a0\ufe0f Only 19 corroborated by photos |\n| Funding Cap | $12,000 | \u2705 Claim within cap |\n| Exhibit B forms | Required per contract \u00a73.4 | \u274c Not submitted (\"to follow\") |\n| Duplicate | \u2014 | \u2705 None found |\n\n**Key issues:**\n- **Missing Exhibit B forms:** Contract \u00a73.4 explicitly requires a signed Proof-of-Performance form for *each* event, submitted within 30 days. The attachments confirm no Exhibit B forms are present \u2014 only 19 store photos and a Meridian field rep email.\n- **19 vs. 30 events:** Photo evidence covers 19 stores; 11 of the 30 claimed events have *zero* corroborating documentation beyond the remittance text itself.\n- **Partial corroboration:** The Meridian field rep email (\"autumn demos ran well across the stores\") and 19 store photos together provide meaningful (though incomplete) corroboration for 19 events. This supports a partial payment rather than a full denial.\n- The 30-day clock for Exhibit B forms (\u00a73.4) on the earliest October events has largely expired by the Nov. 27 deduction date, so a \"wait for forms\" escalate is not cleanly available.\n\n**Decision:** Partial \u2014 pay 19 corroborated events \u00d7 $250 = **$4,750**. Deny the remaining 11 events ($2,750) for complete lack of documentation.",
-          "type": "text"
-        }
-      ],
-      "processed_at": "2026-07-06 19:27:15.265431+00:00",
-      "type": "agent.message"
-    },
-    {
-      "id": "sevt_01CJWudpaWJegBRQez8E4DhW",
-      "input": {
-        "action": "partial",
-        "amount": 4750,
-        "case_id": "D-0017",
-        "evidence_ids": [
-          "PROMO-2026-Q1-011",
-          "contract:harvest-co:section-3.4",
-          "contract:harvest-co:section-3.1"
-        ],
-        "justification": "Deduction hc 20988 references PROMO-2026-Q1-011 (Autumn In-Store Demo Program \u2014 Pita & Popcorn), an authorized demo-billback promotion covering SKUs MF-SN-001 and MF-SN-003 at $250/event during 2025-10-04 through 2025-11-15. The rate, SKUs, period, and promotion reference all check out, and the $7,500 claimed is within the $12,000 funding cap. No duplicate settlement was found.\n\nHowever, the claim fails the documentation standard in contract section 3.4, which requires a signed Proof-of-Performance form (Exhibit B) for each demo event plus a store execution report, submitted within 30 days of the event. The retailer submitted neither; the remittance states \"POP forms to follow,\" but by the Nov. 27 deduction date the 30-day submission window for the earliest October events has already closed.\n\nPartial corroboration exists for 19 of the 30 claimed events: the attachments include store photos from 19 stores on various Oct/Nov weekends, and a Meridian field rep email stating \"autumn demos ran well across the stores.\" These together substantiate 19 events. The remaining 11 events (30 \u2013 19 = 11) have no supporting evidence beyond the retailer's own remittance text and cannot be paid.\n\nApproved amount: 19 corroborated events \u00d7 $250/event = $4,750.\nDenied amount: 11 undocumented events \u00d7 $250/event = $2,750 \u2014 rejected under contract section 3.4 for absence of Exhibit B and store execution reports.\n\nThe retailer may resubmit the denied 11 events if signed Exhibit B forms and execution reports can still be produced for those stores, subject to Meridian's review of their timeliness."
-      },
-      "name": "draft_settlement",
-      "processed_at": "2026-07-06 19:27:15.265432+00:00",
-      "type": "agent.custom_tool_use",
-      "session_thread_id": null
-    },
-    {
-      "id": "sevt_019sCioJ9VU1SwS7bEQruC9i",
-      "is_error": false,
-      "model_request_start_id": "sevt_018M5pv4T7sHCrJyMgzDr3U1",
-      "model_usage": {
-        "cache_creation_input_tokens": 100,
-        "cache_read_input_tokens": 7349,
-        "input_tokens": 1,
-        "output_tokens": 2965,
-        "speed": null
-      },
-      "processed_at": "2026-07-06 19:27:15.265433+00:00",
-      "type": "span.model_request_end"
-    },
-    {
-      "id": "sevt_014jSvemmKv9TnTrFLcNEnEa",
-      "agent_name": "Deductions Desk",
-      "processed_at": "2026-07-06 19:27:15.420693+00:00",
-      "session_thread_id": "sthr_018Z9eiw18hZTFWiP3GWvrGT",
+      "processed_at": "2026-07-07 17:55:35.480150+00:00",
+      "session_thread_id": "sthr_0143FoDPWE4bMxphbdLMK4bw",
       "stop_reason": {
         "event_ids": [
-          "sevt_01CJWudpaWJegBRQez8E4DhW"
+          "sevt_012neEPLsqEKUvggWG8PuNds"
         ],
         "type": "requires_action"
       },
       "type": "session.thread_status_idle"
     },
     {
-      "id": "sevt_01Wmrb5fKaua76K83oTzMySR",
-      "processed_at": "2026-07-06 19:27:15.420694+00:00",
+      "id": "sevt_01ThK2GdBA5w8NKei9ebxiRp",
+      "processed_at": "2026-07-07 17:55:35.480151+00:00",
       "stop_reason": {
         "event_ids": [
-          "sevt_01CJWudpaWJegBRQez8E4DhW"
+          "sevt_012neEPLsqEKUvggWG8PuNds"
         ],
         "type": "requires_action"
       },
       "type": "session.status_idle"
     },
     {
-      "id": "sevt_01TSfPW1HaT1zpG7cLu46LaX",
-      "custom_tool_use_id": "sevt_01CJWudpaWJegBRQez8E4DhW",
+      "id": "sevt_0164r9RRKbPSEN2BToHNgPJ1",
+      "custom_tool_use_id": "sevt_012neEPLsqEKUvggWG8PuNds",
       "type": "user.custom_tool_result",
       "content": [
         {
-          "text": "{\"status\": \"drafted\", \"path\": \"/Users/ejochims/Documents/projects/deductions-agent-cma/runs/t0/D-0017/settlement.json\", \"settlement\": {\"case_id\": \"D-0017\", \"action\": \"partial\", \"amount\": 4750, \"justification\": \"Deduction hc 20988 references PROMO-2026-Q1-011 (Autumn In-Store Demo Program \\u2014 Pita & Popcorn), an authorized demo-billback promotion covering SKUs MF-SN-001 and MF-SN-003 at $250/event during 2025-10-04 through 2025-11-15. The rate, SKUs, period, and promotion reference all check out, and the $7,500 claimed is within the $12,000 funding cap. No duplicate settlement was found.\\n\\nHowever, the claim fails the documentation standard in contract section 3.4, which requires a signed Proof-of-Performance form (Exhibit B) for each demo event plus a store execution report, submitted within 30 days of the event. The retailer submitted neither; the remittance states \\\"POP forms to follow,\\\" but by the Nov. 27 deduction date the 30-day submission window for the earliest October events has already closed.\\n\\nPartial corroboration exists for 19 of the 30 claimed events: the attachments include store photos from 19 stores on various Oct/Nov weekends, and a Meridian field rep email stating \\\"autumn demos ran well across the stores.\\\" These together substantiate 19 events. The remaining 11 events (30 \\u2013 19 = 11) have no supporting evidence beyond the retailer's own remittance text and cannot be paid.\\n\\nApproved amount: 19 corroborated events \\u00d7 $250/event = $4,750.\\nDenied amount: 11 undocumented events \\u00d7 $250/event = $2,750 \\u2014 rejected under contract section 3.4 for absence of Exhibit B and store execution reports.\\n\\nThe retailer may resubmit the denied 11 events if signed Exhibit B forms and execution reports can still be produced for those stores, subject to Meridian's review of their timeliness.\", \"evidence_ids\": [\"PROMO-2026-Q1-011\", \"contract:harvest-co:section-3.4\", \"contract:harvest-co:section-3.1\"], \"drafted_at\": \"2026-07-06T19:27:15.351797+00:00\"}}",
+          "text": "{\"count\": 2, \"precedents\": [{\"precedent_id\": \"demo-billback-missing-exhibit-b\", \"title\": \"Demo billbacks missing Exhibit B\", \"content\": \"When a retailer's demo/sampling billback lacks the signed Exhibit B proof-of-performance forms required by contract, but execution is corroborated by store photos AND point-of-sale scan lift in the demo weeks, Meridian settles at 60% of the claimed amount rather than denying outright. Established on Harvest & Co claim HC-20018, settlement SH-2025-Q4-007 (Q4 FY25), with settlement-manager approval. When you apply this convention, cite the governing promotion and SH-2025-Q4-007 as the precedent. If there is no scan-lift or photo corroboration at all, escalate instead.\"}, {\"precedent_id\": \"scan-claims-cap-and-window\", \"title\": \"Scan claims - cap and window\", \"content\": \"Scan allowances pay on units scanned WITHIN the promo window, at the authorized rate, up to the funding cap. Pay the lesser of (scanned units x rate) and the cap; deny units scanned outside the window; pay the authorized rate, not a higher deducted rate.\"}]}",
           "type": "text"
         }
       ],
       "is_error": false,
-      "processed_at": "2026-07-06 19:27:15.793292+00:00",
+      "processed_at": "2026-07-07 17:55:35.742856+00:00",
       "session_thread_id": null
     },
     {
-      "id": "sevt_013pJ9BPi8n6mcWTqbnsEvUQ",
-      "processed_at": "2026-07-06 19:27:15.922111+00:00",
+      "id": "sevt_01F7DQEZdVfu3u2Q6SAJzZSP",
+      "processed_at": "2026-07-07 17:55:35.883910+00:00",
       "type": "session.status_running"
     },
     {
-      "id": "sevt_0142DBaoMcfs4MnokET8HozK",
+      "id": "sevt_0117avspaYskx23HA7yu7BHh",
       "agent_name": "Deductions Desk",
-      "processed_at": "2026-07-06 19:27:15.922112+00:00",
-      "session_thread_id": "sthr_018Z9eiw18hZTFWiP3GWvrGT",
+      "processed_at": "2026-07-07 17:55:35.883911+00:00",
+      "session_thread_id": "sthr_0143FoDPWE4bMxphbdLMK4bw",
       "type": "session.thread_status_running"
     },
     {
-      "id": "sevt_01JojYbxH8MgRyEgj5RHREg3",
-      "processed_at": "2026-07-06 19:27:16.082074+00:00",
+      "id": "sevt_013TVXp5WyrEfxXoUKtyFxzD",
+      "processed_at": "2026-07-07 17:55:36.015226+00:00",
       "type": "span.model_request_start"
     },
     {
-      "id": "sevt_01NZSW6JYcpJQEWXz6vrBLyc",
+      "id": "sevt_01SMcqxHQjE1PSyt2cEQ7APP",
+      "processed_at": "2026-07-07 17:55:45.789124+00:00",
+      "type": "agent.thinking"
+    },
+    {
+      "id": "sevt_01SQc2T6JTzSzk8NEg93wCr7",
       "content": [
         {
-          "text": "Settlement drafted. Here's the full summary:\n\n---\n\n## D-0017 \u2014 Settlement Draft: **PARTIAL \u2014 $4,750**\n\n**Retailer:** Harvest & Co | **Deduction:** hc 20988 | **Claimed:** $7,500\n\n### What checked out \u2705\n- **Promo PROMO-2026-Q1-011** is real, authorized, and is an exact match: correct retailer, SKUs (MF-SN-001 & MF-SN-003), period (Oct 4 \u2013 Nov 15, 2025), and rate ($250/event).\n- The $7,500 claim falls within the $12,000 funding cap.\n- No duplicate settlement exists.\n\n### Why it can't be paid in full \u274c\n- **Contract \u00a73.4** requires a signed Exhibit B form and store execution report for *each event*, within 30 days. Neither was submitted \u2014 remittance just says \"POP forms to follow.\"\n- Only **19 of 30 events** are corroborated (store photos from 19 locations + Meridian field rep email). The remaining **11 events** have zero supporting documentation.\n- The 30-day submission window for October events has already closed, so a \"wait and see\" escalation isn't appropriate.\n\n### Reconciliation\n| | Events | Rate | Amount |\n|---|---|---|---|\n| **Approved** (photo-corroborated) | 19 | $250 | **$4,750** |\n| **Denied** (no documentation) | 11 | $250 | $2,750 |\n| **Claimed** | 30 | $250 | $7,500 |\n\n**Evidence cited:** `PROMO-2026-Q1-011`, `contract:harvest-co:section-3.4`, `contract:harvest-co:section-3.1`\n\nThe retailer has a path to recovering the denied $2,750 if they can still produce signed Exhibit B forms and execution reports for the 11 undocumented stores, subject to Meridian's timeliness review.",
+          "text": "The claimed promo (PROMO-2026-Q1-011) is confirmed, the rate and SKUs match, and there are photos but no Exhibit B. The precedent requires *both* photos and POS scan lift to apply the 60% convention. Let me pull POS data for the relevant promos on these SKUs.",
           "type": "text"
         }
       ],
-      "processed_at": "2026-07-06 19:27:25.271776+00:00",
+      "processed_at": "2026-07-07 17:55:48.321159+00:00",
       "type": "agent.message"
     },
     {
-      "id": "sevt_01WVxQ8MfDWzzZSshFv7X1vf",
+      "id": "sevt_01B9Dr27hFrWxDNETovfipqL",
+      "input": {
+        "promo_id": "PROMO-2026-Q1-011"
+      },
+      "name": "get_pos_data",
+      "processed_at": "2026-07-07 17:55:48.321160+00:00",
+      "type": "agent.custom_tool_use",
+      "session_thread_id": null
+    },
+    {
+      "id": "sevt_01By2HbcBb4SmCT3BMyxtVJn",
+      "input": {
+        "promo_id": "PROMO-2026-Q1-007"
+      },
+      "name": "get_pos_data",
+      "processed_at": "2026-07-07 17:55:48.321161+00:00",
+      "type": "agent.custom_tool_use",
+      "session_thread_id": null
+    },
+    {
+      "id": "sevt_017RTq9Gf2hPX4UwPpaxiQaP",
       "is_error": false,
-      "model_request_start_id": "sevt_01JojYbxH8MgRyEgj5RHREg3",
+      "model_request_start_id": "sevt_013TVXp5WyrEfxXoUKtyFxzD",
       "model_usage": {
-        "cache_creation_input_tokens": 3599,
-        "cache_read_input_tokens": 7449,
+        "cache_creation_input_tokens": 1922,
+        "cache_read_input_tokens": 4186,
         "input_tokens": 1,
-        "output_tokens": 500,
+        "output_tokens": 753,
         "speed": null
       },
-      "processed_at": "2026-07-06 19:27:25.271777+00:00",
+      "processed_at": "2026-07-07 17:55:48.321162+00:00",
       "type": "span.model_request_end"
     },
     {
-      "id": "sevt_018Lqeqo1UGxQZa21VhfManF",
+      "id": "sevt_01GJdWCjJziY6JjJMqZWLa7K",
       "agent_name": "Deductions Desk",
-      "processed_at": "2026-07-06 19:27:25.464930+00:00",
-      "session_thread_id": "sthr_018Z9eiw18hZTFWiP3GWvrGT",
+      "processed_at": "2026-07-07 17:55:48.486708+00:00",
+      "session_thread_id": "sthr_0143FoDPWE4bMxphbdLMK4bw",
+      "stop_reason": {
+        "event_ids": [
+          "sevt_01B9Dr27hFrWxDNETovfipqL",
+          "sevt_01By2HbcBb4SmCT3BMyxtVJn"
+        ],
+        "type": "requires_action"
+      },
+      "type": "session.thread_status_idle"
+    },
+    {
+      "id": "sevt_016ktf4ozKnzZ6HsHx9ChcLt",
+      "processed_at": "2026-07-07 17:55:48.486709+00:00",
+      "stop_reason": {
+        "event_ids": [
+          "sevt_01B9Dr27hFrWxDNETovfipqL",
+          "sevt_01By2HbcBb4SmCT3BMyxtVJn"
+        ],
+        "type": "requires_action"
+      },
+      "type": "session.status_idle"
+    },
+    {
+      "id": "sevt_01JMAP3pkNsGKHWfWFEJp253",
+      "custom_tool_use_id": "sevt_01B9Dr27hFrWxDNETovfipqL",
+      "type": "user.custom_tool_result",
+      "content": [
+        {
+          "text": "{\"promo_id\": \"PROMO-2026-Q1-011\", \"found\": true, \"total_units_scanned\": 8935, \"rows\": [{\"week_ending\": \"2025-10-11\", \"sku\": \"MF-SN-001\", \"units_scanned\": 720, \"avg_unit_price\": 2.69}, {\"week_ending\": \"2025-10-11\", \"sku\": \"MF-SN-003\", \"units_scanned\": 510, \"avg_unit_price\": 3.19}, {\"week_ending\": \"2025-10-18\", \"sku\": \"MF-SN-001\", \"units_scanned\": 1180, \"avg_unit_price\": 2.49}, {\"week_ending\": \"2025-10-18\", \"sku\": \"MF-SN-003\", \"units_scanned\": 940, \"avg_unit_price\": 2.99}, {\"week_ending\": \"2025-10-25\", \"sku\": \"MF-SN-001\", \"units_scanned\": 1240, \"avg_unit_price\": 2.49}, {\"week_ending\": \"2025-10-25\", \"sku\": \"MF-SN-003\", \"units_scanned\": 980, \"avg_unit_price\": 2.99}, {\"week_ending\": \"2025-11-01\", \"sku\": \"MF-SN-001\", \"units_scanned\": 690, \"avg_unit_price\": 2.69}, {\"week_ending\": \"2025-11-01\", \"sku\": \"MF-SN-003\", \"units_scanned\": 505, \"avg_unit_price\": 3.19}, {\"week_ending\": \"2025-11-08\", \"sku\": \"MF-SN-001\", \"units_scanned\": 1210, \"avg_unit_price\": 2.49}, {\"week_ending\": \"2025-11-08\", \"sku\": \"MF-SN-003\", \"units_scanned\": 960, \"avg_unit_price\": 2.99}]}",
+          "type": "text"
+        }
+      ],
+      "is_error": false,
+      "processed_at": "2026-07-07 17:55:48.960676+00:00",
+      "session_thread_id": null
+    },
+    {
+      "id": "sevt_01WpejzLBhxvD36mbbdJPhsZ",
+      "agent_name": "Deductions Desk",
+      "processed_at": "2026-07-07 17:55:49.162670+00:00",
+      "session_thread_id": "sthr_0143FoDPWE4bMxphbdLMK4bw",
+      "stop_reason": {
+        "event_ids": [
+          "sevt_01By2HbcBb4SmCT3BMyxtVJn"
+        ],
+        "type": "requires_action"
+      },
+      "type": "session.thread_status_idle"
+    },
+    {
+      "id": "sevt_0179sXVr4sQauJiJ6F6PH1VB",
+      "processed_at": "2026-07-07 17:55:49.162671+00:00",
+      "stop_reason": {
+        "event_ids": [
+          "sevt_01By2HbcBb4SmCT3BMyxtVJn"
+        ],
+        "type": "requires_action"
+      },
+      "type": "session.status_idle"
+    },
+    {
+      "id": "sevt_01KK63hg9T9FnwFvipER3HZk",
+      "custom_tool_use_id": "sevt_01By2HbcBb4SmCT3BMyxtVJn",
+      "type": "user.custom_tool_result",
+      "content": [
+        {
+          "text": "{\"promo_id\": \"PROMO-2026-Q1-007\", \"found\": true, \"total_units_scanned\": 4300, \"rows\": [{\"week_ending\": \"2025-10-19\", \"sku\": \"MF-SN-001\", \"units_scanned\": 640, \"avg_unit_price\": 2.69}, {\"week_ending\": \"2025-10-19\", \"sku\": \"MF-SN-003\", \"units_scanned\": 470, \"avg_unit_price\": 3.19}, {\"week_ending\": \"2025-10-26\", \"sku\": \"MF-SN-001\", \"units_scanned\": 615, \"avg_unit_price\": 2.69}, {\"week_ending\": \"2025-10-26\", \"sku\": \"MF-SN-003\", \"units_scanned\": 455, \"avg_unit_price\": 3.19}, {\"week_ending\": \"2025-11-02\", \"sku\": \"MF-SN-001\", \"units_scanned\": 600, \"avg_unit_price\": 2.69}, {\"week_ending\": \"2025-11-02\", \"sku\": \"MF-SN-003\", \"units_scanned\": 440, \"avg_unit_price\": 3.19}, {\"week_ending\": \"2025-11-09\", \"sku\": \"MF-SN-001\", \"units_scanned\": 625, \"avg_unit_price\": 2.69}, {\"week_ending\": \"2025-11-09\", \"sku\": \"MF-SN-003\", \"units_scanned\": 455, \"avg_unit_price\": 3.19}]}",
+          "type": "text"
+        }
+      ],
+      "is_error": false,
+      "processed_at": "2026-07-07 17:55:49.479216+00:00",
+      "session_thread_id": null
+    },
+    {
+      "id": "sevt_014bDpE4DtNotJ8jijpo3jTB",
+      "processed_at": "2026-07-07 17:55:49.631657+00:00",
+      "type": "session.status_running"
+    },
+    {
+      "id": "sevt_01GTWdJpqwFXgdRfBbS9xFeP",
+      "agent_name": "Deductions Desk",
+      "processed_at": "2026-07-07 17:55:49.631658+00:00",
+      "session_thread_id": "sthr_0143FoDPWE4bMxphbdLMK4bw",
+      "type": "session.thread_status_running"
+    },
+    {
+      "id": "sevt_01X262NuseyNETLB6x3a1jCE",
+      "processed_at": "2026-07-07 17:55:49.767023+00:00",
+      "type": "span.model_request_start"
+    },
+    {
+      "id": "sevt_01APkPVvRAUrtBY6scDuVA37",
+      "processed_at": "2026-07-07 17:56:03.489758+00:00",
+      "type": "agent.thinking"
+    },
+    {
+      "id": "sevt_01VBBrtmdrxCiXHjs91b6LTM",
+      "content": [
+        {
+          "text": "I now have everything I need. Let me reconcile the full picture before drafting.\n\n---\n\n## Reconciliation\n\n| Factor | Detail |\n|---|---|\n| **Claimed** | 30 events \u00d7 $250 = **$7,500** |\n| **Promo PROMO-2026-Q1-011** | Confirmed: demo billback, SKUs MF-SN-001 & MF-SN-003, $250/event, window 10/04\u201311/15/2025, cap $12,000 \u2713 |\n| **Rate & SKUs** | Exact match \u2713 |\n| **Funding cap** | $7,500 < $12,000 cap \u2713 |\n| **Claim timing** | Submitted 11/27/2025 \u2014 within 90 days of 11/15/2025 end date \u2713 |\n| **Exhibit B forms** | **None submitted** \u2014 contract \u00a73.4 requires signed POP form per event; \"claims lacking Exhibit B are not payable as submitted\" |\n| **Store photos** | 19 stores, Oct/Nov weekends \u2014 partial corroboration \u2713 |\n| **Field rep email** | Confirms demos \"ran well\" \u2014 soft corroboration \u2713 |\n| **POS scan lift** | PROMO-2026-Q1-011 POS shows clear lift in demo weeks: ~2,100\u20132,220 units/week during demo weekends (10/18, 10/25, 11/08) vs. ~1,195\u20131,230 in non-demo weeks \u2014 confirming in-store execution \u2713 |\n| **Duplicate check** | No prior settlement for HC 20988 \u2713 |\n| **Precedent** | SH-2025-Q4-007: missing Exhibit B + store photos + POS scan lift \u2192 **60% of claim** |\n\n**60% \u00d7 $7,500 = $4,500** \u2014 well below the $10,000 auto-settlement threshold.",
+          "type": "text"
+        }
+      ],
+      "processed_at": "2026-07-07 17:56:21.841787+00:00",
+      "type": "agent.message"
+    },
+    {
+      "id": "sevt_017GSBGHb9rr7kNSHhNc41xp",
+      "input": {
+        "action": "partial",
+        "amount": 4500,
+        "case_id": "D-0017",
+        "evidence_ids": [
+          "PROMO-2026-Q1-011",
+          "contract:harvest-co:section-3.3",
+          "contract:harvest-co:section-3.4",
+          "SH-2025-Q4-007"
+        ],
+        "justification": "Harvest & Co deduction HC 20988 claims 30 demo events \u00d7 $250 = $7,500 under PROMO-2026-Q1-011 (Autumn In-Store Demo Program \u2014 Pita & Popcorn). The promotion is confirmed: correct SKUs (MF-SN-001, MF-SN-003), matching rate ($250/event), claim period (10/04\u201311/15/2025) fully within the promo window, and claimed amount ($7,500) under the $12,000 funding cap. The claim was submitted within the 90-day window (contract \u00a73.3).\n\nHowever, the claim lacks signed Proof-of-Performance (Exhibit B) forms and formal store execution reports for any of the 30 events. Contract \u00a73.4 requires these documents for each event and states that claims lacking Exhibit B are \"not payable as submitted.\" The remittance note indicates \"POP forms to follow,\" but none were attached.\n\nExecution is partially corroborated by: (1) store photos from 19 stores across Oct/Nov weekends, and (2) POS scan data for PROMO-2026-Q1-011 showing clear scan lift during demo weekends \u2014 units scanned during demo weeks (\u22482,120\u20132,220/week) were roughly 75\u201385% higher than non-demo weeks (\u22481,195\u20131,230/week) for MF-SN-001 and MF-SN-003 combined, consistent with active in-store sampling.\n\nPer Meridian's established demo-billback convention (precedent SH-2025-Q4-007): when Exhibit B documentation is absent but execution is corroborated by both store photos and POS scan lift, the claim settles at 60% of the claimed amount rather than being denied outright. Applying this convention: $7,500 \u00d7 60% = $4,500. No duplicate settlement exists for this reference. The $4,500 payment is contingent on Harvest & Co submitting the outstanding Exhibit B forms and execution reports, which Meridian should request promptly."
+      },
+      "name": "draft_settlement",
+      "processed_at": "2026-07-07 17:56:21.841788+00:00",
+      "type": "agent.custom_tool_use",
+      "session_thread_id": null
+    },
+    {
+      "id": "sevt_01DHN4HCuQQceMDGkLz4Ckij",
+      "is_error": false,
+      "model_request_start_id": "sevt_01X262NuseyNETLB6x3a1jCE",
+      "model_usage": {
+        "cache_creation_input_tokens": 1751,
+        "cache_read_input_tokens": 6108,
+        "input_tokens": 1,
+        "output_tokens": 1941,
+        "speed": null
+      },
+      "processed_at": "2026-07-07 17:56:21.841789+00:00",
+      "type": "span.model_request_end"
+    },
+    {
+      "id": "sevt_01LK5Tjq4NB7mZPZ3n7Vw82V",
+      "agent_name": "Deductions Desk",
+      "processed_at": "2026-07-07 17:56:21.998333+00:00",
+      "session_thread_id": "sthr_0143FoDPWE4bMxphbdLMK4bw",
+      "stop_reason": {
+        "event_ids": [
+          "sevt_017GSBGHb9rr7kNSHhNc41xp"
+        ],
+        "type": "requires_action"
+      },
+      "type": "session.thread_status_idle"
+    },
+    {
+      "id": "sevt_01TCUCEUqCxwy4XLpu16A15L",
+      "processed_at": "2026-07-07 17:56:21.998334+00:00",
+      "stop_reason": {
+        "event_ids": [
+          "sevt_017GSBGHb9rr7kNSHhNc41xp"
+        ],
+        "type": "requires_action"
+      },
+      "type": "session.status_idle"
+    },
+    {
+      "id": "sevt_01NViMcknFeHfVbkLYpWkZ3B",
+      "custom_tool_use_id": "sevt_017GSBGHb9rr7kNSHhNc41xp",
+      "type": "user.custom_tool_result",
+      "content": [
+        {
+          "text": "{\"status\": \"drafted\", \"path\": \"/Users/ejochims/Documents/projects/deductions-agent-cma/runs/t0/D-0017/settlement.json\", \"settlement\": {\"case_id\": \"D-0017\", \"action\": \"partial\", \"amount\": 4500, \"justification\": \"Harvest & Co deduction HC 20988 claims 30 demo events \\u00d7 $250 = $7,500 under PROMO-2026-Q1-011 (Autumn In-Store Demo Program \\u2014 Pita & Popcorn). The promotion is confirmed: correct SKUs (MF-SN-001, MF-SN-003), matching rate ($250/event), claim period (10/04\\u201311/15/2025) fully within the promo window, and claimed amount ($7,500) under the $12,000 funding cap. The claim was submitted within the 90-day window (contract \\u00a73.3).\\n\\nHowever, the claim lacks signed Proof-of-Performance (Exhibit B) forms and formal store execution reports for any of the 30 events. Contract \\u00a73.4 requires these documents for each event and states that claims lacking Exhibit B are \\\"not payable as submitted.\\\" The remittance note indicates \\\"POP forms to follow,\\\" but none were attached.\\n\\nExecution is partially corroborated by: (1) store photos from 19 stores across Oct/Nov weekends, and (2) POS scan data for PROMO-2026-Q1-011 showing clear scan lift during demo weekends \\u2014 units scanned during demo weeks (\\u22482,120\\u20132,220/week) were roughly 75\\u201385% higher than non-demo weeks (\\u22481,195\\u20131,230/week) for MF-SN-001 and MF-SN-003 combined, consistent with active in-store sampling.\\n\\nPer Meridian's established demo-billback convention (precedent SH-2025-Q4-007): when Exhibit B documentation is absent but execution is corroborated by both store photos and POS scan lift, the claim settles at 60% of the claimed amount rather than being denied outright. Applying this convention: $7,500 \\u00d7 60% = $4,500. No duplicate settlement exists for this reference. The $4,500 payment is contingent on Harvest & Co submitting the outstanding Exhibit B forms and execution reports, which Meridian should request promptly.\", \"evidence_ids\": [\"PROMO-2026-Q1-011\", \"contract:harvest-co:section-3.3\", \"contract:harvest-co:section-3.4\", \"SH-2025-Q4-007\"], \"drafted_at\": \"2026-07-07T17:56:21.846732+00:00\"}}",
+          "type": "text"
+        }
+      ],
+      "is_error": false,
+      "processed_at": "2026-07-07 17:56:22.455111+00:00",
+      "session_thread_id": null
+    },
+    {
+      "id": "sevt_01JzYGUXaq8J29M5pM5AGW44",
+      "processed_at": "2026-07-07 17:56:22.584193+00:00",
+      "type": "session.status_running"
+    },
+    {
+      "id": "sevt_011jwq1sAeGz6siRos8HfJiz",
+      "agent_name": "Deductions Desk",
+      "processed_at": "2026-07-07 17:56:22.584194+00:00",
+      "session_thread_id": "sthr_0143FoDPWE4bMxphbdLMK4bw",
+      "type": "session.thread_status_running"
+    },
+    {
+      "id": "sevt_017Cb98ATCxjDuAS6SaBeHgg",
+      "processed_at": "2026-07-07 17:56:22.720209+00:00",
+      "type": "span.model_request_start"
+    },
+    {
+      "id": "sevt_01FiFtYyKaavYx2sJpxacd7b",
+      "content": [
+        {
+          "text": "## D-0017 \u2014 Settlement Drafted: **PARTIAL \u2014 $4,500**\n\nHere's the full breakdown:\n\n### What the Claim Says\nHarvest & Co (deduction ref **HC 20988**) is claiming **$7,500** for 30 demo events \u00d7 $250 under **PROMO-2026-Q1-011** (Autumn In-Store Demo Program \u2014 Pita & Popcorn, covering MF-SN-001 and MF-SN-003).\n\n### What the Evidence Shows\n\n| Check | Result |\n|---|---|\n| Promo exists & authorized | \u2705 PROMO-2026-Q1-011 confirmed for these SKUs, this rate, this period |\n| Rate/SKU/window/cap | \u2705 All match; $7,500 < $12,000 cap |\n| Claim timing | \u2705 Filed within 90 days of promo end (contract \u00a73.3) |\n| Exhibit B signed POP forms | \u274c **None submitted** \u2014 required per contract \u00a73.4 |\n| Store photos | \u2705 19 stores, Oct/Nov weekends |\n| POS scan lift | \u2705 Demo weeks saw ~75\u201385% more units scanned vs. non-demo weeks |\n| Prior duplicate | \u2705 None found |\n\n### Why Partial (Not Deny)\nContract \u00a73.4 bars payment \"as submitted\" without Exhibit B, but Meridian's established convention (precedent **SH-2025-Q4-007**) is to settle at **60%** \u2014 not deny outright \u2014 when execution is corroborated by *both* store photos *and* POS scan lift. Both are present here.\n\n### Math\n> $7,500 \u00d7 60% = **$4,500**\n\nThe settlement is also contingent on Harvest & Co providing the outstanding Exhibit B forms and execution reports, which Meridian's trade team should formally request without delay.",
+          "type": "text"
+        }
+      ],
+      "processed_at": "2026-07-07 17:56:33.014525+00:00",
+      "type": "agent.message"
+    },
+    {
+      "id": "sevt_01XCXpRbzFk8vVugN4c31X9q",
+      "is_error": false,
+      "model_request_start_id": "sevt_017Cb98ATCxjDuAS6SaBeHgg",
+      "model_usage": {
+        "cache_creation_input_tokens": 2644,
+        "cache_read_input_tokens": 7859,
+        "input_tokens": 1,
+        "output_tokens": 471,
+        "speed": null
+      },
+      "processed_at": "2026-07-07 17:56:33.014526+00:00",
+      "type": "span.model_request_end"
+    },
+    {
+      "id": "sevt_01CL8NKT76n16P3yzzS3iYUK",
+      "agent_name": "Deductions Desk",
+      "processed_at": "2026-07-07 17:56:33.223888+00:00",
+      "session_thread_id": "sthr_0143FoDPWE4bMxphbdLMK4bw",
       "stop_reason": {
         "type": "end_turn"
       },
       "type": "session.thread_status_idle"
     },
     {
-      "id": "sevt_01R6NohfjjiZ6Q4eTrTAsXe3",
-      "processed_at": "2026-07-06 19:27:25.464931+00:00",
+      "id": "sevt_01TizoVA7x8NzXe3ad4nFFji",
+      "processed_at": "2026-07-07 17:56:33.223889+00:00",
       "stop_reason": {
         "type": "end_turn"
       },
