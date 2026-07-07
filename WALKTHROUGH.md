@@ -321,7 +321,9 @@ built to reward exactly that recall: the correct answer is a partial at 60%,
 citing the precedent. This mirrors the real organizational problem — settlement
 policy should be *consistent across analysts and across time*, not re-derived per
 case. `--no-memory` runs the same eval with the tool returning no precedents, so
-the value of memory is itself measurable.
+the value of memory is itself measurable. The full rationale — including what we
+give up by not using native memory — is in
+`docs/decisions/0001-memory-precedent-recall.md`.
 
 ---
 

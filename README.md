@@ -263,7 +263,9 @@ demo billbacks missing the signed Exhibit B proof, but corroborated by store
 photos and scan lift, settle at **60% of claim** (precedent `SH-2025-Q4-007`).
 Cases 17–18 reward recalling and applying that convention consistently.
 `python src/eval_runner.py --no-memory` measures the delta with the tool
-returning no precedents.
+returning no precedents. The decision to serve precedents this way rather than
+via native memory — and the trade-off it makes — is recorded in
+[`docs/decisions/0001-memory-precedent-recall.md`](docs/decisions/0001-memory-precedent-recall.md).
 
 ---
 
