@@ -523,7 +523,46 @@
     </div>
   </div></section>
 
-  <!-- ==================================================== 8 · RUN IT -->
+  <!-- ============================================= 8 · PRODUCTION SCALE -->
+  <section class="slide" aria-label="What we'd revisit at production scale"><div class="slide-inner">
+    <p class="eyebrow">Beyond the POC</p>
+    <h2>What we'd revisit at production scale</h2>
+    <p>
+      Deliberately simplified to prove the trust layer. Three decisions we'd
+      reopen with real constraints — each a design fork we reasoned through, not
+      a gap we missed.
+    </p>
+    <div class="grid3">
+      <div class="card">
+        <span class="tag">Memory model</span>
+        <h3>Curated recall → governed learning</h3>
+        <p>Today precedents are a host-fulfilled, read-only tool — no model-writable
+        state, no poisoning surface. If the agent should <em>accumulate</em> new
+        precedents over time, move to native memory with human-gated writes, backed
+        by write→recall and poisoning cases in the eval.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Systems of record</span>
+        <h3>Fixtures → live integrations</h3>
+        <p>The six tools read synthetic fixtures. Production swaps their
+        implementations for retailer EDI / deduction portals, the ERP (e.g. SAP),
+        and OCR of backup docs — behind the same typed tool interface. The boundary
+        holds; only the data source changes.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Governance &amp; audit</span>
+        <h3>Draft-only → approval workflow</h3>
+        <p>The $10k human gate is the seed. At scale: role-based execution, an
+        immutable audit trail, and adversarial remittance text as a first-class
+        eval bucket — so prompt injection is measured, not assumed away.</p>
+      </div>
+    </div>
+    <p class="chart-note" style="margin-top:9px;">Each is captured as an
+      architecture decision in <span class="mono">docs/decisions/</span>, with a
+      concrete &ldquo;when to revisit&rdquo; trigger.</p>
+  </div></section>
+
+  <!-- ==================================================== 9 · RUN IT -->
   <section class="slide" aria-label="Run the demo"><div class="slide-inner">
     <p class="eyebrow">See it yourself</p>
     <h2>Run the demo in 60 seconds</h2>
@@ -563,7 +602,7 @@ make demo   <span class="cm"># review UI at :8501</span></pre>
 <div class="controls">
   <button class="nav" id="prev" type="button" aria-label="Previous slide">‹</button>
   <div class="dots" id="dots" role="tablist" aria-label="Slides"></div>
-  <span class="counter" id="counter">1 / 8</span>
+  <span class="counter" id="counter">1 / 9</span>
   <button class="nav" id="next" type="button" aria-label="Next slide">›</button>
 </div>
 
