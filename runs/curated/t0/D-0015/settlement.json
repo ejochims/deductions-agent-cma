@@ -1,0 +1,12 @@
+{
+  "case_id": "D-0015",
+  "action": "partial",
+  "amount": 6600,
+  "justification": "Harvest & Co deducted $11,000 for 44 in-store demo events \u00d7 $250 under PROMO-2026-Q1-010 (Holiday In-Store Demo Program \u2014 Pretzels & Cold Brew). The referenced promotion is valid: it covers the correct SKUs (MF-SN-002 and MF-BV-102), the authorized rate of $250/event, the claimed period (2025-11-03 to 2025-12-14), and has a $15,000 funding cap. No duplicate settlement was found for deduction ref \"hc 20655.\"\n\nHowever, as of claim submission, no signed Proof-of-Performance (Exhibit B) forms or store execution reports have been provided. The remittance states \"POP forms coming.\" Contract section 3.4 requires a signed Exhibit B and store execution report for each demo event, submitted within 30 days of the event; claims lacking this documentation \"are not payable as submitted.\"\n\nPartial settlement is supported by two corroborating evidence sources: (1) store photos from 23 stores across the Nov/Dec demo period, and (2) strong POS scan lift on both SKUs across all six promo weeks (10,540 units scanned), consistent with active in-store demo execution. These together satisfy the corroboration threshold established in Meridian precedent SH-2025-Q4-007 (demo billbacks missing Exhibit B, but corroborated by photos and scan lift, settle at 60%).\n\nApplying the 60% convention: $11,000 \u00d7 60% = $6,600. This amount is below the $10,000 auto-settlement threshold. The remaining 40% ($4,400) is withheld pending submission of the signed Exhibit B forms. Upon receipt of compliant documentation for the remaining events, the balance may be reconsidered.",
+  "evidence_ids": [
+    "PROMO-2026-Q1-010",
+    "contract:harvest-co:section-3.4",
+    "SH-2025-Q4-007"
+  ],
+  "drafted_at": "2026-07-07T17:55:14.972566+00:00"
+}

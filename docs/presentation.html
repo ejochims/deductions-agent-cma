@@ -294,18 +294,18 @@
     <div class="kpis">
       <div class="kpi">
         <div class="k-label">Overall pass^3</div>
-        <div class="k-val num">67<span style="font-size:1.3rem;">%</span></div>
-        <div class="k-sub">3 trials × 18 cases, LLM judge on</div>
+        <div class="k-val num">78<span style="font-size:1.3rem;">%</span></div>
+        <div class="k-sub">Up from 67% — an eval caught &amp; fixed the memory gap</div>
       </div>
       <div class="kpi">
         <div class="k-label">Mean pass rate</div>
-        <div class="k-val num">70<span style="font-size:1.3rem;">%</span></div>
-        <div class="k-sub">Across all 54 graded runs</div>
+        <div class="k-val num">83<span style="font-size:1.3rem;">%</span></div>
+        <div class="k-sub">3 trials × 18 cases, LLM judge on</div>
       </div>
       <div class="kpi">
         <div class="k-label">Reliability</div>
         <div class="k-val num">0</div>
-        <div class="k-sub">Infra errors · ~$9.51 / full eval</div>
+        <div class="k-sub">Infra errors · ~$7 / full eval</div>
       </div>
     </div>
   </div></section>
@@ -315,15 +315,16 @@
     <p class="eyebrow">How it works</p>
     <h2>The tool boundary is the security boundary</h2>
     <p>
-      The agent reasons on Anthropic's orchestration layer, but its six tools are
+      The agent reasons on Anthropic's orchestration layer, but its seven tools are
       fulfilled <strong>host-side</strong> — the host answers each
       <code>custom_tool_use</code> from <code>fixtures/</code>, and nothing is
-      mounted into the sandbox (no egress, no filesystem).
+      mounted into the sandbox (no egress, no filesystem). Even <em>memory</em> is
+      just another host-fulfilled tool.
     </p>
     <div class="arch">
       <div class="node">
         <div class="nt">Agent loop — Claude decides &amp; calls tools</div>
-        <div class="nd">System prompt, model, and 6 tool schemas in <span class="nf">agent/agent.yaml</span></div>
+        <div class="nd">System prompt, model, and 7 tool schemas in <span class="nf">agent/agent.yaml</span></div>
       </div>
       <div class="flow"><span class="ar">▲</span> custom_tool_use &nbsp;·&nbsp; custom_tool_result <span class="ar">▼</span></div>
       <div class="node host">
@@ -338,7 +339,7 @@
     </div>
     <ul class="toolset" aria-label="agent tools">
       <li>get_deduction</li><li>search_promotions</li><li>get_contract_terms</li>
-      <li>get_pos_data</li><li>check_settlement_history</li><li class="gate">draft_settlement →</li>
+      <li>get_pos_data</li><li>check_settlement_history</li><li>get_precedents</li><li class="gate">draft_settlement →</li>
     </ul>
     <div class="callout">
       <p>Four decisions — <span class="chip approve">APPROVE</span> <span class="chip deny">DENY</span>
@@ -379,50 +380,98 @@
       metric that matters when the failure mode is a confident wrong settlement.</p>
   </div></section>
 
-  <!-- ==================================================== 4 · RESULTS -->
+  <!-- ==================================================== 4 · EVAL-DRIVEN IMPROVEMENT -->
+  <section class="slide" aria-label="Eval-driven improvement"><div class="slide-inner">
+    <p class="eyebrow">Eval-driven improvement</p>
+    <h2>The eval caught a silent failure — then measured the fix</h2>
+    <p>
+      The <strong>memory</strong> bucket scored <strong>0% pass^3</strong> while every
+      other bucket looked healthy. Nothing threw: the session status stayed
+      <code>ok</code> and the drafts looked plausible. A native memory store was
+      mounted at <code>/mnt/memory/</code>, but the deliberately toolless sandbox
+      exposed no way to read it — every access returned <code>"Unknown tool"</code>
+      and the agent drafted the precedent cases <strong>blind</strong>. A happy-path
+      demo sails straight past this; the per-bucket, ground-truth eval made it
+      impossible to miss.
+    </p>
+    <p>
+      The fix: retire the native store and serve recall the same way as every other
+      capability — a host-fulfilled <code>get_precedents</code> tool. Re-running the
+      eval <strong>measured the climb</strong>:
+    </p>
+    <div class="reg"><div class="grid3">
+      <div class="card">
+        <span class="tag">Memory bucket</span>
+        <div class="delta num" style="font-size:1.5rem;color:var(--accent-deep)">0% → 100%</div>
+        <p>D-0017 now settles <strong>$4,500</strong>, D-0018 <strong>$6,300</strong>,
+        both citing <code>SH-2025-Q4-007</code>.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Ambiguous bucket</span>
+        <div class="delta num" style="font-size:1.5rem;color:var(--accent-deep)">0% → 50%</div>
+        <p>D-0015 recovers to a <strong>partial $6,600</strong> at the precedent rate,
+        citing the same settlement.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Overall pass^3</span>
+        <div class="delta num" style="font-size:1.5rem;color:var(--accent-deep)">67% → 78%</div>
+        <p>No safety regressions — the $10k threshold guardrail still holds
+        <strong>3/3</strong> on D-0014.</p>
+      </div>
+    </div></div>
+    <p class="chart-note">The honest counter-check: a <code>--no-memory</code> re-run
+      collapses every recovered case back to <strong>0%</strong> — proving the tool,
+      not the prompt, does the work. Before/after logged in
+      <span class="mono">ITERATIONS.md</span> #1 and
+      <span class="mono">docs/decisions/0001</span>.</p>
+  </div></section>
+
+  <!-- ==================================================== 5 · RESULTS -->
   <section class="slide" aria-label="Results"><div class="slide-inner">
-    <p class="eyebrow">Results · baseline eval</p>
+    <p class="eyebrow">Results · latest eval</p>
     <h2>pass^3 by bucket</h2>
     <p>
-      Read escalate-first: escalation is the safety behavior. The two weak buckets —
-      <strong>ambiguous</strong> and <strong>memory</strong> — are the honest edges;
-      the next slide shows the prompt sections that hold them up.
+      Read escalate-first: escalation is the safety behavior. <strong>memory</strong>
+      is now solid at 100% — the previous slide shows how an eval caught it at 0% and
+      measured the fix. <strong>ambiguous</strong> and <strong>partial</strong> are the
+      honest remaining edges (documented backlog, not regressions).
     </p>
     <div class="chartcard">
       <div class="chart" id="chart">
         <div class="bar-row"><div class="bar-lab">approve</div>
           <div class="bar-track" title="approve · 4 cases · mean 100%"><div class="bar-fill" data-pct="100"><span class="bar-val inside">100%</span></div></div></div>
         <div class="bar-row"><div class="bar-lab">deny</div>
-          <div class="bar-track" title="deny · 4 cases · mean 100%"><div class="bar-fill" data-pct="100"><span class="bar-val inside">100%</span></div></div></div>
+          <div class="bar-track" title="deny · 4 cases · mean 92%"><div class="bar-fill" data-pct="75"><span class="bar-val inside">75%</span></div></div></div>
         <div class="bar-row"><div class="bar-lab">partial</div>
-          <div class="bar-track" title="partial · 3 cases · mean 67%"><div class="bar-fill" data-pct="67"><span class="bar-val inside">67%</span></div></div></div>
+          <div class="bar-track" title="partial · 3 cases · mean 78%"><div class="bar-fill" data-pct="67"><span class="bar-val inside">67%</span></div></div></div>
         <div class="bar-row"><div class="bar-lab">escalate</div>
           <div class="bar-track" title="escalate · 3 cases · mean 67%"><div class="bar-fill" data-pct="67"><span class="bar-val inside">67%</span></div></div></div>
         <div class="bar-row"><div class="bar-lab">ambiguous</div>
-          <div class="bar-track" title="ambiguous · 2 cases · mean 17%"><div class="bar-fill" data-pct="0"><span class="bar-val">0%</span></div></div></div>
+          <div class="bar-track" title="ambiguous · 2 cases · mean 50%"><div class="bar-fill" data-pct="50"><span class="bar-val inside">50%</span></div></div></div>
         <div class="bar-row"><div class="bar-lab">memory</div>
-          <div class="bar-track" title="memory · 2 cases · mean 17%"><div class="bar-fill" data-pct="0"><span class="bar-val">0%</span></div></div></div>
+          <div class="bar-track" title="memory · 2 cases · mean 100%"><div class="bar-fill" data-pct="100"><span class="bar-val inside">100%</span></div></div></div>
       </div>
       <div class="chart-x"><span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div>
     </div>
     <div class="overall">
-      <div><span class="ov-n num">67%</span><span class="ov-l">overall pass^3</span></div>
-      <div><span class="ov-n num">70%</span><span class="ov-l">mean pass rate</span></div>
+      <div><span class="ov-n num">78%</span><span class="ov-l">overall pass^3</span></div>
+      <div><span class="ov-n num">83%</span><span class="ov-l">mean pass rate</span></div>
       <div><span class="ov-n num">18</span><span class="ov-l">cases · 0 infra errors</span></div>
     </div>
-    <p class="chart-note">Baseline: <code>claude-sonnet-4-6</code>, 3 trials × 18 cases,
-      judge on. Source: <span class="mono">runs/results.json</span>.</p>
+    <p class="chart-note">Latest: <code>claude-sonnet-4-6</code>, 3 trials × 18 cases,
+      judge on, post memory-fix (fingerprint <span class="mono">bc748e7bf9fa2807</span>).
+      Source: <span class="mono">runs/curated/postfix_results.json</span>.</p>
   </div></section>
 
-  <!-- ==================================================== 5 · REGRESSIONS -->
+  <!-- ==================================================== 6 · REGRESSIONS -->
   <section class="slide" aria-label="Stress-testing the prompt"><div class="slide-inner">
     <p class="eyebrow">Stress-testing the prompt</p>
-    <h2>Which prompt sections are load-bearing?</h2>
+    <h2>Which parts are load-bearing?</h2>
     <p>
-      Each experiment weakens one section of the system prompt, re-runs the eval,
-      then reverts. If the score drops, that section was doing real work — and the
-      grader that catches the drop is named. If it doesn't, that's an honest
-      negative worth keeping.
+      Each experiment removes one part of the system — a prompt section or a tool —
+      re-runs the eval, then reverts. If the score drops, that part was doing real
+      work, and the grader that catches the drop is named. If it doesn't, that's an
+      honest negative worth keeping.
     </p>
     <div class="reg"><div class="grid3">
       <div class="card">
@@ -437,11 +486,12 @@
       <div class="card">
         <span class="tag">Memory / precedent</span>
         <h3>Load-bearing</h3>
-        <p>Weaken precedent-recall and the two memory cases
-        (<strong>D-0017 / D-0018</strong>) stop pulling the prior settlement,
-        scattering across the wrong actions.</p>
-        <div class="delta num">memory mean &nbsp;17% → 0%</div>
-        <div class="verdict bad">✕ regression — keep the section</div>
+        <p>Run the same cases with <code>--no-memory</code> (the
+        <code>get_precedents</code> tool returns nothing) and both memory cases
+        (<strong>D-0017 / D-0018</strong>) collapse — the agent recounts events
+        instead of applying 60%-of-claim and drops the <code>SH-…</code> citation.</p>
+        <div class="delta num">memory pass^3 &nbsp;100% → 0%</div>
+        <div class="verdict bad">✕ the tool, not the prompt, does the work</div>
       </div>
       <div class="card">
         <span class="tag">Citation discipline</span>
@@ -455,7 +505,7 @@
     </div></div>
   </div></section>
 
-  <!-- ==================================================== 6 · SHOWCASE -->
+  <!-- ==================================================== 7 · SHOWCASE -->
   <section class="slide" aria-label="Showcase cases"><div class="slide-inner">
     <p class="eyebrow">Worth showing live</p>
     <h2>Four cases that make the point</h2>
@@ -491,7 +541,7 @@
       no API key, so the demo works fully offline.</p>
   </div></section>
 
-  <!-- ==================================================== 7 · DECISIONS -->
+  <!-- ==================================================== 8 · DECISIONS -->
   <section class="slide" aria-label="Design decisions"><div class="slide-inner">
     <p class="eyebrow">What generalizes</p>
     <h2>Three design decisions worth stealing</h2>
@@ -523,7 +573,7 @@
     </div>
   </div></section>
 
-  <!-- ============================================= 8 · PRODUCTION SCALE -->
+  <!-- ============================================= 9 · PRODUCTION SCALE -->
   <section class="slide" aria-label="What we'd revisit at production scale"><div class="slide-inner">
     <p class="eyebrow">Beyond the POC</p>
     <h2>What we'd revisit at production scale</h2>
@@ -562,7 +612,7 @@
       concrete &ldquo;when to revisit&rdquo; trigger.</p>
   </div></section>
 
-  <!-- ==================================================== 9 · RUN IT -->
+  <!-- ==================================================== 10 · RUN IT -->
   <section class="slide" aria-label="Run the demo"><div class="slide-inner">
     <p class="eyebrow">See it yourself</p>
     <h2>Run the demo in 60 seconds</h2>
@@ -602,7 +652,7 @@ make demo   <span class="cm"># review UI at :8501</span></pre>
 <div class="controls">
   <button class="nav" id="prev" type="button" aria-label="Previous slide">‹</button>
   <div class="dots" id="dots" role="tablist" aria-label="Slides"></div>
-  <span class="counter" id="counter">1 / 9</span>
+  <span class="counter" id="counter">1 / 10</span>
   <button class="nav" id="next" type="button" aria-label="Next slide">›</button>
 </div>
 

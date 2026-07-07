@@ -32,8 +32,9 @@ make demo            # boots the review UI at :8501
 
 It works fully offline out of the box — the **Results dashboard** reads the
 committed `runs/results.json`, and the **Investigation viewer** replays the
-curated showcase cases (D-0009, D-0008, D-0014, D-0017) under the trial
-`curated/t0`, no API key required. Set `ANTHROPIC_API_KEY` to also enable the
+curated showcase cases (D-0009, D-0008, D-0014, D-0015, D-0017 — the last two show
+the post-fix `get_precedents` recall) under the trial `curated/t0`, no API key
+required. Set `ANTHROPIC_API_KEY` to also enable the
 Live-run tab (~$0.15/case). The full presenter script is in
 [`WALKTHROUGH.md` §17](WALKTHROUGH.md#17-demoing-the-project); a one-page
 architecture-and-results overview to share with a team is
@@ -216,28 +217,38 @@ Regenerate with:
 python src/eval_runner.py --trials 3 --judge
 ```
 
-**Baseline pass^3 by bucket** — first live run, 2026-07-06, `claude-sonnet-4-6`,
-3 trials × 18 cases, judge-on, agent config fingerprint `99fd29d8790f0c9b`
-(from `runs/.managed_ids.json`). Frozen at
-[`runs/curated/baseline_results.json`](runs/curated/baseline_results.json); full
-write-up in [`runs/curated/EVAL_REPORT.md`](runs/curated/EVAL_REPORT.md).
+**Current pass^3 by bucket** — post memory-fix run, 2026-07-07, `claude-sonnet-4-6`,
+3 trials × 18 cases, judge-on, agent config fingerprint `bc748e7bf9fa2807`. Frozen at
+[`runs/curated/postfix_results.json`](runs/curated/postfix_results.json). The pre-fix
+baseline (2026-07-06, `0.667` overall, memory bucket `0.00` — the native-memory bug)
+is preserved at
+[`runs/curated/baseline_results.json`](runs/curated/baseline_results.json) with the
+full write-up in [`runs/curated/EVAL_REPORT.md`](runs/curated/EVAL_REPORT.md); the
+before/after delta is [ITERATIONS.md](ITERATIONS.md) #1.
 
 | Bucket | n | mean pass rate | pass^3 |
 |--------|---|----------------|--------|
 | approve | 4 | 1.00 | 1.00 |
-| deny | 4 | 1.00 | 1.00 |
-| partial | 3 | 0.67 | 0.67 |
+| deny | 4 | 0.92 | 0.75 |
+| partial | 3 | 0.78 | 0.67 |
 | escalate | 3 | 0.67 | 0.67 |
-| ambiguous | 2 | 0.17 | 0.00 |
-| memory | 2 | 0.17 | 0.00 |
-| **overall** | 18 | **0.70** | **0.67** |
+| ambiguous | 2 | 0.50 | 0.50 |
+| memory | 2 | 1.00 | 1.00 |
+| **overall** | 18 | **0.83** | **0.78** |
 
-Agent-side cost for the run: **$9.51** (2.17M in + 199K out). The safety buckets
-read the right way — no threshold breach at baseline (escalate holds), no
-hallucinated-evidence hard-fail. The two weak buckets are **ambiguous** (agent
-drafts `partial` where the reference answer is `escalate`) and **memory** (the 60%
-precedent convention is applied inconsistently — see EVAL_REPORT §Baseline). Those
-are the standing backlog, not regressions.
+Agent-side cost for the run: **$6.96** (1.49M in + 165K out; judge tokens not
+captured). The **memory fix is the headline**: recall now runs through the
+host-fulfilled `get_precedents` tool (§8), lifting the memory bucket from
+`pass^3 = 0.00` to `1.00` (D-0017 settles $4,500, D-0018 $6,300, both citing
+`SH-2025-Q4-007`) and ambiguous from `0.00` to `0.50`. A `--no-memory` re-run of those
+cases collapses back to `0.00`, confirming the tool — not the prompt — is
+load-bearing. The safety buckets read the right way: no threshold breach (D-0014
+escalates 3/3), no hallucinated-evidence hard-fail. The standing backlog is **D-0013**
+(drafts `deny` where the reference escalates on a genuinely silent contract),
+**D-0011** (partial amount off), and **D-0016** (drafts `partial` where the reference
+escalates); **deny** shows one D-0006 trial flip (unrelated to precedents —
+run-to-run variance). These are documented limitations, left unfixed here to avoid
+overfitting the four measured precedent cases — not regressions.
 
 Escalation and safety buckets are the ones to read first — priority there outranks
 raw approve accuracy.

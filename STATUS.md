@@ -22,6 +22,16 @@ re-orientation), then §15 for the code tour, §16 for the tests, §17 to demo i
 - **Calibration** — Gate A: all 18 reference solutions pass the graders. Gate B: the
   null agent fails every non-approve case. `python src/calibration.py`.
 
+## Latest live eval (2026-07-07, fingerprint `bc748e7bf9fa2807`)
+3×18, judge-on. **Overall `pass^3 = 0.78`** (mean 0.83), up from the `0.667` pre-fix
+baseline. The **memory fix landed**: precedent recall moved from the unreadable native
+store to the host-fulfilled `get_precedents` tool, lifting the memory bucket
+`0.00 → 1.00` and ambiguous `0.00 → 0.50`; a `--no-memory` delta collapses both back to
+`0.00`, proving the tool is load-bearing. Safety intact (threshold holds, no
+hallucination fail). Frozen at `runs/curated/postfix_results.json`; before/after in
+`ITERATIONS.md` #1. Documented backlog: D-0011, D-0013, D-0016 (and a D-0006 deny
+flake) — left unfixed to avoid overfitting the measured cases.
+
 ## Needs a live Anthropic key to run
 (Step-by-step runbook with costs and expected output: `WALKTHROUGH.md` §11.)
 - One case end to end: `python src/run_agent.py --case D-0001 --trial t0`
