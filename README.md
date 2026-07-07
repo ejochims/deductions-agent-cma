@@ -52,7 +52,7 @@ architecture-and-results overview to share with a team is
                         (orchestrator)                                    reads fixtures/
                                                                           writes runs/<trial>/<case>/settlement.json
    agent/environment.yaml ─▶ per-session sandbox (no mounts, no egress)
-   agent/memory_seed.json ─▶ precedent memory store (attached read/write)
+   fixtures/precedents.json ─▶ precedent recall, served host-side via get_precedents
 ```
 
 ### The load-bearing decision: host-fulfilled tools
@@ -252,15 +252,18 @@ deltas by editing the `system:` block in `agent.yaml`.
 
 ---
 
-## 8. Memory — cross-session precedent recall
+## 8. Memory — precedent recall
 
-Each case runs in its own session, but all sessions share one **memory store**
-seeded with Meridian's pre-digested precedents (`agent/memory_seed.json`) — chiefly
-the convention that demo billbacks missing the signed Exhibit B proof, but
-corroborated by store photos and scan lift, settle at **60% of claim** (precedent
-`SH-2025-Q4-007`). Cases 17–18 reward recalling and applying that convention
-consistently. `python src/eval_runner.py --no-memory` measures the delta with the
-store detached.
+Each case runs in its own session, but precedent recall is served host-side by
+the **`get_precedents`** tool (not a mounted memory store — the sandbox is
+toolless by design, so a store would be unreadable *and* re-open a model-writable
+surface the boundary forbids; see WALKTHROUGH §8). It returns Meridian's
+pre-digested precedents (`fixtures/precedents.json`) — chiefly the convention that
+demo billbacks missing the signed Exhibit B proof, but corroborated by store
+photos and scan lift, settle at **60% of claim** (precedent `SH-2025-Q4-007`).
+Cases 17–18 reward recalling and applying that convention consistently.
+`python src/eval_runner.py --no-memory` measures the delta with the tool
+returning no precedents.
 
 ---
 
@@ -315,10 +318,10 @@ and logged in `ITERATIONS.md` with the before/after pass-rate delta by bucket.
 Repo layout:
 
 ```
-fixtures/        agent-facing universe (company, retailers, promos, contracts, pos, deductions, history)
+fixtures/        agent-facing universe (company, retailers, promos, contracts, pos, deductions, history, precedents)
 ground_truth/    NEVER mounted — labels.json + one reference solution per case
-agent/           agent.yaml · environment.yaml · tools_server.py · memory_seed.json
-src/             run_agent · graders · judge · eval_runner · calibration · null_agent · sweep · memory_store · costs · digest · fixtures_index
+agent/           agent.yaml · environment.yaml · tools_server.py
+src/             run_agent · graders · judge · eval_runner · calibration · null_agent · sweep · costs · digest · fixtures_index
 tests/           pytest suite (graders, calibration, tools, aggregation, costs, digest, config, UI)
 ui/              local review UI (app.py · data.py · theme.py) — `make ui`
 .streamlit/      app theme (validated palette: surfaces, ink, accent, hairlines)

@@ -56,6 +56,20 @@ def test_draft_settlement_writes_file_and_nulls_amount(tmp_path):
     assert written["action"] == "deny" and written["amount"] is None
 
 
+def test_get_precedents_returns_convention(ts):
+    p = ts.dispatch("get_precedents", {}, "t")
+    assert p["count"] >= 1
+    blob = json.dumps(p["precedents"])
+    # The demo-billback convention and the id to cite must be reachable.
+    assert "60%" in blob and "SH-2025-Q4-007" in blob
+
+
+def test_get_precedents_empty_when_disabled(tmp_path):
+    ts = ToolServer(FIXTURES_DIR, tmp_path, precedents_enabled=False)
+    p = ts.dispatch("get_precedents", {}, "t")
+    assert p["count"] == 0 and p["precedents"] == []
+
+
 def test_unknown_case_raises_toolerror(ts):
     with pytest.raises(ToolError):
         ts.dispatch("get_deduction", {"case_id": "D-9999"}, "t")

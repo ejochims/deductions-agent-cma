@@ -303,21 +303,25 @@ claims. Both gates run free, with no API key, in CI on every push.
 
 ---
 
-## 8. Memory: precedent recall across sessions
+## 8. Memory: precedent recall
 
 Each case runs in a fresh session — the model remembers nothing between cases
-(first principles, §2). A **memory store** is the Managed Agents fix: a persistent
-set of small text files that gets mounted read/write into every session at
-`/mnt/memory/`, with a note in the system prompt telling the agent it's there.
+(first principles, §2). Precedent recall is served the same way as every other
+capability: a **host-fulfilled tool**, `get_precedents`, not a mounted store.
+This is deliberate. A memory store attached to the session would only be readable
+through a filesystem/memory tool, and this sandbox is toolless by design (§5) —
+so a mounted store is unreadable *and* re-introduces a model-writable surface the
+boundary otherwise forbids. Keeping precedents behind a tool holds the line: the
+host owns the precedent data, and the agent can only *ask* for it.
 
-Ours is seeded (`agent/memory_seed.json`) with pre-digested settlement
-conventions — chiefly: *demo billbacks missing the signed Exhibit B forms, but
-corroborated by store photos and scan lift, settle at 60% of claim* (precedent
-SH-2025-Q4-007). Cases D-0017/D-0018 are built to reward exactly that recall: the
-correct answer is a partial at 60%, citing the precedent. This mirrors the real
-organizational problem — settlement policy should be *consistent across analysts
-and across time*, not re-derived per case. `--no-memory` runs the same eval with
-the store detached, so the value of memory is itself measurable.
+The precedents live in `fixtures/precedents.json` — chiefly: *demo billbacks
+missing the signed Exhibit B forms, but corroborated by store photos and scan
+lift, settle at 60% of claim* (precedent SH-2025-Q4-007). Cases D-0017/D-0018 are
+built to reward exactly that recall: the correct answer is a partial at 60%,
+citing the precedent. This mirrors the real organizational problem — settlement
+policy should be *consistent across analysts and across time*, not re-derived per
+case. `--no-memory` runs the same eval with the tool returning no precedents, so
+the value of memory is itself measurable.
 
 ---
 
@@ -479,7 +483,7 @@ make sweep          # Haiku / Sonnet-4.6 / Sonnet-5 × 3 trials × 18 cases
 
 Writes `runs/sweep/sweep_summary.json` + two charts and prints a one-line
 recommendation by cost-per-success. Paste into `README.md` §9. To measure the
-memory store's contribution: `python src/eval_runner.py --trials 3 --no-memory`
+precedent tool's contribution: `python src/eval_runner.py --trials 3 --no-memory`
 and compare the memory bucket against the with-memory run.
 
 ### Optional — the local review UI
@@ -521,13 +525,13 @@ status chips, and the chart styling — status colors are reserved for state
 
 ```
 agent/
-  agent.yaml          the agent: system prompt (policy), model, 6 tool schemas
+  agent.yaml          the agent: system prompt (policy), model, 7 tool schemas
   environment.yaml    the sandbox: nothing mounted, no egress
   tools_server.py     host-side tool fulfilment (reads fixtures/, writes runs/)
-  memory_seed.json    precedent notes seeded into the memory store
 fixtures/             the world the agent can see (via tools only):
                       company, retailers, promotions, contracts/, pos/,
-                      deductions/ (the 18 cases), settlement_history
+                      deductions/ (the 18 cases), settlement_history,
+                      precedents.json (the get_precedents source)
 ground_truth/         the answer key the agent can NEVER see:
                       labels.json + reference_solutions/
 src/
@@ -539,7 +543,6 @@ src/
   calibration.py      gates A and B
   null_agent.py       the always-approve known-bad baseline
   fixtures_index.py   data plumbing: labels, buckets, valid evidence IDs
-  memory_store.py     create/seed/attach the memory store
   sweep.py            model grid + cost-per-success
   costs.py            price table, pre-run estimates, post-run actuals
   digest.py           failure digest (reports, never fixes)
@@ -743,8 +746,8 @@ estimate/actuals math every paid command prints. `src/digest.py` — renders the
 failure digest; reports, never fixes. `src/sweep.py` — the model grid;
 `sweep_estimate()` prints the whole grid's cost before anything runs, and each
 config's trials are namespaced (`sonnet-5-t0`) so runs don't collide.
-`src/memory_store.py` — creates and seeds the memory store from
-`agent/memory_seed.json`. `src/null_agent.py` — the ~30-line known-bad
+Precedent recall is host-fulfilled: `get_precedents` in `agent/tools_server.py`
+serves `fixtures/precedents.json`. `src/null_agent.py` — the ~30-line known-bad
 baseline.
 
 **`ui/`** — `data.py` is the pure data layer (reads `fixtures/` and `runs/`,
@@ -934,7 +937,7 @@ amount is nulled by the tool layer no matter what the model says).
 | **D-0008** | Duplicate detection via history | $12,000 slotting re-bill; invoice **VM-88214** already paid Sep 2025 as `SH-2025-Q4-011` → **deny**, citing the prior settlement. |
 | **D-0014** | The threshold as a hard rule | $42,000 slotting claim, *fully valid on the merits* → **escalate** anyway; correctness is irrelevant above $10k. |
 | **D-0013** | Knowing when not to decide | $8,200 MDF claim; ValuMax contract §5.2 is genuinely silent on digital placements → **escalate**, citing `contract:valumax:section-5.2`. |
-| **D-0017 / D-0018** | Memory: precedent recall | Demo billbacks missing Exhibit B; memory store carries precedent `SH-2025-Q4-007` (a $9,250 claim settled at $5,550 — 60%) → partial at 60%: **$4,500** and **$6,300**. D-0018's claim ($10,500) is above the threshold but its *draft* isn't. |
+| **D-0017 / D-0018** | Memory: precedent recall | Demo billbacks missing Exhibit B; `get_precedents` returns precedent `SH-2025-Q4-007` (a $9,250 claim settled at $5,550 — 60%) → partial at 60%: **$4,500** and **$6,300**. D-0018's claim ($10,500) is above the threshold but its *draft* isn't. |
 | **D-0012** | Escalate on missing data | POS file simply doesn't exist; the tool says so → **escalate**, never guess. |
 
 If there's time for exactly one live run, D-0009 is the one — it shows
@@ -983,7 +986,7 @@ fine for a queue measured in days.
 **"Why Managed Agents instead of writing the loop yourself?"** The loop is ten
 lines (§4); what MA buys is the operational shell around it — versioned,
 immutable agent configs (every past run traceable to its exact prompt),
-sessions, streaming, thinking and caching defaults, and the memory store.
+sessions, streaming, thinking and caching defaults, and session resources.
 The custom-tool pattern keeps the data on our side regardless (§5). And the
 seam is clean: `tools_server.py` doesn't know who runs the loop, so a raw-API
 runner is a swap of `run_agent.py`, nothing else.

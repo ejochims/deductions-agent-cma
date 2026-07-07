@@ -54,15 +54,15 @@ def test_template_grammar_matches_generator():
     assert rendered == contract_ids
 
 
-def test_memory_seed_citations_resolve():
+def test_precedent_citations_resolve():
     # Precedent notes steer the agent's citations too — their ids must be real.
     import json
-    seed = json.loads((REPO_ROOT / "agent" / "memory_seed.json").read_text())
-    for note in seed:
+    precedents = json.loads((FIXTURES_DIR / "precedents.json").read_text())
+    for note in precedents:
         for ex in set(re.findall(r"SH-\d{4}-Q\d-\d{3}", note["content"])):
-            assert ex in VALID, f"memory seed cites {ex!r} not in fixtures"
+            assert ex in VALID, f"precedent cites {ex!r} not in fixtures"
 
 
 def test_agent_yaml_parses_with_expected_tool_count():
     cfg = yaml.safe_load(AGENT_YAML)
-    assert len([t for t in cfg["tools"] if t["type"] == "custom"]) == 6
+    assert len([t for t in cfg["tools"] if t["type"] == "custom"]) == 7

@@ -1,0 +1,12 @@
+[
+  {
+    "precedent_id": "demo-billback-missing-exhibit-b",
+    "title": "Demo billbacks missing Exhibit B",
+    "content": "When a retailer's demo/sampling billback lacks the signed Exhibit B proof-of-performance forms required by contract, but execution is corroborated by store photos AND point-of-sale scan lift in the demo weeks, Meridian settles at 60% of the claimed amount rather than denying outright. Established on Harvest & Co claim HC-20018, settlement SH-2025-Q4-007 (Q4 FY25), with settlement-manager approval. When you apply this convention, cite the governing promotion and SH-2025-Q4-007 as the precedent. If there is no scan-lift or photo corroboration at all, escalate instead."
+  },
+  {
+    "precedent_id": "scan-claims-cap-and-window",
+    "title": "Scan claims - cap and window",
+    "content": "Scan allowances pay on units scanned WITHIN the promo window, at the authorized rate, up to the funding cap. Pay the lesser of (scanned units x rate) and the cap; deny units scanned outside the window; pay the authorized rate, not a higher deducted rate."
+  }
+]
