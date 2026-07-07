@@ -52,17 +52,21 @@ def queue_rows(cases: list[dict]) -> list[dict]:
 
 # ---------------------------------------------------------------------- runs
 def list_runs() -> dict[str, list[str]]:
-    """trial -> case ids that have a drafted settlement on disk."""
+    """trial -> case ids that have a drafted settlement on disk.
+
+    Discovers trials at any depth under runs/ so nested curated runs surface
+    too: a live run at runs/ui/D-0009/ keys as "ui", while the committed
+    showcase transcripts at runs/curated/t0/D-0009/ key as "curated/t0". The
+    trial label is the settlement's grandparent relative to runs/, which stays
+    compatible with load_artifacts() (RUNS_DIR / trial / case_id).
+    """
     out: dict[str, list[str]] = {}
     if not RUNS_DIR.exists():
         return out
-    for trial_dir in sorted(RUNS_DIR.iterdir()):
-        if not trial_dir.is_dir():
-            continue
-        cases = sorted(p.parent.name for p in trial_dir.glob("*/settlement.json"))
-        if cases:
-            out[trial_dir.name] = cases
-    return out
+    for sp in RUNS_DIR.rglob("settlement.json"):
+        trial = sp.parent.parent.relative_to(RUNS_DIR).as_posix()
+        out.setdefault(trial, []).append(sp.parent.name)
+    return {trial: sorted(set(cases)) for trial, cases in sorted(out.items())}
 
 
 def load_artifacts(trial: str, case_id: str) -> tuple[dict | None, dict | None]:

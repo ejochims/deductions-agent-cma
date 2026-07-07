@@ -863,16 +863,17 @@ side.
 ### Pre-demo checklist
 
 ```bash
-make lint test      # 71 passed
+make lint test      # tests pass
 make gates          # Gate A PASS, Gate B PASS
-export ANTHROPIC_API_KEY=sk-ant-...
-make ui             # boots at :8501; leave it running
+export ANTHROPIC_API_KEY=sk-ant-...   # optional — only the Live-run tab needs it
+make demo           # boots at :8501; leave it running
 ```
 
-- Confirm `runs/results.json` exists so the dashboard has real numbers, and
-  that `runs/` holds at least one good transcript to replay (if not:
-  `make phase-e` the day before, ~$2–3, then copy the best run into
-  `runs/curated/` per §11 Step 7 so it survives a `make clean` or a re-clone).
+- The demo works offline out of the box: `runs/results.json` is committed (the
+  dashboard's real numbers) and the curated showcase transcripts under
+  `runs/curated/t0/` surface automatically in the **Investigation viewer** (they
+  appear under the trial label `curated/t0`). Nothing to pre-run; a key is only
+  needed if you want the Live-run tab.
 - In the UI, pre-generate the **null baseline** on the dashboard tab so the
   chart is one click away.
 - Bump the terminal font; keep one terminal on the repo root and the browser on
@@ -945,10 +946,12 @@ is the best second: a different tool (history) and a different verdict.
 If the key or the network dies, everything except the Live-run tab still works:
 
 - **Investigation viewer** replays any existing run from `runs/` — the full
-  transcript walkthrough works identically on a replay. This is why the
-  checklist has you curate a run beforehand: `runs/curated/` is the committed,
-  survives-everything copy (§11 Step 7), and it starts empty until you put a
-  run there.
+  transcript walkthrough works identically on a replay. The committed showcase
+  transcripts live in `runs/curated/` (the survives-everything copy, §11 Step 7)
+  and appear in the viewer under the trial `curated/t0`, so D-0009 is one
+  selection away even on a fresh clone with no key. To swap in your own run as
+  the offline showcase, drop it under `runs/curated/<trial>/<case>/` and it
+  surfaces the same way.
 - **Null baseline** generates and grades offline — the calibration story needs
   no API at all.
 - The script above survives intact with step 3 swapped from "watch it live" to

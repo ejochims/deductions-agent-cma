@@ -41,6 +41,40 @@ def test_list_runs_and_null_baseline_pipeline(tmp_path, monkeypatch):
     assert by_bucket["OVERALL"]["cases"] == 18
 
 
+def test_list_runs_discovers_nested_trials(tmp_path, monkeypatch):
+    """Trials nested under a subdir (e.g. curated/t0) must surface, not just
+    the one-level runs/<trial>/ layout."""
+    monkeypatch.setattr(ui_data, "RUNS_DIR", tmp_path)
+    for rel in ("ui/D-0001", "curated/t0/D-0009", "curated/regression_threshold/t0/D-0014"):
+        d = tmp_path / rel
+        d.mkdir(parents=True)
+        (d / "settlement.json").write_text(json.dumps({"case_id": d.name}))
+    runs = ui_data.list_runs()
+    assert runs == {
+        "curated/regression_threshold/t0": ["D-0014"],
+        "curated/t0": ["D-0009"],
+        "ui": ["D-0001"],
+    }
+    # A nested trial label round-trips through load_artifacts unchanged.
+    settlement, _ = ui_data.load_artifacts("curated/t0", "D-0009")
+    assert settlement == {"case_id": "D-0009"}
+
+
+def test_list_runs_surfaces_committed_curated_showcase():
+    """The committed curated transcripts drive the offline demo — they must be
+    discoverable and grade as expected without any live run."""
+    runs = ui_data.list_runs()
+    assert "curated/t0" in runs
+    assert {"D-0008", "D-0009", "D-0014", "D-0017"} <= set(runs["curated/t0"])
+
+    partial, _ = ui_data.load_artifacts("curated/t0", "D-0009")
+    passed, _ = ui_data.scorecard(partial, "D-0009")
+    assert passed  # flagship evidence-based partial replays green
+
+    escalate, _ = ui_data.load_artifacts("curated/t0", "D-0014")
+    assert escalate["action"] == "escalate"  # $42k slotting → human, above $10k
+
+
 def test_transcript_steps_shapes_a_record():
     record = {
         "transcript": [
