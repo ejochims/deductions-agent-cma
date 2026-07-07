@@ -35,6 +35,24 @@ The store was attached, but **nothing exposed it to the model**, so the agent
 drafted D-0017/D-0018 blind. The run's `status` stayed `ok`, so it degraded
 silently rather than surfacing as an error.
 
+### How we found it: the evals surfaced it, not the code
+
+We did not catch this by reading the code — the **eval harness** did. The feature
+looked complete from the outside: the store was created, seeded, and attached,
+and the system prompt referenced it, so nothing about the wiring looked wrong.
+What flagged it was the **`memory` bucket scoring 0% pass^3** in the eval, sitting
+next to healthy scores in every other bucket. That per-bucket signal is what
+triggered the investigation, which then traced the run records to the
+`"Unknown tool"` errors above.
+
+This is itself an argument for the harness. A capability that degrades *silently*
+— the session `status` stayed `ok`, no exception, a plausible-looking draft — is
+exactly the failure a happy-path demo sails straight past and a per-bucket,
+ground-truth eval catches. The memory bug is a concrete instance of the repo's
+core thesis: **you cannot trust a capability you cannot measure**, and the reason
+we could even have this architecture conversation is that the eval made an
+invisible failure visible.
+
 ### The constraint that makes this non-trivial
 
 This is not a bug we can fix by "granting a permission." It is a direct
