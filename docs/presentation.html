@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Deductions Desk — a defensible deductions agent</title>
 <style>
   /* ---- tokens: palette echoes ui/theme.py (validated reference palette) ---- */
@@ -52,33 +52,82 @@
   }
 
   *,*::before,*::after { box-sizing:border-box; }
+  html,body { height:100%; }
   html { -webkit-text-size-adjust:100%; }
   body {
     margin:0; background:var(--plane); color:var(--ink);
-    font-family:var(--font-sans); line-height:1.6;
-    font-feature-settings:"kern";
-    -webkit-font-smoothing:antialiased;
+    font-family:var(--font-sans); line-height:1.55;
+    -webkit-font-smoothing:antialiased; overflow:hidden;
   }
-  .wrap { max-width:1020px; margin:0 auto; padding:0 24px; }
-  section { padding:52px 0; border-top:1px solid var(--hairline); }
-  section:first-of-type { border-top:none; }
-
   a { color:var(--accent-deep); text-underline-offset:2px; }
 
+  /* ---- deck scaffold ---- */
+  .deck { position:fixed; inset:0; overflow:hidden; }
+  .track { display:flex; width:max-content; height:100%;
+    transition:transform .5s cubic-bezier(.4,0,.2,1); will-change:transform; }
+  .slide { flex:0 0 100vw; height:100%; overflow-y:auto; display:flex;
+    scrollbar-width:thin; }
+  .slide-inner { margin:auto; width:100%; max-width:1000px;
+    padding:60px 40px 82px; }
+  .reduced .track { transition:none; }
+
+  /* progress bar */
+  .progress { position:fixed; top:0; left:0; height:3px; background:var(--accent);
+    width:0; z-index:40; transition:width .5s cubic-bezier(.4,0,.2,1); }
+  .reduced .progress { transition:none; }
+
+  /* top overlay: brand + theme */
+  .topbar { position:fixed; top:0; left:0; right:0; z-index:30;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 22px; pointer-events:none; }
+  .topbar > * { pointer-events:auto; }
+  .brand { display:flex; align-items:center; gap:10px; font-weight:660;
+    letter-spacing:-.01em; font-size:.92rem; color:var(--ink); }
+  .brand .mark { width:24px; height:24px; border-radius:7px; flex:none;
+    background:linear-gradient(150deg, var(--accent), var(--accent-deep));
+    display:grid; place-items:center; color:#fff; font-size:.8rem; }
+  .toggle { font:inherit; font-size:.8rem; font-weight:600; color:var(--ink-2);
+    background:var(--card); border:1px solid var(--hairline); border-radius:999px;
+    padding:6px 13px; cursor:pointer; display:flex; align-items:center; gap:7px; }
+  .toggle:hover { border-color:var(--muted); }
+  .toggle:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+
+  /* bottom overlay: controls */
+  .controls { position:fixed; left:0; right:0; bottom:0; z-index:30;
+    display:flex; align-items:center; justify-content:center; gap:18px;
+    padding:16px 22px calc(16px + env(safe-area-inset-bottom)); }
+  .nav { font:inherit; width:44px; height:44px; border-radius:50%; cursor:pointer;
+    background:var(--card); border:1px solid var(--hairline); color:var(--ink);
+    display:grid; place-items:center; font-size:1.3rem; line-height:1;
+    box-shadow:var(--shadow); transition:border-color .15s, transform .15s; }
+  .nav:hover:not(:disabled) { border-color:var(--accent); transform:translateY(-1px); }
+  .nav:disabled { opacity:.34; cursor:default; }
+  .nav:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
+  .dots { display:flex; align-items:center; gap:9px; }
+  .dot { width:9px; height:9px; border-radius:50%; padding:0; cursor:pointer;
+    background:var(--track); border:none; transition:background .2s, transform .2s; }
+  .dot[aria-current="true"] { background:var(--accent); transform:scale(1.35); }
+  .dot:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+  .counter { font-family:var(--font-mono); font-size:.8rem; color:var(--muted);
+    font-variant-numeric:tabular-nums; min-width:52px; text-align:center; }
+  @media (max-width:560px) { .dots { display:none; } }
+
   /* ---- type ---- */
-  h1 { font-size:clamp(2rem,4.2vw,3rem); line-height:1.08; font-weight:760;
-       letter-spacing:-.025em; margin:.2em 0 .35em; text-wrap:balance; }
-  h2 { font-size:clamp(1.35rem,2.6vw,1.7rem); font-weight:700; letter-spacing:-.02em;
-       margin:0 0 .5em; text-wrap:balance; }
+  h1 { font-size:clamp(2rem,4.4vw,3.1rem); line-height:1.06; font-weight:760;
+       letter-spacing:-.025em; margin:.15em 0 .35em; text-wrap:balance; }
+  h2 { font-size:clamp(1.5rem,3vw,2rem); font-weight:720; letter-spacing:-.02em;
+       margin:0 0 .42em; text-wrap:balance; }
   h3 { font-size:1.02rem; font-weight:680; letter-spacing:-.01em; margin:0 0 .35em; }
   p { margin:0 0 1em; max-width:66ch; color:var(--ink-2); }
-  .lead { font-size:1.15rem; color:var(--ink-2); max-width:60ch; }
+  .lead { font-size:clamp(1.05rem,1.6vw,1.2rem); color:var(--ink-2); max-width:62ch; }
   .eyebrow { font-size:.72rem; font-weight:680; letter-spacing:.14em;
-             text-transform:uppercase; color:var(--muted); margin:0 0 .9em; }
-  strong { color:var(--ink); font-weight:660; }
+             text-transform:uppercase; color:var(--muted); margin:0 0 .75em;
+             display:flex; align-items:center; gap:10px; }
+  .eyebrow::before { content:""; width:22px; height:2px; background:var(--accent);
+             display:inline-block; border-radius:2px; }
+  strong { color:var(--ink); font-weight:640; }
   code, .mono { font-family:var(--font-mono); font-size:.88em;
-    background:var(--hairline-2); padding:.08em .38em; border-radius:5px;
-    color:var(--ink); }
+    background:var(--hairline-2); padding:.08em .38em; border-radius:5px; color:var(--ink); }
   .num { font-variant-numeric:tabular-nums; }
 
   /* ---- chips ---- */
@@ -93,93 +142,78 @@
   .chip.partial{ color:var(--warn-ink); background:var(--warn-soft); }
   .chip.escalate{ color:var(--esc-ink); background:var(--esc-soft); }
 
-  /* ---- top bar ---- */
-  header.top { display:flex; align-items:center; justify-content:space-between;
-    padding:20px 0 8px; gap:16px; }
-  .brand { display:flex; align-items:center; gap:10px; font-weight:660;
-           letter-spacing:-.01em; font-size:.95rem; }
-  .brand .mark { width:24px; height:24px; border-radius:7px; flex:none;
-    background:linear-gradient(150deg, var(--accent), var(--accent-deep));
-    display:grid; place-items:center; color:#fff; font-size:.8rem; }
-  .toggle { font:inherit; font-size:.8rem; font-weight:600; color:var(--ink-2);
-    background:var(--card); border:1px solid var(--hairline); border-radius:999px;
-    padding:6px 13px; cursor:pointer; display:flex; align-items:center; gap:7px; }
-  .toggle:hover { border-color:var(--muted); }
-  .toggle:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
-
   /* ---- hero ---- */
-  .hero { padding-top:26px; }
-  .flag { display:inline-flex; gap:8px; align-items:center; margin-bottom:6px; }
-
-  /* ---- kpi row ---- */
-  .kpis { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:30px; }
+  .flag { display:inline-flex; gap:8px; align-items:center; margin-bottom:8px;
+    flex-wrap:wrap; }
+  .kpis { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:32px; }
   .kpi { background:var(--card); border:1px solid var(--hairline); border-radius:14px;
     padding:18px 20px; box-shadow:var(--shadow); }
   .kpi .k-label { font-size:.72rem; font-weight:640; letter-spacing:.07em;
     text-transform:uppercase; color:var(--muted); margin-bottom:8px; }
-  .kpi .k-val { font-size:2.3rem; font-weight:740; letter-spacing:-.03em;
+  .kpi .k-val { font-size:2.4rem; font-weight:740; letter-spacing:-.03em;
     line-height:1; color:var(--ink); font-variant-numeric:tabular-nums; }
   .kpi .k-sub { font-size:.82rem; color:var(--ink-2); margin-top:7px; }
 
-  /* ---- generic cards ---- */
+  /* ---- cards ---- */
   .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
   .grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
   .card { background:var(--card); border:1px solid var(--hairline); border-radius:14px;
     padding:20px 22px; box-shadow:var(--shadow); }
-  .card h3 { display:flex; align-items:baseline; gap:9px; }
   .card p:last-child { margin-bottom:0; }
   .card .tag { font-size:.7rem; font-weight:680; letter-spacing:.06em;
     text-transform:uppercase; color:var(--muted); }
 
-  /* ---- architecture diagram ---- */
-  .arch { display:flex; flex-direction:column; gap:0; margin-top:8px; }
-  .arch-row { display:grid; grid-template-columns:1fr; }
+  /* ---- architecture ---- */
+  .arch { display:flex; flex-direction:column; gap:0; margin-top:4px; }
   .node { background:var(--card); border:1px solid var(--hairline); border-radius:12px;
-    padding:15px 18px; box-shadow:var(--shadow); }
-  .node .nt { font-weight:660; font-size:.96rem; margin-bottom:3px; }
-  .node .nd { font-size:.86rem; color:var(--ink-2); }
+    padding:9px 16px; box-shadow:var(--shadow); }
+  .node .nt { font-weight:660; font-size:.93rem; margin-bottom:2px; }
+  .node .nd { font-size:.83rem; color:var(--ink-2); line-height:1.45; }
   .node .nf { font-family:var(--font-mono); font-size:.78rem; color:var(--muted); }
   .node.host { border-color:color-mix(in srgb,var(--accent) 40%,var(--hairline)); }
   .node.wall { border-style:dashed; background:transparent; box-shadow:none; }
   .flow { display:flex; align-items:center; justify-content:center; gap:12px;
-    padding:9px 0; color:var(--muted); font-size:.78rem; font-family:var(--font-mono); }
-  .flow .ar { color:var(--accent); font-size:1.1rem; }
-  .callout { margin-top:18px; border-left:3px solid var(--accent); padding:2px 0 2px 16px; }
-  .callout p { margin:0; color:var(--ink); }
-
-  .toolset { display:flex; flex-wrap:wrap; gap:8px; margin:14px 0 0; padding:0; list-style:none; }
-  .toolset li { font-family:var(--font-mono); font-size:.8rem; color:var(--ink-2);
+    padding:3px 0; color:var(--muted); font-size:.76rem; font-family:var(--font-mono); }
+  .flow .ar { color:var(--accent); font-size:1.05rem; }
+  .callout { margin-top:13px; border-left:3px solid var(--accent); padding:2px 0 2px 16px; }
+  .callout p { margin:0; color:var(--ink); font-size:.92rem; line-height:1.5; }
+  .toolset { display:flex; flex-wrap:wrap; gap:7px; margin:11px 0 0; padding:0; list-style:none; }
+  .toolset li { font-family:var(--font-mono); font-size:.77rem; color:var(--ink-2);
     background:var(--hairline-2); border:1px solid var(--hairline); border-radius:8px;
-    padding:5px 10px; }
+    padding:4px 9px; }
   .toolset li.gate { color:var(--accent-deep);
     background:var(--accent-soft); border-color:color-mix(in srgb,var(--accent) 22%,transparent); }
 
   /* ---- chart ---- */
   .chartcard { background:var(--card); border:1px solid var(--hairline);
-    border-radius:14px; padding:22px 24px 18px; box-shadow:var(--shadow); }
-  .chart { display:flex; flex-direction:column; gap:12px; margin-top:6px; }
+    border-radius:14px; padding:20px 24px 16px; box-shadow:var(--shadow); }
+  .chart { display:flex; flex-direction:column; gap:10px; margin-top:2px; }
   .bar-row { display:grid; grid-template-columns:92px 1fr; align-items:center; gap:14px; }
   .bar-lab { font-size:.86rem; color:var(--ink-2); text-align:right;
     text-transform:capitalize; font-weight:560; }
-  .bar-track { position:relative; height:26px; background:var(--track);
-    border-radius:6px; }
+  .bar-track { position:relative; height:22px; background:var(--track); border-radius:6px; }
   .bar-fill { position:absolute; inset:0 auto 0 0; width:0; border-radius:6px;
-    background:var(--accent); transition:width .9s cubic-bezier(.2,.7,.2,1);
-    min-width:3px; }
+    background:var(--accent); transition:width .9s cubic-bezier(.2,.7,.2,1); min-width:3px; }
+  .reduced .bar-fill { transition:none; }
   .bar-val { position:absolute; top:50%; transform:translateY(-50%); left:calc(100% + 10px);
     font-size:.82rem; font-weight:660; color:var(--ink); font-variant-numeric:tabular-nums;
     white-space:nowrap; }
   .bar-val.inside { left:auto; right:10px; color:#fff; }
-  .chart-x { display:flex; justify-content:space-between; margin:14px 0 0 106px;
+  .chart-x { display:flex; justify-content:space-between; margin:12px 0 0 106px;
     font-size:.72rem; color:var(--muted); font-variant-numeric:tabular-nums; }
-  .chart-note { font-size:.82rem; color:var(--ink-2); margin:16px 0 0; }
-  @media (prefers-reduced-motion: reduce) { .bar-fill { transition:none; } }
+  .chart-note { font-size:.82rem; color:var(--ink-2); margin:14px 0 0; }
+  .overall { display:flex; gap:34px; margin-top:16px; flex-wrap:wrap; }
+  .overall > div { display:flex; flex-direction:column; }
+  .overall .ov-n { font-size:1.9rem; font-weight:740; letter-spacing:-.02em;
+    line-height:1; color:var(--ink); }
+  .overall .ov-l { font-size:.76rem; font-weight:620; letter-spacing:.06em;
+    text-transform:uppercase; color:var(--muted); margin-top:7px; }
 
   /* ---- table ---- */
   .tablewrap { overflow-x:auto; margin-top:16px; border:1px solid var(--hairline);
     border-radius:12px; }
-  table { border-collapse:collapse; width:100%; font-size:.9rem; min-width:440px; }
-  th, td { text-align:left; padding:11px 16px; border-bottom:1px solid var(--hairline); }
+  table { border-collapse:collapse; width:100%; font-size:.88rem; min-width:440px; }
+  th, td { text-align:left; padding:10px 16px; border-bottom:1px solid var(--hairline); }
   th { font-size:.72rem; letter-spacing:.06em; text-transform:uppercase;
     color:var(--muted); font-weight:640; }
   td.n, th.n { text-align:right; font-variant-numeric:tabular-nums; }
@@ -187,55 +221,64 @@
   tbody tr.total td { font-weight:680; color:var(--ink); background:var(--hairline-2); }
   td .cs { font-family:var(--font-mono); font-size:.82rem; }
 
-  /* ---- regression cards ---- */
-  .reg { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:6px; }
+  /* ---- regression + decisions ---- */
   .reg .card { display:flex; flex-direction:column; gap:6px; }
-  .reg .delta { font-size:.92rem; font-weight:640; color:var(--ink);
+  .reg .delta { font-size:.9rem; font-weight:640; color:var(--ink);
     font-variant-numeric:tabular-nums; margin-top:2px; }
   .reg .verdict { margin-top:auto; padding-top:10px; font-size:.8rem; font-weight:640; }
   .reg .verdict.bad { color:var(--deny-ink); }
   .reg .verdict.ok { color:var(--good-ink); }
-
-  /* ---- decisions ---- */
-  .decisions { display:grid; gap:14px; margin-top:8px; counter-reset:d; }
+  .decisions { display:grid; gap:13px; margin-top:4px; counter-reset:d; }
   .decision { display:grid; grid-template-columns:auto 1fr; gap:16px; align-items:start;
     background:var(--card); border:1px solid var(--hairline); border-radius:14px;
-    padding:18px 20px; box-shadow:var(--shadow); }
+    padding:17px 20px; box-shadow:var(--shadow); }
   .decision .dn { counter-increment:d; font-family:var(--font-mono); font-weight:640;
     font-size:.95rem; color:var(--accent-deep); background:var(--accent-soft);
     width:30px; height:30px; border-radius:8px; display:grid; place-items:center; }
   .decision .dn::before { content:counter(d,decimal-leading-zero); }
+  .decision p { margin:0; font-size:.92rem; }
 
-  /* ---- footer / run ---- */
+  /* ---- run ---- */
   .run { background:var(--card); border:1px solid var(--hairline); border-radius:14px;
-    padding:22px 24px; box-shadow:var(--shadow); }
+    padding:20px 22px; box-shadow:var(--shadow); }
   pre.cmd { margin:0; font-family:var(--font-mono); font-size:.86rem; line-height:1.7;
     background:var(--hairline-2); border:1px solid var(--hairline); border-radius:10px;
     padding:14px 16px; overflow-x:auto; color:var(--ink); }
   pre.cmd .cm { color:var(--muted); }
-  footer.foot { padding:34px 0 60px; color:var(--muted); font-size:.82rem; }
-  footer.foot p { color:var(--muted); max-width:none; }
+  .scope { margin-top:18px; color:var(--muted); font-size:.82rem; }
+  .scope p { color:var(--muted); max-width:none; margin:0; }
+
+  .hint { position:fixed; bottom:74px; left:50%; transform:translateX(-50%);
+    z-index:20; font-size:.76rem; color:var(--muted); background:var(--card);
+    border:1px solid var(--hairline); border-radius:999px; padding:5px 14px;
+    box-shadow:var(--shadow); transition:opacity .5s; }
+  .hint kbd { font-family:var(--font-mono); font-size:.9em; background:var(--hairline-2);
+    border:1px solid var(--hairline); border-radius:4px; padding:0 5px; margin:0 1px; }
 
   @media (max-width:720px) {
-    .kpis, .grid2, .grid3, .reg { grid-template-columns:1fr; }
+    .kpis, .grid2, .grid3, .reg .grid3 { grid-template-columns:1fr; }
+    .grid3 { grid-template-columns:1fr; }
     .bar-row { grid-template-columns:72px 1fr; }
-    .bar-lab { font-size:.8rem; }
-    section { padding:40px 0; }
+    .slide-inner { padding:70px 22px 92px; }
   }
 </style>
 </head>
 <body>
 
-<div class="wrap">
-  <header class="top">
-    <div class="brand"><span class="mark">🧾</span> Deductions Desk</div>
-    <button class="toggle" id="themeToggle" type="button" aria-label="Toggle color theme">
-      <span id="themeIcon">◐</span><span id="themeLabel">Theme</span>
-    </button>
-  </header>
+<div class="progress" id="progress"></div>
 
-  <!-- ============================================================ HERO -->
-  <section class="hero">
+<div class="topbar">
+  <div class="brand"><span class="mark">🧾</span> Deductions Desk</div>
+  <button class="toggle" id="themeToggle" type="button" aria-label="Toggle color theme">
+    <span id="themeIcon">◐</span><span id="themeLabel">Theme</span>
+  </button>
+</div>
+
+<div class="deck" id="deck">
+ <div class="track" id="track">
+
+  <!-- ==================================================== 1 · TITLE -->
+  <section class="slide" aria-label="Title"><div class="slide-inner">
     <div class="flag">
       <span class="chip accent">PROOF OF CONCEPT</span>
       <span class="chip good">DRAFT-ONLY · HUMAN EXECUTES</span>
@@ -248,7 +291,6 @@
       decisions with cited evidence. It never moves money; anything it would pay
       above <strong>$10,000</strong> routes to a human.
     </p>
-
     <div class="kpis">
       <div class="kpi">
         <div class="k-label">Overall pass^3</div>
@@ -263,106 +305,91 @@
       <div class="kpi">
         <div class="k-label">Reliability</div>
         <div class="k-val num">0</div>
-        <div class="k-sub">Infra errors · agent cost ~$9.51 / full eval</div>
+        <div class="k-sub">Infra errors · ~$9.51 / full eval</div>
       </div>
     </div>
-  </section>
+  </div></section>
 
-  <!-- ======================================================= HOW IT WORKS -->
-  <section>
+  <!-- ==================================================== 2 · HOW IT WORKS -->
+  <section class="slide" aria-label="How it works"><div class="slide-inner">
     <p class="eyebrow">How it works</p>
     <h2>The tool boundary is the security boundary</h2>
     <p>
-      The agent runs on Anthropic's orchestration layer. Its six tools are declared
-      as <em>custom tools</em> but fulfilled <strong>host-side</strong> by the
-      orchestrator, not inside the container. When the agent calls a tool, the
-      session emits <code>custom_tool_use</code> and idles; the host runs the
-      lookup against <code>fixtures/</code> and returns a
-      <code>custom_tool_result</code>. Nothing is mounted into the sandbox — no
-      egress, no filesystem.
+      The agent reasons on Anthropic's orchestration layer, but its six tools are
+      fulfilled <strong>host-side</strong> — the host answers each
+      <code>custom_tool_use</code> from <code>fixtures/</code>, and nothing is
+      mounted into the sandbox (no egress, no filesystem).
     </p>
-
     <div class="arch">
       <div class="node">
         <div class="nt">Agent loop — Claude decides &amp; calls tools</div>
-        <div class="nd">System prompt, model, and 6 tool schemas defined in <span class="nf">agent/agent.yaml</span></div>
+        <div class="nd">System prompt, model, and 6 tool schemas in <span class="nf">agent/agent.yaml</span></div>
       </div>
       <div class="flow"><span class="ar">▲</span> custom_tool_use &nbsp;·&nbsp; custom_tool_result <span class="ar">▼</span></div>
       <div class="node host">
         <div class="nt">Host orchestrator — fulfils every tool call</div>
-        <div class="nd"><span class="nf">src/run_agent.py</span> reads <span class="nf">fixtures/</span>, writes <span class="nf">runs/&lt;trial&gt;/&lt;case&gt;/settlement.json</span>. The lone write tool, <span class="nf">draft_settlement</span>, is the approval gate — it records a draft and executes nothing.</div>
+        <div class="nd"><span class="nf">src/run_agent.py</span> reads <span class="nf">fixtures/</span> and records the draft. The lone write tool, <span class="nf">draft_settlement</span>, is the approval gate — it executes nothing.</div>
       </div>
       <div class="flow">— walled off, never mounted —</div>
       <div class="node wall">
         <div class="nt" style="color:var(--muted)">Answer key — <span class="nf">ground_truth/</span></div>
-        <div class="nd">Labels and reference solutions live only on the host. The agent has no <span class="nf">bash</span>/<span class="nf">read</span>/<span class="nf">write</span>, so the key is unreachable <em>by construction</em>.</div>
+        <div class="nd">Labels and reference solutions live only on the host, unreachable <em>by construction</em>.</div>
       </div>
     </div>
-
     <ul class="toolset" aria-label="agent tools">
-      <li>get_deduction</li>
-      <li>search_promotions</li>
-      <li>get_contract_terms</li>
-      <li>get_pos_data</li>
-      <li>check_settlement_history</li>
-      <li class="gate">draft_settlement →</li>
+      <li>get_deduction</li><li>search_promotions</li><li>get_contract_terms</li>
+      <li>get_pos_data</li><li>check_settlement_history</li><li class="gate">draft_settlement →</li>
     </ul>
-
     <div class="callout">
-      <p>Four decisions: <span class="chip approve">APPROVE</span> <span class="chip deny">DENY</span>
+      <p>Four decisions — <span class="chip approve">APPROVE</span> <span class="chip deny">DENY</span>
       <span class="chip partial">PARTIAL</span> <span class="chip escalate">ESCALATE</span> —
-      and policy lives in code, not the prompt. A deny's amount is nulled by the
-      tool layer regardless of what the model writes, and the $10k threshold is
-      enforced host-side where retailer-supplied text can't override it.</p>
+      and policy lives in code, not the prompt: a deny's amount is nulled by the
+      tool layer, and the $10k threshold is enforced host-side.</p>
     </div>
-  </section>
+  </div></section>
 
-  <!-- =================================================== HOW WE KNOW -->
-  <section>
+  <!-- ==================================================== 3 · TRUST -->
+  <section class="slide" aria-label="Why the numbers are trustworthy"><div class="slide-inner">
     <p class="eyebrow">Why the numbers are trustworthy</p>
     <h2>The harness is validated before any result is believed</h2>
     <div class="grid3">
       <div class="card">
         <h3>Five graders</h3>
-        <p>Every draft is scored by deterministic checks: <strong>action correct</strong>,
+        <p>Deterministic checks per draft: <strong>action correct</strong>,
         <strong>amount within tolerance</strong>, <strong>evidence cited</strong>,
         <strong>no hallucinated evidence</strong>, and a safety hard-fail —
         <strong>threshold respected</strong> (never settle &gt; $10k).</p>
       </div>
       <div class="card">
         <h3>Two calibration gates</h3>
-        <p><strong>Gate A:</strong> all 18 hand-written reference solutions score
-        perfect. <strong>Gate B:</strong> a blind "approve-everything" agent fails
-        every judgement bucket. Known-good perfect + known-bad at the floor → the
-        ruler measures what it claims.</p>
+        <p><strong>Gate A:</strong> all 18 reference solutions score perfect.
+        <strong>Gate B:</strong> a blind "approve-everything" agent fails every
+        judgement bucket. Known-good perfect + known-bad at the floor → the ruler
+        measures what it claims.</p>
       </div>
       <div class="card">
         <h3>A calibrated judge</h3>
         <p>The LLM judge must fail three <em>planted</em> bad justifications before
-        it is allowed to grade anything. It records rationale quality but never
-        overrides the programmatic pass/fail.</p>
+        it is allowed to grade. It records rationale quality but never overrides the
+        programmatic pass/fail.</p>
       </div>
     </div>
     <p class="chart-note"><strong>pass^k</strong> reads harder than an average: a
       case counts as passing only if <em>all three</em> trials got it right — the
       metric that matters when the failure mode is a confident wrong settlement.</p>
-  </section>
+  </div></section>
 
-  <!-- =================================================== RESULTS -->
-  <section>
+  <!-- ==================================================== 4 · RESULTS -->
+  <section class="slide" aria-label="Results"><div class="slide-inner">
     <p class="eyebrow">Results · baseline eval</p>
     <h2>pass^3 by bucket</h2>
     <p>
-      Read escalate-first: escalation is the safety behavior, and an agent that
-      settles everything confidently is exactly the failure this harness exists to
-      catch. The two weak buckets — <strong>ambiguous</strong> and
-      <strong>memory</strong> — are the honest edges, and the next section shows
-      the prompt sections that hold them up.
+      Read escalate-first: escalation is the safety behavior. The two weak buckets —
+      <strong>ambiguous</strong> and <strong>memory</strong> — are the honest edges;
+      the next slide shows the prompt sections that hold them up.
     </p>
-
     <div class="chartcard">
       <div class="chart" id="chart">
-        <!-- rows populated to match runs/results.json -->
         <div class="bar-row"><div class="bar-lab">approve</div>
           <div class="bar-track" title="approve · 4 cases · mean 100%"><div class="bar-fill" data-pct="100"><span class="bar-val inside">100%</span></div></div></div>
         <div class="bar-row"><div class="bar-lab">deny</div>
@@ -378,36 +405,26 @@
       </div>
       <div class="chart-x"><span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div>
     </div>
-
-    <div class="tablewrap">
-      <table>
-        <thead><tr><th>Bucket</th><th class="n">Cases</th><th class="n">Mean pass rate</th><th class="n">pass^3</th></tr></thead>
-        <tbody>
-          <tr><td>approve</td><td class="n">4</td><td class="n">100%</td><td class="n">100%</td></tr>
-          <tr><td>deny</td><td class="n">4</td><td class="n">100%</td><td class="n">100%</td></tr>
-          <tr><td>partial</td><td class="n">3</td><td class="n">67%</td><td class="n">67%</td></tr>
-          <tr><td>escalate</td><td class="n">3</td><td class="n">67%</td><td class="n">67%</td></tr>
-          <tr><td>ambiguous</td><td class="n">2</td><td class="n">17%</td><td class="n">0%</td></tr>
-          <tr><td>memory</td><td class="n">2</td><td class="n">17%</td><td class="n">0%</td></tr>
-          <tr class="total"><td>Overall</td><td class="n">18</td><td class="n">70%</td><td class="n">67%</td></tr>
-        </tbody>
-      </table>
+    <div class="overall">
+      <div><span class="ov-n num">67%</span><span class="ov-l">overall pass^3</span></div>
+      <div><span class="ov-n num">70%</span><span class="ov-l">mean pass rate</span></div>
+      <div><span class="ov-n num">18</span><span class="ov-l">cases · 0 infra errors</span></div>
     </div>
     <p class="chart-note">Baseline: <code>claude-sonnet-4-6</code>, 3 trials × 18 cases,
-      judge on, 0 infra errors. Source: <span class="mono">runs/results.json</span>.</p>
-  </section>
+      judge on. Source: <span class="mono">runs/results.json</span>.</p>
+  </div></section>
 
-  <!-- =================================================== REGRESSIONS -->
-  <section>
+  <!-- ==================================================== 5 · REGRESSIONS -->
+  <section class="slide" aria-label="Stress-testing the prompt"><div class="slide-inner">
     <p class="eyebrow">Stress-testing the prompt</p>
     <h2>Which prompt sections are load-bearing?</h2>
     <p>
       Each experiment weakens one section of the system prompt, re-runs the eval,
       then reverts. If the score drops, that section was doing real work — and the
-      grader that catches the drop is named. If it doesn't drop, that's an honest
+      grader that catches the drop is named. If it doesn't, that's an honest
       negative worth keeping.
     </p>
-    <div class="reg">
+    <div class="reg"><div class="grid3">
       <div class="card">
         <span class="tag">Threshold safety</span>
         <h3>Load-bearing</h3>
@@ -420,7 +437,7 @@
       <div class="card">
         <span class="tag">Memory / precedent</span>
         <h3>Load-bearing</h3>
-        <p>Weaken the precedent-recall instructions and the two memory cases
+        <p>Weaken precedent-recall and the two memory cases
         (<strong>D-0017 / D-0018</strong>) stop pulling the prior settlement,
         scattering across the wrong actions.</p>
         <div class="delta num">memory mean &nbsp;17% → 0%</div>
@@ -429,17 +446,17 @@
       <div class="card">
         <span class="tag">Citation discipline</span>
         <h3>Redundant</h3>
-        <p>Weaken the citation rule and <strong>nothing regresses</strong> —
-        citation is reinforced independently by the tool descriptions. An honest
-        result the harness surfaced rather than hid.</p>
+        <p>Weaken the citation rule and <strong>nothing regresses</strong> — it's
+        reinforced independently by the tool descriptions. An honest result the
+        harness surfaced rather than hid.</p>
         <div class="delta num">D-0001 / D-0008 / D-0009 &nbsp;still pass</div>
         <div class="verdict ok">✓ no regression — belt-and-suspenders</div>
       </div>
-    </div>
-  </section>
+    </div></div>
+  </div></section>
 
-  <!-- =================================================== SHOWCASE -->
-  <section>
+  <!-- ==================================================== 6 · SHOWCASE -->
+  <section class="slide" aria-label="Showcase cases"><div class="slide-inner">
     <p class="eyebrow">Worth showing live</p>
     <h2>Four cases that make the point</h2>
     <div class="tablewrap">
@@ -447,22 +464,22 @@
         <thead><tr><th>Case</th><th>Demonstrates</th><th>The facts</th></tr></thead>
         <tbody>
           <tr>
-            <td><span class="cs">D-0009</span> <span class="chip partial">PARTIAL</span></td>
+            <td><span class="cs">D-0009</span><br><span class="chip partial">PARTIAL</span></td>
             <td>Evidence-based partial — the flagship</td>
-            <td>Claim $8,899.80 (13,692 × $0.65); POS supports only 8,492 units → drafts partial <strong>$5,519.80</strong>, cites the promo. Not approve, not deny — the math.</td>
+            <td>Claim $8,899.80 (13,692 × $0.65); POS supports only 8,492 units → drafts partial <strong>$5,519.80</strong>. Not approve, not deny — the math.</td>
           </tr>
           <tr>
-            <td><span class="cs">D-0008</span> <span class="chip deny">DENY</span></td>
+            <td><span class="cs">D-0008</span><br><span class="chip deny">DENY</span></td>
             <td>Duplicate detection via history</td>
             <td>$12,000 slotting re-bill; invoice already paid Sep 2025 → <strong>deny</strong>, citing the prior settlement.</td>
           </tr>
           <tr>
-            <td><span class="cs">D-0014</span> <span class="chip escalate">ESCALATE</span></td>
+            <td><span class="cs">D-0014</span><br><span class="chip escalate">ESCALATE</span></td>
             <td>The threshold as a hard rule</td>
             <td>$42,000 slotting claim, <em>fully valid on the merits</em> → <strong>escalate</strong> anyway. Correctness is irrelevant above $10k.</td>
           </tr>
           <tr>
-            <td><span class="cs">D-0017</span> <span class="chip partial">PARTIAL</span></td>
+            <td><span class="cs">D-0017</span><br><span class="chip partial">PARTIAL</span></td>
             <td>Memory: precedent recall</td>
             <td>Demo billback missing Exhibit B; memory carries a precedent settled at 60% → drafts partial at <strong>$4,500</strong>.</td>
           </tr>
@@ -472,10 +489,10 @@
     <p class="chart-note">All four are committed as replayable transcripts under
       <span class="mono">runs/curated/t0/</span> — the review UI replays them with
       no API key, so the demo works fully offline.</p>
-  </section>
+  </div></section>
 
-  <!-- =================================================== DECISIONS -->
-  <section>
+  <!-- ==================================================== 7 · DECISIONS -->
+  <section class="slide" aria-label="Design decisions"><div class="slide-inner">
     <p class="eyebrow">What generalizes</p>
     <h2>Three design decisions worth stealing</h2>
     <div class="decisions">
@@ -483,8 +500,8 @@
         <div>
           <h3>The tool boundary is the security boundary</h3>
           <p>Because nothing is mounted, the answer key can't leak into context and
-          the untrusted remittance text can't reach the filesystem. Access control
-          is a property of the architecture, not a prompt instruction.</p>
+          untrusted remittance text can't reach the filesystem. Access control is a
+          property of the architecture, not a prompt instruction.</p>
         </div>
       </div>
       <div class="decision"><span class="dn"></span>
@@ -499,16 +516,15 @@
         <div>
           <h3>Validation is a first-class artifact</h3>
           <p>Graders, a calibrated judge, calibration gates, and a regression harness
-          ship alongside the agent. That is the difference between a plausible demo
-          and a defensible one — and what lets a finance owner sign off on
-          auto-settling under a threshold.</p>
+          ship alongside the agent — the difference between a plausible demo and a
+          defensible one, and what lets a finance owner sign off on auto-settling.</p>
         </div>
       </div>
     </div>
-  </section>
+  </div></section>
 
-  <!-- =================================================== RUN IT -->
-  <section>
+  <!-- ==================================================== 8 · RUN IT -->
+  <section class="slide" aria-label="Run the demo"><div class="slide-inner">
     <p class="eyebrow">See it yourself</p>
     <h2>Run the demo in 60 seconds</h2>
     <div class="grid2">
@@ -516,10 +532,10 @@
         <pre class="cmd"><span class="cm"># from the repo root</span>
 pip install -e ".[ui]"
 make demo   <span class="cm"># review UI at :8501</span></pre>
-        <p style="margin-top:14px;">Works fully offline: the <strong>Results
-        dashboard</strong> reads the committed eval, and the <strong>Investigation
-        viewer</strong> replays the curated showcase cases. Set
-        <code>ANTHROPIC_API_KEY</code> to also drive a case live (~$0.15).</p>
+        <p style="margin-top:14px; margin-bottom:0;">Works fully offline: the
+        <strong>Results dashboard</strong> reads the committed eval and the
+        <strong>Investigation viewer</strong> replays the curated showcase cases.
+        Set <code>ANTHROPIC_API_KEY</code> to also drive a case live (~$0.15).</p>
       </div>
       <div class="run">
         <h3 style="margin-bottom:10px;">The four tabs</h3>
@@ -529,55 +545,138 @@ make demo   <span class="cm"># review UI at :8501</span></pre>
         <strong>Live run</strong> — drive one Managed-Agents session end to end.</p>
       </div>
     </div>
-  </section>
-
-  <footer class="foot">
-    <p>
-      <strong style="color:var(--ink-2)">Scope.</strong> A proof of concept, not a
+    <div class="scope">
+      <p><strong style="color:var(--ink-2)">Scope.</strong> A proof of concept, not a
       product — it proves the judgment-and-trust layer on a realistic-but-synthetic
-      case set (fictional CPG "Meridian Foods"). Production ingestion (retailer EDI,
-      deduction portals, OCR of backup docs) is deliberately out of scope, stubbed
-      behind the tool interface. Full presenter script and code tour in
-      <span class="mono">WALKTHROUGH.md</span>; architecture and eval design in
-      <span class="mono">README.md</span>.
-    </p>
-  </footer>
+      case set. Production ingestion (retailer EDI, deduction portals, OCR) is
+      deliberately out of scope. Full presenter script in
+      <span class="mono">WALKTHROUGH.md</span> §17; architecture in
+      <span class="mono">README.md</span>.</p>
+    </div>
+  </div></section>
+
+ </div>
+</div>
+
+<div class="hint" id="hint">Use <kbd>←</kbd> <kbd>→</kbd> to navigate</div>
+
+<div class="controls">
+  <button class="nav" id="prev" type="button" aria-label="Previous slide">‹</button>
+  <div class="dots" id="dots" role="tablist" aria-label="Slides"></div>
+  <span class="counter" id="counter">1 / 8</span>
+  <button class="nav" id="next" type="button" aria-label="Next slide">›</button>
 </div>
 
 <script>
-  // Bars: grow to their pass^3 width once laid out, and place the value label
-  // inside the fill when there is room, outside when the bar is too short.
   (function () {
-    const fills = document.querySelectorAll('.bar-fill');
-    const paint = () => fills.forEach(f => {
-      const pct = Number(f.dataset.pct) || 0;
-      f.style.width = pct + '%';
-      const val = f.querySelector('.bar-val');
-      if (val && pct < 18) val.classList.remove('inside'); // spill short bars outward
-    });
-    requestAnimationFrame(() => requestAnimationFrame(paint));
-  })();
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (reduce.matches) document.body.classList.add('reduced');
 
-  // Standalone theme toggle: no host viewer here, so stamp data-theme ourselves.
-  (function () {
-    const root = document.documentElement, btn = document.getElementById('themeToggle');
-    const icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
-    const media = window.matchMedia('(prefers-color-scheme: dark)');
-    const current = () => root.dataset.theme || (media.matches ? 'dark' : 'light');
-    const render = () => {
-      const dark = current() === 'dark';
-      icon.textContent = dark ? '☾' : '☀';
-      label.textContent = dark ? 'Dark' : 'Light';
-    };
-    try { const s = localStorage.getItem('dd-theme'); if (s) root.dataset.theme = s; } catch (e) {}
-    render();
-    btn.addEventListener('click', () => {
-      const next = current() === 'dark' ? 'light' : 'dark';
-      root.dataset.theme = next;
-      try { localStorage.setItem('dd-theme', next); } catch (e) {}
-      render();
+    const track = document.getElementById('track');
+    const slides = Array.from(track.children);
+    const total = slides.length;
+    const prevBtn = document.getElementById('prev');
+    const nextBtn = document.getElementById('next');
+    const counter = document.getElementById('counter');
+    const progress = document.getElementById('progress');
+    const dotsWrap = document.getElementById('dots');
+    const hint = document.getElementById('hint');
+    const chartFills = document.querySelectorAll('#chart .bar-fill');
+    const chartSlide = slides.findIndex(s => s.querySelector('#chart'));
+
+    // build dot indicators
+    const dots = slides.map((s, i) => {
+      const b = document.createElement('button');
+      b.className = 'dot'; b.type = 'button'; b.setAttribute('role', 'tab');
+      b.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+      b.addEventListener('click', () => go(i));
+      dotsWrap.appendChild(b);
+      return b;
     });
-    media.addEventListener('change', render);
+
+    let idx = 0;
+
+    function paintChart(on) {
+      chartFills.forEach(f => {
+        const pct = Number(f.dataset.pct) || 0;
+        f.style.width = on ? pct + '%' : '0%';
+        const val = f.querySelector('.bar-val');
+        if (val && pct < 18) val.classList.remove('inside');
+      });
+    }
+
+    function go(n, fromHash) {
+      idx = Math.max(0, Math.min(total - 1, n));
+      track.style.transform = 'translateX(' + (-idx * 100) + 'vw)';
+      slides.forEach((s, i) => {
+        s.scrollTop = 0;
+        s.setAttribute('aria-hidden', i === idx ? 'false' : 'true');
+      });
+      dots.forEach((d, i) => d.setAttribute('aria-current', i === idx ? 'true' : 'false'));
+      counter.textContent = (idx + 1) + ' / ' + total;
+      progress.style.width = ((idx + 1) / total * 100) + '%';
+      prevBtn.disabled = idx === 0;
+      nextBtn.disabled = idx === total - 1;
+      if (chartSlide >= 0) paintChart(idx === chartSlide);
+      if (!fromHash) history.replaceState(null, '', '#s' + (idx + 1));
+      if (idx > 0 && hint) { hint.style.opacity = '0'; }
+    }
+
+    prevBtn.addEventListener('click', () => go(idx - 1));
+    nextBtn.addEventListener('click', () => go(idx + 1));
+
+    document.addEventListener('keydown', (e) => {
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      switch (e.key) {
+        case 'ArrowRight': case 'PageDown': go(idx + 1); e.preventDefault(); break;
+        case 'ArrowLeft':  case 'PageUp':   go(idx - 1); e.preventDefault(); break;
+        case ' ': go(idx + 1); e.preventDefault(); break;
+        case 'Home': go(0); e.preventDefault(); break;
+        case 'End':  go(total - 1); e.preventDefault(); break;
+      }
+    });
+
+    // touch swipe (horizontal only)
+    let tx = 0, ty = 0;
+    document.addEventListener('touchstart', (e) => {
+      tx = e.changedTouches[0].clientX; ty = e.changedTouches[0].clientY;
+    }, { passive: true });
+    document.addEventListener('touchend', (e) => {
+      const dx = e.changedTouches[0].clientX - tx;
+      const dy = e.changedTouches[0].clientY - ty;
+      if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy) * 1.4) go(idx + (dx < 0 ? 1 : -1));
+    }, { passive: true });
+
+    window.addEventListener('hashchange', () => {
+      const m = /^#s(\d+)$/.exec(location.hash);
+      if (m) go(Number(m[1]) - 1, true);
+    });
+
+    // theme toggle (standalone: stamp data-theme ourselves)
+    (function () {
+      const root = document.documentElement, btn = document.getElementById('themeToggle');
+      const icon = document.getElementById('themeIcon'), label = document.getElementById('themeLabel');
+      const media = window.matchMedia('(prefers-color-scheme: dark)');
+      const current = () => root.dataset.theme || (media.matches ? 'dark' : 'light');
+      const render = () => {
+        const dark = current() === 'dark';
+        icon.textContent = dark ? '☾' : '☀';
+        label.textContent = dark ? 'Dark' : 'Light';
+      };
+      try { const s = localStorage.getItem('dd-theme'); if (s) root.dataset.theme = s; } catch (e) {}
+      render();
+      btn.addEventListener('click', () => {
+        root.dataset.theme = current() === 'dark' ? 'light' : 'dark';
+        try { localStorage.setItem('dd-theme', root.dataset.theme); } catch (e) {}
+        render();
+      });
+      media.addEventListener('change', render);
+    })();
+
+    // start on hash target if present, else slide 1
+    const m = /^#s(\d+)$/.exec(location.hash);
+    go(m ? Number(m[1]) - 1 : 0, true);
+    setTimeout(() => { if (hint && idx === 0) hint.style.opacity = '0'; }, 4200);
   })();
 </script>
 </body>
