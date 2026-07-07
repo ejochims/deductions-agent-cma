@@ -1,4 +1,4 @@
-.PHONY: install lint verify-quickstart clean ui \
+.PHONY: install lint verify-quickstart clean ui demo \
         gates phase-a phase-b phase-c phase-d phase-e phase-f \
         test calibrate judge-calibrate run-one estimate trial eval digest sweep
 
@@ -55,6 +55,11 @@ digest:
 # local review UI (case queue, investigation replay, dashboard, live run)
 ui:
 	streamlit run ui/app.py
+
+# team demo — same app, framed as the presenter entry point. Works fully offline
+# out of the box (curated transcripts + committed results.json); the Live-run tab
+# lights up automatically when ANTHROPIC_API_KEY is set. See WALKTHROUGH.md sec 17.
+demo: ui
 
 # model sweep (cost-per-success)
 sweep:

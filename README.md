@@ -23,6 +23,22 @@ stubbed behind the tool interface (see §1). The implementation runs on Claude
 Managed Agents (versioned agent config + per-session sandboxes, Anthropic Python
 SDK, `ant` CLI), but the concept is not tied to that stack.
 
+### Demo in 60 seconds
+
+```bash
+pip install -e ".[ui]"
+make demo            # boots the review UI at :8501
+```
+
+It works fully offline out of the box — the **Results dashboard** reads the
+committed `runs/results.json`, and the **Investigation viewer** replays the
+curated showcase cases (D-0009, D-0008, D-0014, D-0017) under the trial
+`curated/t0`, no API key required. Set `ANTHROPIC_API_KEY` to also enable the
+Live-run tab (~$0.15/case). The full presenter script is in
+[`WALKTHROUGH.md` §17](WALKTHROUGH.md#17-demoing-the-project); a one-page
+architecture-and-results overview to share with a team is
+[`docs/presentation.html`](docs/presentation.html).
+
 ---
 
 ## 1. Architecture
