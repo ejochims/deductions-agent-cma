@@ -1,0 +1,702 @@
+{
+  "trials": [
+    "t0",
+    "t1",
+    "t2"
+  ],
+  "cases": [
+    "D-0001",
+    "D-0008",
+    "D-0009",
+    "D-0013",
+    "D-0017"
+  ],
+  "used_judge": false,
+  "used_memory": true,
+  "summary": {
+    "overall": {
+      "n_cases": 5,
+      "mean_pass_rate": 0.6,
+      "pass_rate_stdev": 0.4898979485566356,
+      "pass_k": 0.6,
+      "cases_all_infra": 0
+    },
+    "by_bucket": {
+      "approve": {
+        "n_cases": 1,
+        "mean_pass_rate": 1.0,
+        "pass_rate_stdev": 0.0,
+        "pass_k": 1,
+        "cases_all_infra": 0
+      },
+      "deny": {
+        "n_cases": 1,
+        "mean_pass_rate": 1.0,
+        "pass_rate_stdev": 0.0,
+        "pass_k": 1,
+        "cases_all_infra": 0
+      },
+      "escalate": {
+        "n_cases": 1,
+        "mean_pass_rate": 0.0,
+        "pass_rate_stdev": 0.0,
+        "pass_k": 0,
+        "cases_all_infra": 0
+      },
+      "memory": {
+        "n_cases": 1,
+        "mean_pass_rate": 0.0,
+        "pass_rate_stdev": 0.0,
+        "pass_k": 0,
+        "cases_all_infra": 0
+      },
+      "partial": {
+        "n_cases": 1,
+        "mean_pass_rate": 1.0,
+        "pass_rate_stdev": 0.0,
+        "pass_k": 1,
+        "cases_all_infra": 0
+      }
+    },
+    "per_case": {
+      "D-0001": {
+        "bucket": "approve",
+        "trials": 3,
+        "infra_errors": 0,
+        "pass_rate": 1.0,
+        "pass_k": 1
+      },
+      "D-0008": {
+        "bucket": "deny",
+        "trials": 3,
+        "infra_errors": 0,
+        "pass_rate": 1.0,
+        "pass_k": 1
+      },
+      "D-0009": {
+        "bucket": "partial",
+        "trials": 3,
+        "infra_errors": 0,
+        "pass_rate": 1.0,
+        "pass_k": 1
+      },
+      "D-0013": {
+        "bucket": "escalate",
+        "trials": 3,
+        "infra_errors": 0,
+        "pass_rate": 0.0,
+        "pass_k": 0
+      },
+      "D-0017": {
+        "bucket": "memory",
+        "trials": 3,
+        "infra_errors": 0,
+        "pass_rate": 0.0,
+        "pass_k": 0
+      }
+    },
+    "total_infra_errors": 0
+  },
+  "results": [
+    {
+      "case_id": "D-0001",
+      "trial": "t0",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='approve' expected='approve'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted=6800 expected=6800.0 |delta|=0.00 allowed=68.00"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=approve, amount=6800)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [],
+      "note": ""
+    },
+    {
+      "case_id": "D-0008",
+      "trial": "t0",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='deny' expected='deny'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": false,
+          "detail": "no payout expected (deny/escalate)"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=deny, amount=None)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [],
+      "note": ""
+    },
+    {
+      "case_id": "D-0009",
+      "trial": "t0",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='partial' expected='partial'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted=5519.8 expected=5519.8 |delta|=0.00 allowed=275.99"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=partial, amount=5519.8)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [],
+      "note": ""
+    },
+    {
+      "case_id": "D-0013",
+      "trial": "t0",
+      "status": "ok",
+      "passed": false,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": false,
+          "applicable": true,
+          "detail": "drafted='deny' expected='escalate'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": false,
+          "detail": "no payout expected (deny/escalate)"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=deny, amount=None)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [],
+      "note": ""
+    },
+    {
+      "case_id": "D-0017",
+      "trial": "t0",
+      "status": "ok",
+      "passed": false,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='partial' expected='partial'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted=4500 expected=4500.0 |delta|=0.00 allowed=225.00"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": false,
+          "applicable": true,
+          "detail": "missing ['SH-2025-Q4-007']"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=partial, amount=4500)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [],
+      "note": ""
+    },
+    {
+      "case_id": "D-0001",
+      "trial": "t1",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='approve' expected='approve'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted=6800 expected=6800.0 |delta|=0.00 allowed=68.00"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=approve, amount=6800)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [],
+      "note": ""
+    },
+    {
+      "case_id": "D-0008",
+      "trial": "t1",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='deny' expected='deny'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": false,
+          "detail": "no payout expected (deny/escalate)"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=deny, amount=None)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [],
+      "note": ""
+    },
+    {
+      "case_id": "D-0009",
+      "trial": "t1",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='partial' expected='partial'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted=5519.8 expected=5519.8 |delta|=0.00 allowed=275.99"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=partial, amount=5519.8)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [],
+      "note": ""
+    },
+    {
+      "case_id": "D-0013",
+      "trial": "t1",
+      "status": "ok",
+      "passed": false,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": false,
+          "applicable": true,
+          "detail": "drafted='deny' expected='escalate'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": false,
+          "detail": "no payout expected (deny/escalate)"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=deny, amount=None)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [],
+      "note": ""
+    },
+    {
+      "case_id": "D-0017",
+      "trial": "t1",
+      "status": "ok",
+      "passed": false,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='partial' expected='partial'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted=4500 expected=4500.0 |delta|=0.00 allowed=225.00"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": false,
+          "applicable": true,
+          "detail": "missing ['SH-2025-Q4-007']"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=partial, amount=4500)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [],
+      "note": ""
+    },
+    {
+      "case_id": "D-0001",
+      "trial": "t2",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='approve' expected='approve'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted=6800 expected=6800.0 |delta|=0.00 allowed=68.00"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=approve, amount=6800)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [],
+      "note": ""
+    },
+    {
+      "case_id": "D-0008",
+      "trial": "t2",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='deny' expected='deny'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": false,
+          "detail": "no payout expected (deny/escalate)"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=deny, amount=None)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [],
+      "note": ""
+    },
+    {
+      "case_id": "D-0009",
+      "trial": "t2",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='partial' expected='partial'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted=5519.8 expected=5519.8 |delta|=0.00 allowed=275.99"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=partial, amount=5519.8)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [],
+      "note": ""
+    },
+    {
+      "case_id": "D-0013",
+      "trial": "t2",
+      "status": "ok",
+      "passed": false,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": false,
+          "applicable": true,
+          "detail": "drafted='deny' expected='escalate'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": false,
+          "detail": "no payout expected (deny/escalate)"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=deny, amount=None)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [],
+      "note": ""
+    },
+    {
+      "case_id": "D-0017",
+      "trial": "t2",
+      "status": "ok",
+      "passed": false,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='partial' expected='partial'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": false,
+          "applicable": true,
+          "detail": "drafted=2850 expected=4500.0 |delta|=1650.00 allowed=225.00"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": false,
+          "applicable": true,
+          "detail": "missing ['SH-2025-Q4-007']"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=partial, amount=2850)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [],
+      "note": ""
+    }
+  ]
+}

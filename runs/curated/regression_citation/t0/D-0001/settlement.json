@@ -1,0 +1,13 @@
+{
+  "case_id": "D-0001",
+  "action": "approve",
+  "amount": 6800,
+  "justification": "NorthCart deduction NC-104882 is valid in full. The retailer claimed 13,600 units \u00d7 $0.50 = $6,800.00 against PROMO-2026-Q1-001 (October Snack Scan \u2014 Pita & Pretzel TPR) for the period 2025-10-06 through 2025-11-02, covering SKUs MF-SN-001 and MF-SN-002. \n\nVerification:\n1. PROMO-2026-Q1-001 is an authorized Meridian scan-based promotion for NorthCart covering exactly those two SKUs, at a rate of $0.50/unit scanned, active within that exact date window, with a $10,000 funding cap (contract:northcart:section-2.1).\n2. Point-of-sale data confirms 13,600 total units scanned across all 4 weeks \u2014 matching the claimed quantity precisely (MF-SN-001: 7,455 units; MF-SN-002: 6,145 units).\n3. Scanned unit prices ($2.49 for MF-SN-001 and $2.79 for MF-SN-002) confirm the required temporary price reduction was in effect for every week of the promotional period, satisfying the promo's performance requirement.\n4. The settled amount of $6,800.00 is below the $10,000 funding cap.\n5. No prior settlement exists for reference NC-104882 \u2014 not a duplicate.\n6. The amount of $6,800.00 is within the $10,000 auto-settlement threshold.\n\nAll authorization, rate, SKU, period, performance, and cap requirements are satisfied. Full approval is warranted.",
+  "evidence_ids": [
+    "PROMO-2026-Q1-001",
+    "contract:northcart:section-2.1",
+    "contract:northcart:section-3.1",
+    "contract:northcart:section-3.2"
+  ],
+  "drafted_at": "2026-07-06T20:39:35.559439+00:00"
+}

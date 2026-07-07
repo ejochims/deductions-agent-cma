@@ -1,0 +1,12 @@
+{
+  "case_id": "D-0017",
+  "action": "partial",
+  "amount": 4750,
+  "justification": "Deduction hc 20988 references PROMO-2026-Q1-011 (Autumn In-Store Demo Program \u2014 Pita & Popcorn), an authorized demo-billback promotion covering SKUs MF-SN-001 and MF-SN-003 at $250/event during 2025-10-04 through 2025-11-15. The rate, SKUs, period, and promotion reference all check out, and the $7,500 claimed is within the $12,000 funding cap. No duplicate settlement was found.\n\nHowever, the claim fails the documentation standard in contract section 3.4, which requires a signed Proof-of-Performance form (Exhibit B) for each demo event plus a store execution report, submitted within 30 days of the event. The retailer submitted neither; the remittance states \"POP forms to follow,\" but by the Nov. 27 deduction date the 30-day submission window for the earliest October events has already closed.\n\nPartial corroboration exists for 19 of the 30 claimed events: the attachments include store photos from 19 stores on various Oct/Nov weekends, and a Meridian field rep email stating \"autumn demos ran well across the stores.\" These together substantiate 19 events. The remaining 11 events (30 \u2013 19 = 11) have no supporting evidence beyond the retailer's own remittance text and cannot be paid.\n\nApproved amount: 19 corroborated events \u00d7 $250/event = $4,750.\nDenied amount: 11 undocumented events \u00d7 $250/event = $2,750 \u2014 rejected under contract section 3.4 for absence of Exhibit B and store execution reports.\n\nThe retailer may resubmit the denied 11 events if signed Exhibit B forms and execution reports can still be produced for those stores, subject to Meridian's review of their timeliness.",
+  "evidence_ids": [
+    "PROMO-2026-Q1-011",
+    "contract:harvest-co:section-3.4",
+    "contract:harvest-co:section-3.1"
+  ],
+  "drafted_at": "2026-07-06T19:27:15.351797+00:00"
+}

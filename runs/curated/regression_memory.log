@@ -1,0 +1,51 @@
+COST ESTIMATE (rough, pre-run) — 6 agent runs on claude-sonnet-4-6
+  agent:  ~$0.72
+  TOTAL:  ~$0.72
+  (assumptions in costs.py; actuals printed after the run)
+  trace: https://platform.claude.com/workspaces/default/sessions/sesn_01Fqbhbqb98mzcu7a9rfuZ9Z
+  trace: https://platform.claude.com/workspaces/default/sessions/sesn_01GFF9MJ3XfdKvAMfoCnWqMW
+  trace: https://platform.claude.com/workspaces/default/sessions/sesn_01RDTQsRpVLxvcMQ6o154yAB
+  trace: https://platform.claude.com/workspaces/default/sessions/sesn_01Af4AGf1rXnE1k7Ebro1jYD
+  trace: https://platform.claude.com/workspaces/default/sessions/sesn_013E4NC47bkc6cFeQivusxUs
+  trace: https://platform.claude.com/workspaces/default/sessions/sesn_017p1bNZqcCzTvqbfTuVgBcx
+
+overall pass^3 = 0 mean pass rate = 0.0
+  memory     pass^k=0 mean=0.0 (n=2)
+
+COST ACTUALS — 6 records on claude-sonnet-4-6: 253,739 in + 26,925 out = $1.1651 (agent side; judge tokens not captured)
+
+# Failure digest
+
+trials=['t0', 't1', 't2']  judge=off  memory=on
+failures=6  infra_errors=0  total_runs=6
+
+## Graded failures (read the transcript; do not auto-fix)
+- **D-0017** [memory] trial=t0
+    - amount_within_tolerance: drafted=4750 expected=4500.0 |delta|=250.00 allowed=225.00
+    - transcript: /Users/ejochims/Documents/projects/deductions-agent-cma/runs/t0/D-0017/record.json
+- **D-0017** [memory] trial=t1
+    - action_correct: drafted='deny' expected='partial'
+    - amount_within_tolerance: expected ~4500.0 but no amount drafted
+    - evidence_cited: missing ['SH-2025-Q4-007']
+    - transcript: /Users/ejochims/Documents/projects/deductions-agent-cma/runs/t1/D-0017/record.json
+- **D-0017** [memory] trial=t2
+    - action_correct: drafted='escalate' expected='partial'
+    - amount_within_tolerance: expected ~4500.0 but no amount drafted
+    - evidence_cited: missing ['SH-2025-Q4-007']
+    - transcript: /Users/ejochims/Documents/projects/deductions-agent-cma/runs/t2/D-0017/record.json
+- **D-0018** [memory] trial=t0
+    - action_correct: drafted='deny' expected='partial'
+    - amount_within_tolerance: expected ~6300.0 but no amount drafted
+    - evidence_cited: missing ['SH-2025-Q4-007']
+    - transcript: /Users/ejochims/Documents/projects/deductions-agent-cma/runs/t0/D-0018/record.json
+- **D-0018** [memory] trial=t1
+    - action_correct: drafted='escalate' expected='partial'
+    - amount_within_tolerance: expected ~6300.0 but no amount drafted
+    - evidence_cited: missing ['SH-2025-Q4-007']
+    - transcript: /Users/ejochims/Documents/projects/deductions-agent-cma/runs/t1/D-0018/record.json
+- **D-0018** [memory] trial=t2
+    - action_correct: drafted='deny' expected='partial'
+    - amount_within_tolerance: expected ~6300.0 but no amount drafted
+    - evidence_cited: missing ['SH-2025-Q4-007']
+    - transcript: /Users/ejochims/Documents/projects/deductions-agent-cma/runs/t2/D-0018/record.json
+

@@ -1,0 +1,13 @@
+{
+  "case_id": "D-0008",
+  "action": "deny",
+  "amount": null,
+  "justification": "This deduction (VM-90332, $12,000) is a duplicate of a claim already settled and paid in full. Settlement history record SH-2025-Q4-011 (settled 2025-09-22) documents that invoice VM-88214 / promo SLOT-VM-2025-09 \u2014 for new item slotting of SKU MF-BV-102 \u2014 was approved and paid at $12,000 in full. The current deduction references the identical invoice (VM-88214), identical promo reference (SLOT-VM-2025-09), and identical SKU (MF-BV-102) for the identical dollar amount. Per contract section 4.2, slotting is a one-time charge per item; no additional slotting may be deducted for the same item absent new written authorization. A search of all active ValuMax promotions for MF-BV-102 returns zero results, confirming no new authorization exists. The deduction is denied in full as a duplicate of an already-settled claim. Meridian reserves the right to recover this deduction as an invalid offset per contract section 3.3 if ValuMax does not reverse it.",
+  "evidence_ids": [
+    "SH-2025-Q4-011",
+    "contract:valumax:section-4.2",
+    "contract:valumax:section-3.1",
+    "contract:valumax:section-3.3"
+  ],
+  "drafted_at": "2026-07-06T19:13:34.118090+00:00"
+}

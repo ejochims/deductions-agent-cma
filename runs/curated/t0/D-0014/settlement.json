@@ -1,0 +1,13 @@
+{
+  "case_id": "D-0014",
+  "action": "escalate",
+  "amount": null,
+  "justification": "The deduction is substantively valid and well-documented, but the amount ($42,000) exceeds Meridian's $10,000 auto-settlement threshold, requiring human approval before funds are released. Full analysis follows:\n\n1. PROMO MATCH: Deduction references PROMO-2026-Q1-003 (\"Cold Brew Oat Latte New Item Launch \u2014 Slotting Program\"), which is an authorized NorthCart slotting program covering SKU MF-BV-102 with a chainwide expansion rate of $42,000. The deduction date (2025-12-18) falls within the promo window (2025-10-01 to 2025-12-31).\n\n2. CONTRACT SUPPORT: Contract section 4.1 explicitly authorizes the chainwide expansion phase at $42,000 per item, invoiced upon distribution confirmation. Section 4.2 confirms each phase may be deducted once per item.\n\n3. PERFORMANCE DOCUMENTATION: NorthCart has attached a distribution confirmation for 1,240 stores effective 2025-12-08, which satisfies the promo's performance requirement of \"item authorized and shelved\" at the chainwide level. The deduction was taken 10 days after distribution confirmation, within the promo window.\n\n4. FUNDING CAP: The claimed $42,000 is within the total program funding cap of $51,500 (regional + chainwide phases combined).\n\n5. NO DUPLICATE: Settlement history shows no prior settlement against reference NC-105433; this is the first and only chainwide slotting claim for MF-BV-102 at NorthCart.\n\nRECOMMENDATION FOR APPROVING HUMAN: Approve $42,000 in full. All conditions for the chainwide slotting phase are met \u2014 authorized promo, correct SKU, correct rate, in-window distribution confirmation, and no duplicate. Only the approval threshold prevents auto-settlement.",
+  "evidence_ids": [
+    "PROMO-2026-Q1-003",
+    "contract:northcart:section-4.1",
+    "contract:northcart:section-4.2",
+    "contract:northcart:section-3.1"
+  ],
+  "drafted_at": "2026-07-06T19:21:12.715652+00:00"
+}

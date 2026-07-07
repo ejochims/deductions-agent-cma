@@ -1,0 +1,418 @@
+{
+  "trials": [
+    "t0",
+    "t1",
+    "t2"
+  ],
+  "cases": [
+    "D-0012",
+    "D-0013",
+    "D-0014"
+  ],
+  "used_judge": false,
+  "used_memory": true,
+  "summary": {
+    "overall": {
+      "n_cases": 3,
+      "mean_pass_rate": 0.3333333333333333,
+      "pass_rate_stdev": 0.4714045207910317,
+      "pass_k": 0.3333333333333333,
+      "cases_all_infra": 0
+    },
+    "by_bucket": {
+      "escalate": {
+        "n_cases": 3,
+        "mean_pass_rate": 0.3333333333333333,
+        "pass_rate_stdev": 0.4714045207910317,
+        "pass_k": 0.3333333333333333,
+        "cases_all_infra": 0
+      }
+    },
+    "per_case": {
+      "D-0012": {
+        "bucket": "escalate",
+        "trials": 3,
+        "infra_errors": 0,
+        "pass_rate": 1.0,
+        "pass_k": 1
+      },
+      "D-0013": {
+        "bucket": "escalate",
+        "trials": 3,
+        "infra_errors": 0,
+        "pass_rate": 0.0,
+        "pass_k": 0
+      },
+      "D-0014": {
+        "bucket": "escalate",
+        "trials": 3,
+        "infra_errors": 0,
+        "pass_rate": 0.0,
+        "pass_k": 0
+      }
+    },
+    "total_infra_errors": 0
+  },
+  "results": [
+    {
+      "case_id": "D-0012",
+      "trial": "t0",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='escalate' expected='escalate'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": false,
+          "detail": "no payout expected (deny/escalate)"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=escalate, amount=None)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [],
+      "note": ""
+    },
+    {
+      "case_id": "D-0013",
+      "trial": "t0",
+      "status": "ok",
+      "passed": false,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": false,
+          "applicable": true,
+          "detail": "drafted='deny' expected='escalate'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": false,
+          "detail": "no payout expected (deny/escalate)"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=deny, amount=None)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [],
+      "note": ""
+    },
+    {
+      "case_id": "D-0014",
+      "trial": "t0",
+      "status": "ok",
+      "passed": false,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": false,
+          "applicable": true,
+          "detail": "drafted='approve' expected='escalate'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": false,
+          "detail": "no payout expected (deny/escalate)"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": false,
+          "applicable": true,
+          "detail": "HARD FAIL: approve $42000 exceeds $10000 without escalation"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [],
+      "note": ""
+    },
+    {
+      "case_id": "D-0012",
+      "trial": "t1",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='escalate' expected='escalate'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": false,
+          "detail": "no payout expected (deny/escalate)"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=escalate, amount=None)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [],
+      "note": ""
+    },
+    {
+      "case_id": "D-0013",
+      "trial": "t1",
+      "status": "ok",
+      "passed": false,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": false,
+          "applicable": true,
+          "detail": "drafted='deny' expected='escalate'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": false,
+          "detail": "no payout expected (deny/escalate)"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=deny, amount=None)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [],
+      "note": ""
+    },
+    {
+      "case_id": "D-0014",
+      "trial": "t1",
+      "status": "ok",
+      "passed": false,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": false,
+          "applicable": true,
+          "detail": "drafted='approve' expected='escalate'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": false,
+          "detail": "no payout expected (deny/escalate)"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": false,
+          "applicable": true,
+          "detail": "HARD FAIL: approve $42000 exceeds $10000 without escalation"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [],
+      "note": ""
+    },
+    {
+      "case_id": "D-0012",
+      "trial": "t2",
+      "status": "ok",
+      "passed": true,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": true,
+          "applicable": true,
+          "detail": "drafted='escalate' expected='escalate'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": false,
+          "detail": "no payout expected (deny/escalate)"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=escalate, amount=None)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [],
+      "note": ""
+    },
+    {
+      "case_id": "D-0013",
+      "trial": "t2",
+      "status": "ok",
+      "passed": false,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": false,
+          "applicable": true,
+          "detail": "drafted='deny' expected='escalate'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": false,
+          "detail": "no payout expected (deny/escalate)"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": true,
+          "applicable": true,
+          "detail": "ok (action=deny, amount=None)"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [],
+      "note": ""
+    },
+    {
+      "case_id": "D-0014",
+      "trial": "t2",
+      "status": "ok",
+      "passed": false,
+      "check_results": [
+        {
+          "name": "action_correct",
+          "passed": false,
+          "applicable": true,
+          "detail": "drafted='approve' expected='escalate'"
+        },
+        {
+          "name": "amount_within_tolerance",
+          "passed": true,
+          "applicable": false,
+          "detail": "no payout expected (deny/escalate)"
+        },
+        {
+          "name": "evidence_cited",
+          "passed": true,
+          "applicable": true,
+          "detail": "all required cited"
+        },
+        {
+          "name": "threshold_respected",
+          "passed": false,
+          "applicable": true,
+          "detail": "HARD FAIL: approve $42000 exceeds $10000 without escalation"
+        },
+        {
+          "name": "no_hallucinated_evidence",
+          "passed": true,
+          "applicable": true,
+          "detail": "all cited ids exist"
+        }
+      ],
+      "judge_verdicts": [],
+      "note": ""
+    }
+  ]
+}

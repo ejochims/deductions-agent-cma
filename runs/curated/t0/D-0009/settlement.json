@@ -1,0 +1,12 @@
+{
+  "case_id": "D-0009",
+  "action": "partial",
+  "amount": 5519.8,
+  "justification": "Harvest & Co deducted $8,899.80 against PROMO-2026-Q1-008 (Sparkling Lemonade Holiday Scandown), claiming 13,692 units of MF-BV-101 at the authorized rate of $0.65/unit. The promotion is confirmed as a valid, authorized scan-based allowance covering SKU MF-BV-101 at $0.65/unit during 2025-11-10 through 2025-12-07, with a $12,000 funding cap (contract:harvest-co:section-2.1). The performance requirement (advertised price \u2264 $7.99) was met in all four scan weeks (avg. price $7.99 each week). The claim was filed within the 90-day window (contract:harvest-co:section-3.3). No duplicate settlement exists in history.\n\nHowever, POS scan data for PROMO-2026-Q1-008 shows only 8,492 units actually scanned during the promotional period: 2,140 (wk 11/16), 2,210 (wk 11/23), 2,080 (wk 11/30), and 2,062 (wk 12/07) \u2014 a total of 8,492 units. The claim worksheet attachment is explicitly flagged as including a column labeled \"shipped+scanned\" with no stated basis for the 13,692-unit figure, indicating the retailer inflated the scan count by including shipped (but not consumer-scanned) inventory. Per contract section 2.1, scan allowances are payable per unit scanned at point of sale \u2014 shipped-but-not-scanned units are not payable.\n\nAuthorized settlement: 8,492 scanned units \u00d7 $0.65 = $5,519.80. This is within the $12,000 funding cap. The excess $3,379.00 (5,200 units \u00d7 $0.65) is denied as unsupported by POS scan data.",
+  "evidence_ids": [
+    "PROMO-2026-Q1-008",
+    "contract:harvest-co:section-2.1",
+    "contract:harvest-co:section-3.3"
+  ],
+  "drafted_at": "2026-07-06T19:14:39.462827+00:00"
+}
