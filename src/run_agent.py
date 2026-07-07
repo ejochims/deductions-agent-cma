@@ -56,7 +56,8 @@ def assert_tools_consistent(agent_cfg: dict) -> None:
     }
     fulfilled = {
         "get_deduction", "search_promotions", "get_contract_terms",
-        "get_pos_data", "check_settlement_history", "draft_settlement",
+        "get_pos_data", "check_settlement_history", "get_precedents",
+        "draft_settlement",
     }
     missing = declared - fulfilled
     extra = fulfilled - declared
@@ -311,9 +312,9 @@ def run_one_case(case_id: str, trial: str, client=None, *,
     """Run a single case end to end and persist its record.
 
     `client` is an Anthropic SDK client; when None one is constructed. `use_memory`
-    attaches the precedent memory store to the session — set False to measure the
-    with/without-memory delta. `agent_override` swaps model/thinking per
-    session for the sweep, without creating a new agent version.
+    enables the host-fulfilled precedent tool (get_precedents) — set False to
+    measure the with/without-memory delta. `agent_override` swaps model/thinking
+    per session for the sweep, without creating a new agent version.
     """
     agent_cfg = load_agent_config()
     env_cfg = load_environment_config()
@@ -325,7 +326,7 @@ def run_one_case(case_id: str, trial: str, client=None, *,
     # harness would grade the stale draft as the retry's output.
     clear_prior_draft(trial, case_id)
 
-    tools = ToolServer(FIXTURES_DIR, RUNS_DIR)
+    tools = ToolServer(FIXTURES_DIR, RUNS_DIR, precedents_enabled=use_memory)
     recorder = TrialRecorder(case_id, trial)
     t0 = time.monotonic()
     try:
@@ -334,12 +335,11 @@ def run_one_case(case_id: str, trial: str, client=None, *,
             client = anthropic.Anthropic()
         agent_id, agent_version = create_or_load_agent(client, agent_cfg)
         env_id = create_environment(client, env_cfg)
-        resources = None
-        if use_memory:
-            from memory_store import create_or_load_memory_store, memory_resource
-            resources = [memory_resource(create_or_load_memory_store(client))]
+        # Precedents are served host-side through the get_precedents tool (gated by
+        # use_memory on the ToolServer), so the session mounts no resources — the
+        # sandbox stays toolless, consistent with the anti-leakage boundary.
         run_session_for_case(client, agent_id, agent_version, env_id,
-                             case_id, trial, tools, recorder, resources=resources,
+                             case_id, trial, tools, recorder,
                              agent_override=agent_override)
     except Exception as exc:  # noqa: BLE001 — infra failures are recorded, not raised
         recorder.status = "infra_error"

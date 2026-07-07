@@ -5,12 +5,13 @@ import run_agent
 from fixtures_index import REPO_ROOT
 
 
-def test_agent_yaml_parses_and_has_six_tools():
+def test_agent_yaml_parses_and_has_seven_tools():
     cfg = yaml.safe_load((REPO_ROOT / "agent" / "agent.yaml").read_text())
     assert cfg["model"]
     assert cfg["system"].strip()
     customs = [t for t in cfg["tools"] if t["type"] == "custom"]
-    assert len(customs) == 6
+    assert len(customs) == 7
+    assert "get_precedents" in {t["name"] for t in customs}
 
 
 def test_environment_yaml_locked_down():

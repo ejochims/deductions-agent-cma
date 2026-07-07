@@ -7,13 +7,13 @@ re-orientation), then §15 for the code tour, §16 for the tests, §17 to demo i
 - **Fixtures + ground truth** — 18 cases across 6 buckets; 12 promotions, 3
   contracts, POS (incl. one missing on purpose), settlement history (incl. the
   duplicate twin and the 60% precedent). `fixtures/` + `ground_truth/`.
-- **Agent config** — `agent/agent.yaml` (system prompt, model, 6 custom tools),
+- **Agent config** — `agent/agent.yaml` (system prompt, model, 7 custom tools),
   `agent/environment.yaml` (locked-down sandbox), `agent/tools_server.py`
-  (host-side fixture fulfilment + `draft_settlement` gate), `agent/memory_seed.json`.
+  (host-side fixture fulfilment + `get_precedents` + `draft_settlement` gate).
 - **Harness** — `src/graders.py` (5 checks), `src/judge.py` (3 isolated dimensions),
   `src/eval_runner.py` (3×N, pass^k, infra separation, per-bucket rollups),
   `src/calibration.py` (gates A + B), `src/null_agent.py`, `src/fixtures_index.py`,
-  `src/memory_store.py`, `src/sweep.py`.
+  `src/sweep.py`.
 - **Tests** — `tests/` (pytest); CI runs them + calibration on every push.
 - **Local UI** — `ui/` (Streamlit, `make ui`): case queue, investigation
   replay + grader scorecard, results dashboard with offline null-baseline demo,

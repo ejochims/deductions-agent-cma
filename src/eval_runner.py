@@ -211,7 +211,7 @@ def main() -> None:
                         help="Case ids to run (default: all cases).")
     parser.add_argument("--judge", action="store_true", help="Enable the LLM judge.")
     parser.add_argument("--no-memory", action="store_true",
-                        help="Detach the precedent memory store (for the with/without delta).")
+                        help="Disable the precedent tool (for the with/without delta).")
     parser.add_argument("--estimate-only", action="store_true",
                         help="Print the cost estimate and exit without running.")
     args = parser.parse_args()

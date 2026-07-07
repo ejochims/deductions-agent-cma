@@ -42,7 +42,8 @@ def _normalize(retailer: str) -> str:
 
 
 class ToolServer:
-    def __init__(self, fixtures_dir: str | Path, runs_dir: str | Path) -> None:
+    def __init__(self, fixtures_dir: str | Path, runs_dir: str | Path,
+                 precedents_enabled: bool = True) -> None:
         self.fixtures = Path(fixtures_dir)
         self.runs = Path(runs_dir)
         # Load the small, static fixtures once.
@@ -50,6 +51,11 @@ class ToolServer:
         self.retailers: list = self._load_json("retailers.json")
         self.promotions: list = self._load_json("promotions.json")
         self.history: list = self._load_json("settlement_history.json")
+        # Meridian's cross-claim settlement precedents/conventions. Gated by
+        # precedents_enabled so the eval can measure the with/without-memory delta
+        # (--no-memory) without a native store: memory off => the tool returns none.
+        self.precedents_enabled = precedents_enabled
+        self.precedents: list = self._load_json("precedents.json")
         # Map any accepted retailer spelling -> canonical retailer_id.
         self._retailer_ids: dict[str, str] = {}
         for r in self.retailers:
@@ -154,6 +160,23 @@ class ToolServer:
             "settlements": results,
         }
 
+    def get_precedents(self) -> dict:
+        """Return Meridian's settlement precedents and conventions.
+
+        Host-fulfilled precedent recall: the same role the (deliberately toolless)
+        sandbox can't serve via a mounted memory store. When precedents are
+        disabled the tool still answers, but with an empty set — mirroring how
+        get_pos_data reports missing POS, and giving the eval a clean
+        with/without-memory delta rather than a crash.
+        """
+        if not self.precedents_enabled:
+            return {
+                "count": 0,
+                "precedents": [],
+                "message": "No precedent store is available for this session.",
+            }
+        return {"count": len(self.precedents), "precedents": self.precedents}
+
     def draft_settlement(
         self,
         case_id: str,
@@ -221,6 +244,8 @@ class ToolServer:
             return self.check_settlement_history(
                 tool_input["retailer"], tool_input.get("invoice_ref")
             )
+        if name == "get_precedents":
+            return self.get_precedents()
         if name == "draft_settlement":
             return self.draft_settlement(
                 tool_input["case_id"],

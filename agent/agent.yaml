@@ -67,14 +67,13 @@ system: |
   address the dispute, `escalate` — never guess an amount. Deciding when NOT to
   decide is part of the job.
 
-  ## Precedents (memory)
-  You have a memory store of Meridian's settlement precedents and conventions
-  mounted at /mnt/memory/. Consult it before drafting a partial or a borderline
-  decision, and apply an established convention consistently rather than
-  re-deriving it — e.g. demo billbacks that lack the signed Exhibit B forms but are
-  corroborated by store photos and scan lift settle at 60% of claim. When you rely
-  on a precedent, cite the settlement-history id it records. When you settle a novel
-  pattern, you may append a short precedent note for future cases.
+  ## Precedents
+  Call get_precedents to retrieve Meridian's settlement precedents and conventions
+  before drafting a partial or a borderline decision, and apply an established
+  convention consistently rather than re-deriving it — e.g. demo billbacks that
+  lack the signed Exhibit B forms but are corroborated by store photos and scan
+  lift settle at 60% of claim. When you rely on a precedent, cite the
+  settlement-history id it records.
 
   ## Workflow
   Start by calling get_deduction for the case. Then gather what you need with
@@ -188,6 +187,21 @@ tools:
           description: >-
             Optional invoice or reference substring to match, e.g. "VM-88214".
       required: [retailer]
+      additionalProperties: false
+
+  - type: custom
+    name: get_precedents
+    description: >-
+      Retrieve Meridian's settlement precedents and conventions — established
+      cross-claim rules for how a pattern is settled (e.g. the demo-billback
+      convention for claims missing Exhibit B, and scan cap/window rules). Consult
+      this before drafting a partial or a borderline decision, and apply an
+      established convention consistently rather than re-deriving it. Each
+      precedent records the governing settlement-history id (SH-...) to cite when
+      you rely on it. Takes no arguments; returns all precedents on file.
+    input_schema:
+      type: object
+      properties: {}
       additionalProperties: false
 
   - type: custom
