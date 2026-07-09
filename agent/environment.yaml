@@ -1,7 +1,7 @@
 # Managed Agents environment for the Deductions Desk agent.
 # Applied with:  ant beta:environments create < agent/environment.yaml
 #
-# Anti-leakage by construction: this environment mounts NOTHING. All six tools are
+# Anti-leakage by construction: this environment mounts NOTHING. All seven tools are
 # custom tools fulfilled host-side by the orchestrator (src/run_agent.py via
 # agent/tools_server.py), so fixtures/ never enters the container and ground_truth/
 # is unreachable by design. The agent has no bash/read/write and makes no outbound

@@ -230,7 +230,7 @@ with tab_dashboard:
 with tab_live:
     has_key = bool(os.environ.get("ANTHROPIC_API_KEY"))
     st.write("Drives one Managed Agents session end to end: the agent "
-             "investigates via its six tools (fulfilled locally from fixtures) "
+             "investigates via its seven tools (fulfilled locally from fixtures) "
              "and drafts a settlement. **Costs ~\\$0.15 and takes 1–3 minutes.**")
     if not has_key:
         st.warning("`ANTHROPIC_API_KEY` is not set — set it and restart the UI "

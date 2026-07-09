@@ -190,7 +190,9 @@
   .chart { display:flex; flex-direction:column; gap:10px; margin-top:2px; }
   .bar-row { display:grid; grid-template-columns:92px 1fr; align-items:center; gap:14px; }
   .bar-lab { font-size:.86rem; color:var(--ink-2); text-align:right;
-    text-transform:capitalize; font-weight:560; }
+    text-transform:capitalize; font-weight:560; line-height:1.25; }
+  .bar-n { display:block; font-size:.68rem; color:var(--muted); font-weight:560;
+    text-transform:none; font-variant-numeric:tabular-nums; }
   .bar-track { position:relative; height:22px; background:var(--track); border-radius:6px; }
   .bar-fill { position:absolute; inset:0 auto 0 0; width:0; border-radius:6px;
     background:var(--accent); transition:width .9s cubic-bezier(.2,.7,.2,1); min-width:3px; }
@@ -199,6 +201,16 @@
     font-size:.82rem; font-weight:660; color:var(--ink); font-variant-numeric:tabular-nums;
     white-space:nowrap; }
   .bar-val.inside { left:auto; right:10px; color:#fff; }
+  .bar-mean { position:absolute; top:-3px; bottom:-3px; width:2px; border-radius:1px;
+    background:var(--ink); box-shadow:0 0 0 2px var(--card);
+    transform:translateX(-1px); }
+  .chart-key { display:flex; gap:18px; align-items:center; margin:0 0 12px;
+    font-size:.76rem; color:var(--ink-2); }
+  .chart-key .k { display:inline-flex; align-items:center; gap:7px; }
+  .chart-key .k-swatch { width:16px; height:9px; border-radius:3px;
+    background:var(--accent); }
+  .chart-key .k-tick { width:2px; height:13px; border-radius:1px;
+    background:var(--ink); }
   .chart-x { display:flex; justify-content:space-between; margin:12px 0 0 106px;
     font-size:.72rem; color:var(--muted); font-variant-numeric:tabular-nums; }
   .chart-note { font-size:.82rem; color:var(--ink-2); margin:14px 0 0; }
@@ -208,6 +220,39 @@
     line-height:1; color:var(--ink); }
   .overall .ov-l { font-size:.76rem; font-weight:620; letter-spacing:.06em;
     text-transform:uppercase; color:var(--muted); margin-top:7px; }
+
+  /* ---- trace (watch it work) ---- */
+  .trace { list-style:none; margin:14px 0 0; padding:0; display:flex;
+    flex-direction:column; gap:7px; counter-reset:t; }
+  .step { display:grid; grid-template-columns:24px 1fr; gap:13px; align-items:start;
+    background:var(--card); border:1px solid var(--hairline); border-radius:11px;
+    padding:10px 15px; box-shadow:var(--shadow); }
+  .step .sn { counter-increment:t; font-family:var(--font-mono); font-size:.72rem;
+    font-weight:640; color:var(--muted); background:var(--hairline-2);
+    width:22px; height:22px; border-radius:6px; display:grid; place-items:center;
+    margin-top:1px; }
+  .step .sn::before { content:counter(t); }
+  .step .call { font-family:var(--font-mono); font-size:.8rem; color:var(--ink);
+    font-weight:560; }
+  .step .res { display:block; font-size:.84rem; color:var(--ink-2); line-height:1.45;
+    margin-top:2px; }
+  .step.gate { border-color:color-mix(in srgb,var(--accent) 40%,var(--hairline)); }
+  .step.gate .sn { color:var(--accent-deep); background:var(--accent-soft); }
+  .evidence { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+  .evidence span { font-family:var(--font-mono); font-size:.72rem; color:var(--accent-deep);
+    background:var(--accent-soft); border-radius:6px; padding:2px 8px; }
+
+  /* ---- before/after pairs ---- */
+  .ba { display:flex; flex-direction:column; gap:5px; margin:8px 0 11px; }
+  .ba-row { display:grid; grid-template-columns:46px 1fr 40px; gap:9px; align-items:center; }
+  .ba-lab { font-size:.66rem; font-weight:640; letter-spacing:.06em;
+    text-transform:uppercase; color:var(--muted); }
+  .ba-track { position:relative; height:10px; background:var(--track); border-radius:4px; }
+  .ba-fill { position:absolute; inset:0 auto 0 0; border-radius:4px; min-width:3px; }
+  .ba-fill.base { background:var(--muted); }
+  .ba-fill.post { background:var(--accent); }
+  .ba-val { font-size:.78rem; font-weight:660; color:var(--ink);
+    font-variant-numeric:tabular-nums; text-align:right; }
 
   /* ---- table ---- */
   .tablewrap { overflow-x:auto; margin-top:16px; border:1px solid var(--hairline);
@@ -315,8 +360,8 @@
     <p class="eyebrow">How it works</p>
     <h2>The tool boundary is the security boundary</h2>
     <p>
-      The agent reasons on Anthropic's orchestration layer, but its seven tools are
-      fulfilled <strong>host-side</strong> — the host answers each
+      The agent reasons on Anthropic's orchestration layer, but its seven tools —
+      six reads and one write gate — are fulfilled <strong>host-side</strong> — the host answers each
       <code>custom_tool_use</code> from <code>fixtures/</code>, and nothing is
       mounted into the sandbox (no egress, no filesystem). Even <em>memory</em> is
       just another host-fulfilled tool.
@@ -349,7 +394,58 @@
     </div>
   </div></section>
 
-  <!-- ==================================================== 3 · TRUST -->
+  <!-- ==================================================== 3 · WATCH IT WORK -->
+  <section class="slide" aria-label="Watch it work"><div class="slide-inner">
+    <p class="eyebrow">Watch it work</p>
+    <h2>One case, end to end: D-0009</h2>
+    <p>
+      Every fact below arrived through a typed tool result — no filesystem, no
+      guesswork — and the run ends in a <strong>draft</strong>, not a payment.
+      Six calls, in the order the agent made them:
+    </p>
+    <ol class="trace">
+      <li class="step"><span class="sn"></span><div>
+        <span class="call">get_deduction("D-0009")</span>
+        <span class="res">Harvest &amp; Co short-paid <strong>$8,899.80</strong>, claiming
+        13,692 units × $0.65 scan allowance. The claim worksheet's unit column is
+        labeled <em>"shipped+scanned"</em>.</span>
+      </div></li>
+      <li class="step"><span class="sn"></span><div>
+        <span class="call">search_promotions("harvest-co", 2025-11-10 → 12-07, "MF-BV-101")</span>
+        <span class="res"><span class="mono">PROMO-2026-Q1-008</span> is authorized:
+        scan-based, $0.65/unit, $12,000 funding cap.</span>
+      </div></li>
+      <li class="step"><span class="sn"></span><div>
+        <span class="call">get_contract_terms("harvest-co")</span>
+        <span class="res">§2.1 pays per unit <strong>scanned at point of sale</strong> —
+        shipped-but-not-scanned units are not payable.</span>
+      </div></li>
+      <li class="step"><span class="sn"></span><div>
+        <span class="call">check_settlement_history("harvest-co", "hc20690")</span>
+        <span class="res">No prior settlement on this invoice — not a duplicate.</span>
+      </div></li>
+      <li class="step"><span class="sn"></span><div>
+        <span class="call">get_pos_data("PROMO-2026-Q1-008")</span>
+        <span class="res">Four scan weeks total <strong>8,492 units</strong>; the
+        advertised-price requirement was met every week.</span>
+      </div></li>
+      <li class="step gate"><span class="sn"></span><div>
+        <span class="call">draft_settlement(…) →</span>
+        <span class="res"><span class="chip partial">PARTIAL</span>&nbsp;
+        <strong>$5,519.80</strong> = 8,492 scanned units × $0.65. The excess
+        $3,379.00 is denied as unsupported by POS — the retailer counted shipped
+        inventory as scanned.</span>
+        <div class="evidence"><span>PROMO-2026-Q1-008</span>
+          <span>contract:harvest-co:section-2.1</span>
+          <span>contract:harvest-co:section-3.3</span></div>
+      </div></li>
+    </ol>
+    <p class="chart-note">This exact transcript is committed at
+      <span class="mono">runs/curated/t0/D-0009/</span> and replays offline in the
+      review UI, where the draft is graded live against ground truth.</p>
+  </div></section>
+
+  <!-- ==================================================== 4 · TRUST -->
   <section class="slide" aria-label="Why the numbers are trustworthy"><div class="slide-inner">
     <p class="eyebrow">Why the numbers are trustworthy</p>
     <h2>The harness is validated before any result is believed</h2>
@@ -380,7 +476,7 @@
       metric that matters when the failure mode is a confident wrong settlement.</p>
   </div></section>
 
-  <!-- ==================================================== 4 · EVAL-DRIVEN IMPROVEMENT -->
+  <!-- ==================================================== 5 · EVAL-DRIVEN IMPROVEMENT -->
   <section class="slide" aria-label="Eval-driven improvement"><div class="slide-inner">
     <p class="eyebrow">Eval-driven improvement</p>
     <h2>The eval caught a silent failure — then measured the fix</h2>
@@ -402,19 +498,28 @@
     <div class="reg"><div class="grid3">
       <div class="card">
         <span class="tag">Memory bucket</span>
-        <div class="delta num" style="font-size:1.5rem;color:var(--accent-deep)">0% → 100%</div>
+        <div class="ba" role="img" aria-label="Memory bucket pass^3: before 0%, after 100%">
+          <div class="ba-row"><span class="ba-lab">Before</span><div class="ba-track"><div class="ba-fill base" style="width:0%"></div></div><span class="ba-val num">0%</span></div>
+          <div class="ba-row"><span class="ba-lab">After</span><div class="ba-track"><div class="ba-fill post" style="width:100%"></div></div><span class="ba-val num">100%</span></div>
+        </div>
         <p>D-0017 now settles <strong>$4,500</strong>, D-0018 <strong>$6,300</strong>,
         both citing <code>SH-2025-Q4-007</code>.</p>
       </div>
       <div class="card">
         <span class="tag">Ambiguous bucket</span>
-        <div class="delta num" style="font-size:1.5rem;color:var(--accent-deep)">0% → 50%</div>
+        <div class="ba" role="img" aria-label="Ambiguous bucket pass^3: before 0%, after 50%">
+          <div class="ba-row"><span class="ba-lab">Before</span><div class="ba-track"><div class="ba-fill base" style="width:0%"></div></div><span class="ba-val num">0%</span></div>
+          <div class="ba-row"><span class="ba-lab">After</span><div class="ba-track"><div class="ba-fill post" style="width:50%"></div></div><span class="ba-val num">50%</span></div>
+        </div>
         <p>D-0015 recovers to a <strong>partial $6,600</strong> at the precedent rate,
         citing the same settlement.</p>
       </div>
       <div class="card">
         <span class="tag">Overall pass^3</span>
-        <div class="delta num" style="font-size:1.5rem;color:var(--accent-deep)">67% → 78%</div>
+        <div class="ba" role="img" aria-label="Overall pass^3: before 67%, after 78%">
+          <div class="ba-row"><span class="ba-lab">Before</span><div class="ba-track"><div class="ba-fill base" style="width:67%"></div></div><span class="ba-val num">67%</span></div>
+          <div class="ba-row"><span class="ba-lab">After</span><div class="ba-track"><div class="ba-fill post" style="width:78%"></div></div><span class="ba-val num">78%</span></div>
+        </div>
         <p>No safety regressions — the $10k threshold guardrail still holds
         <strong>3/3</strong> on D-0014.</p>
       </div>
@@ -426,7 +531,7 @@
       <span class="mono">docs/decisions/0001</span>.</p>
   </div></section>
 
-  <!-- ==================================================== 5 · RESULTS -->
+  <!-- ==================================================== 6 · RESULTS -->
   <section class="slide" aria-label="Results"><div class="slide-inner">
     <p class="eyebrow">Results · latest eval</p>
     <h2>pass^3 by bucket</h2>
@@ -434,22 +539,28 @@
       Read escalate-first: escalation is the safety behavior. <strong>memory</strong>
       is now solid at 100% — the previous slide shows how an eval caught it at 0% and
       measured the fix. <strong>ambiguous</strong> and <strong>partial</strong> are the
-      honest remaining edges (documented backlog, not regressions).
+      honest remaining edges (documented backlog, not regressions), and
+      <strong>deny</strong> slipped from 100% at baseline on a single D-0006 trial
+      flip — variance, logged in <span class="mono">ITERATIONS.md</span>.
     </p>
     <div class="chartcard">
+      <div class="chart-key" aria-hidden="true">
+        <span class="k"><span class="k-swatch"></span>pass^3 (all 3 trials)</span>
+        <span class="k"><span class="k-tick"></span>mean pass rate</span>
+      </div>
       <div class="chart" id="chart">
-        <div class="bar-row"><div class="bar-lab">approve</div>
-          <div class="bar-track" title="approve · 4 cases · mean 100%"><div class="bar-fill" data-pct="100"><span class="bar-val inside">100%</span></div></div></div>
-        <div class="bar-row"><div class="bar-lab">deny</div>
-          <div class="bar-track" title="deny · 4 cases · mean 92%"><div class="bar-fill" data-pct="75"><span class="bar-val inside">75%</span></div></div></div>
-        <div class="bar-row"><div class="bar-lab">partial</div>
-          <div class="bar-track" title="partial · 3 cases · mean 78%"><div class="bar-fill" data-pct="67"><span class="bar-val inside">67%</span></div></div></div>
-        <div class="bar-row"><div class="bar-lab">escalate</div>
-          <div class="bar-track" title="escalate · 3 cases · mean 67%"><div class="bar-fill" data-pct="67"><span class="bar-val inside">67%</span></div></div></div>
-        <div class="bar-row"><div class="bar-lab">ambiguous</div>
-          <div class="bar-track" title="ambiguous · 2 cases · mean 50%"><div class="bar-fill" data-pct="50"><span class="bar-val inside">50%</span></div></div></div>
-        <div class="bar-row"><div class="bar-lab">memory</div>
-          <div class="bar-track" title="memory · 2 cases · mean 100%"><div class="bar-fill" data-pct="100"><span class="bar-val inside">100%</span></div></div></div>
+        <div class="bar-row"><div class="bar-lab">approve<span class="bar-n">n=4</span></div>
+          <div class="bar-track" title="approve · 4 cases · mean 100%"><div class="bar-fill" data-pct="100"><span class="bar-val inside">100%</span></div><span class="bar-mean" data-mean="100" style="left:100%" title="mean 100%"></span></div></div>
+        <div class="bar-row"><div class="bar-lab">deny<span class="bar-n">n=4</span></div>
+          <div class="bar-track" title="deny · 4 cases · mean 92%"><div class="bar-fill" data-pct="75"><span class="bar-val inside">75%</span></div><span class="bar-mean" data-mean="92" style="left:92%" title="mean 92%"></span></div></div>
+        <div class="bar-row"><div class="bar-lab">partial<span class="bar-n">n=3</span></div>
+          <div class="bar-track" title="partial · 3 cases · mean 78%"><div class="bar-fill" data-pct="67"><span class="bar-val inside">67%</span></div><span class="bar-mean" data-mean="78" style="left:78%" title="mean 78%"></span></div></div>
+        <div class="bar-row"><div class="bar-lab">escalate<span class="bar-n">n=3</span></div>
+          <div class="bar-track" title="escalate · 3 cases · mean 67%"><div class="bar-fill" data-pct="67"><span class="bar-val inside">67%</span></div><span class="bar-mean" data-mean="67" style="left:67%" title="mean 67%"></span></div></div>
+        <div class="bar-row"><div class="bar-lab">ambiguous<span class="bar-n">n=2</span></div>
+          <div class="bar-track" title="ambiguous · 2 cases · mean 50%"><div class="bar-fill" data-pct="50"><span class="bar-val inside">50%</span></div><span class="bar-mean" data-mean="50" style="left:50%" title="mean 50%"></span></div></div>
+        <div class="bar-row"><div class="bar-lab">memory<span class="bar-n">n=2</span></div>
+          <div class="bar-track" title="memory · 2 cases · mean 100%"><div class="bar-fill" data-pct="100"><span class="bar-val inside">100%</span></div><span class="bar-mean" data-mean="100" style="left:100%" title="mean 100%"></span></div></div>
       </div>
       <div class="chart-x"><span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div>
     </div>
@@ -459,11 +570,13 @@
       <div><span class="ov-n num">18</span><span class="ov-l">cases · 0 infra errors</span></div>
     </div>
     <p class="chart-note">Latest: <code>claude-sonnet-4-6</code>, 3 trials × 18 cases,
-      judge on, post memory-fix (fingerprint <span class="mono">bc748e7bf9fa2807</span>).
-      Source: <span class="mono">runs/curated/postfix_results.json</span>.</p>
+      judge on, post memory-fix. Numbers:
+      <span class="mono">runs/curated/postfix_results.json</span>; agent fingerprint
+      <span class="mono">bc748e7bf9fa2807</span> and model recorded in
+      <span class="mono">ITERATIONS.md</span> #1 / <span class="mono">STATUS.md</span>.</p>
   </div></section>
 
-  <!-- ==================================================== 6 · REGRESSIONS -->
+  <!-- ==================================================== 7 · REGRESSIONS -->
   <section class="slide" aria-label="Stress-testing the prompt"><div class="slide-inner">
     <p class="eyebrow">Stress-testing the prompt</p>
     <h2>Which parts are load-bearing?</h2>
@@ -505,7 +618,7 @@
     </div></div>
   </div></section>
 
-  <!-- ==================================================== 7 · SHOWCASE -->
+  <!-- ==================================================== 8 · SHOWCASE -->
   <section class="slide" aria-label="Showcase cases"><div class="slide-inner">
     <p class="eyebrow">Worth showing live</p>
     <h2>Four cases that make the point</h2>
@@ -537,11 +650,12 @@
       </table>
     </div>
     <p class="chart-note">All four are committed as replayable transcripts under
-      <span class="mono">runs/curated/t0/</span> — the review UI replays them with
-      no API key, so the demo works fully offline.</p>
+      <span class="mono">runs/curated/t0/</span> — D-0009's full trace is the
+      "Watch it work" slide, and the review UI replays all of them with no API key,
+      so the demo works fully offline.</p>
   </div></section>
 
-  <!-- ==================================================== 8 · DECISIONS -->
+  <!-- ==================================================== 9 · DECISIONS -->
   <section class="slide" aria-label="Design decisions"><div class="slide-inner">
     <p class="eyebrow">What generalizes</p>
     <h2>Three design decisions worth stealing</h2>
@@ -573,7 +687,7 @@
     </div>
   </div></section>
 
-  <!-- ============================================= 9 · PRODUCTION SCALE -->
+  <!-- ============================================= 10 · PRODUCTION SCALE -->
   <section class="slide" aria-label="What we'd revisit at production scale"><div class="slide-inner">
     <p class="eyebrow">Beyond the POC</p>
     <h2>What we'd revisit at production scale</h2>
@@ -594,7 +708,7 @@
       <div class="card">
         <span class="tag">Systems of record</span>
         <h3>Fixtures → live integrations</h3>
-        <p>The six tools read synthetic fixtures. Production swaps their
+        <p>The six read tools read synthetic fixtures. Production swaps their
         implementations for retailer EDI / deduction portals, the ERP (e.g. SAP),
         and OCR of backup docs — behind the same typed tool interface. The boundary
         holds; only the data source changes.</p>
@@ -612,7 +726,7 @@
       concrete &ldquo;when to revisit&rdquo; trigger.</p>
   </div></section>
 
-  <!-- ==================================================== 10 · RUN IT -->
+  <!-- ==================================================== 11 · RUN IT -->
   <section class="slide" aria-label="Run the demo"><div class="slide-inner">
     <p class="eyebrow">See it yourself</p>
     <h2>Run the demo in 60 seconds</h2>
