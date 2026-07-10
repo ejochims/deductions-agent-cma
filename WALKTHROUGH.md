@@ -869,10 +869,11 @@ side.
 ### Pre-demo checklist
 
 ```bash
-make lint test      # tests pass
+make lint test      # tests pass (includes the deck-figure drift guard)
 make gates          # Gate A PASS, Gate B PASS
 export ANTHROPIC_API_KEY=sk-ant-...   # optional — only the Live-run tab needs it
-make demo           # boots at :8501; leave it running
+make demo           # review UI at :8501; leave it running
+make deck           # slide deck at :8777 (second terminal, or open the file directly)
 ```
 
 - The demo works offline out of the box: `runs/results.json` is committed (the
@@ -885,6 +886,31 @@ make demo           # boots at :8501; leave it running
 - Bump the terminal font; keep one terminal on the repo root and the browser on
   the UI.
 - Decide the fallback now, not mid-demo (see below).
+
+### The slide deck
+
+`docs/presentation.html` is a self-contained 14-slide deck (embedded fonts, no
+network needed — it works from `file://`). Serve it with `make deck` at :8777;
+`docs/index.html` redirects to it. The arc: title → the problem → the approach →
+a real tool-call trace (D-0009) → why Managed Agents → the eval harness → two
+refinement slides (the memory bug, then ablations) → results → showcase cases →
+design decisions → production outlook → honest limits → run it.
+
+Presenting controls:
+
+- **→ / space** reveals the next card or trace step on the current slide, then
+  advances to the next slide; **←** always goes back one slide. Jumping via the
+  dots, a `#s7`-style link, or swipe shows the whole slide at once, so shared
+  links read normally.
+- **n** toggles the speaker-notes panel (one cue card per slide, audience never
+  sees it unless you're mirroring).
+- The theme toggle (top right) persists; **Home/End** jump to first/last slide.
+- Printing (Ctrl/Cmd-P) lays the slides out as vertical pages — use it to hand
+  out a PDF.
+
+A natural split for a live session: deck slides 1–9 carry the story, the review
+UI takes over for the live run and dashboard (the script below), and slides
+10–14 close.
 
 ### A short demo script (~12 minutes)
 
@@ -906,8 +932,7 @@ Anthropic's side; every tool call comes back to this laptop as an event and is
 fulfilled from local fixtures (§5). When it finishes, open the **Investigation
 viewer**: step through the tool calls — deduction → promo search → POS pull —
 to the reconciliation: POS supports **8,492** of 13,692 claimed units, so it
-drafts **partial at $5,519.80**, citing the promo. Not approve, not deny — the
-math.
+drafts **partial at $5,519.80**, citing the promo. The scans set the number.
 
 **4. How we know that's right (3 min, same screen + dashboard).** The grader
 scorecard is right under the draft: five programmatic checks, pass/fail, live.

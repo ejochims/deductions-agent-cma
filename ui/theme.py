@@ -10,12 +10,12 @@ from __future__ import annotations
 import altair as alt
 
 # ---------------------------------------------------------------- palette roles
-INK = "#0b0b0b"            # primary ink
+INK = "#16150f"            # primary ink (matches docs/presentation.html tokens)
 INK_2 = "#52514e"          # secondary ink
-MUTED = "#898781"          # axis / captions
-SURFACE = "#fcfcfb"        # card surface
-PLANE = "#f9f9f7"          # page plane
-HAIRLINE = "#e1e0d9"       # gridline / borders
+MUTED = "#8a8880"          # axis / captions
+SURFACE = "#fdfdfc"        # card surface
+PLANE = "#f4f3ee"          # page plane
+HAIRLINE = "#e2e1da"       # gridline / borders
 ACCENT = "#2a78d6"         # blue (categorical slot 1) — the one accent hue
 ACCENT_DEEP = "#1c5cab"
 
@@ -90,10 +90,12 @@ CSS = f"""
 /* page rhythm */
 .block-container {{ max-width: 1180px; padding-top: 2.2rem; padding-bottom: 4rem; }}
 
-/* type scale */
-h1 {{ font-weight: 750 !important; letter-spacing: -0.02em !important;
+/* type scale — editorial serif headings, echoing the deck's display face */
+h1 {{ font-family: Georgia, 'Times New Roman', serif !important;
+     font-weight: 700 !important; letter-spacing: -0.015em !important;
      font-size: 2.05rem !important; color: {INK} !important; }}
-h2, h3 {{ font-weight: 650 !important; letter-spacing: -0.01em !important;
+h2, h3 {{ font-family: Georgia, 'Times New Roman', serif !important;
+          font-weight: 650 !important; letter-spacing: -0.01em !important;
           color: {INK} !important; }}
 [data-testid="stCaptionContainer"] p {{ color: {INK_2}; }}
 
@@ -101,7 +103,8 @@ h2, h3 {{ font-weight: 650 !important; letter-spacing: -0.01em !important;
 [data-testid="stMetric"] {{
   background: {SURFACE}; border: 1px solid {HAIRLINE}; border-radius: 12px;
   padding: 14px 16px 12px 16px;
-  box-shadow: 0 1px 2px rgba(11,11,11,0.03);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.85),
+              0 1px 2px rgba(22,21,15,.03), 0 10px 28px -18px rgba(22,21,15,.16);
 }}
 [data-testid="stMetricLabel"] p {{ color: {MUTED}; font-size: 0.78rem;
   font-weight: 600; letter-spacing: .05em; text-transform: uppercase; }}
