@@ -395,6 +395,16 @@
   .reduced .fx-in, .reduced .ba-fill, .reduced .bar-mean {
     opacity:1; transform:none; transition:none; }
 
+  /* ---- staged reveals: .frag steps in one per keypress while presenting ---- */
+  .frag { opacity:0; transform:translateY(12px);
+    transition:opacity .45s ease, transform .5s cubic-bezier(.2,.7,.2,1); }
+  .frag.on { opacity:1; transform:none; }
+  .frag .ba-fill { transform:scaleX(0); }
+  .slide.active .frag.on .ba-fill { transform:scaleX(1); }
+  .reduced .frag { transition:none; transform:none; }
+  .reduced .frag .ba-fill { transition:none; }
+  .reduced .frag.on .ba-fill { transform:none; }
+
   @media (max-width:720px) {
     .kpis, .grid2, .grid3, .reg .grid3 { grid-template-columns:1fr; }
     .grid3 { grid-template-columns:1fr; }
@@ -878,19 +888,42 @@
         adversarial eval bucket so prompt injection shows up in the score.</p>
       </div>
     </div>
-    <div class="callout">
-      <p>Known measurement gaps (<span class="mono">NEXT_STEPS.md</span>): no
-      dev/test split yet, small buckets, a judge calibrated on three planted
-      negatives. Those close before the agent gets more autonomy.</p>
-    </div>
     <p class="chart-note" style="margin-top:9px;">Each design fork is captured as an
       architecture decision in <span class="mono">docs/decisions/</span>, with a
       concrete &ldquo;when to revisit&rdquo; trigger.</p>
   </div></section>
 
-  <!-- ==================================================== 13 · RUN IT -->
+  <!-- ============================================= 13 · HONEST LIMITS -->
+  <section class="slide" aria-label="Known limits"><div class="slide-inner">
+    <p class="eyebrow">12 · Honest limits</p>
+    <h2>What we'd fix before trusting it further</h2>
+    <p>
+      Tracked in <span class="mono">NEXT_STEPS.md</span> — these close before the
+      agent gets more autonomy.
+    </p>
+    <div class="grid3">
+      <div class="card">
+        <span class="tag">Eval hygiene</span>
+        <h3>No dev/test split yet</h3>
+        <p>Tuning the prompt against all 18 cases would measure memorization.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Statistics</span>
+        <h3>Small buckets</h3>
+        <p>2–4 cases each — one flipped case moves a bucket 25–50 points.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Judge trust</span>
+        <h3>Thin judge calibration</h3>
+        <p>Three planted negatives so far; human-agreement checks come before the
+        judge gates anything.</p>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- ==================================================== 14 · RUN IT -->
   <section class="slide" aria-label="Run the demo"><div class="slide-inner">
-    <p class="eyebrow">12 · Run it</p>
+    <p class="eyebrow">13 · Run it</p>
     <h2>Run the demo in 60 seconds</h2>
     <div class="grid2">
       <div class="run">
@@ -956,13 +989,29 @@ make demo   <span class="cm"># review UI at :8501</span></pre>
 
     let idx = 0;
 
+    // staged reveals: cards/steps step in one per keypress while presenting.
+    // Jumps (dots, hash, swipe, Home/End) show the whole slide.
+    slides.forEach((s) => {
+      s.querySelectorAll('.grid3 > .card, .trace > .step, .decisions > .decision')
+        .forEach((el) => el.classList.add('frag'));
+    });
+    const frags = slides.map((s) => Array.from(s.querySelectorAll('.frag')));
+    const shown = frags.map((f) => f.length);
+
+    function paintFrags(i) {
+      frags[i].forEach((el, j) => el.classList.toggle('on', j < shown[i]));
+    }
+
     // staggered entrance: stamp targets per slide (no-JS = nothing hidden)
     slides.forEach((s) => {
+      let i = 0;
       s.querySelectorAll(
         'h1, h2, .lead, .kpi, .meta-rule, .card, .step, .decision, .node, .flow, .run, .chartcard, .tablewrap, .overall, .stats, .callout'
-      ).forEach((el, i) => {
+      ).forEach((el) => {
+        if (el.classList.contains('frag')) return;
         el.classList.add('fx-in');
         el.style.setProperty('--i', i);
+        i += 1;
       });
     });
 
@@ -995,8 +1044,10 @@ make demo   <span class="cm"># review UI at :8501</span></pre>
       });
     }
 
-    function go(n, fromHash) {
+    function go(n, fromHash, keepFrags) {
       idx = Math.max(0, Math.min(total - 1, n));
+      if (!keepFrags) shown[idx] = frags[idx].length;
+      paintFrags(idx);
       track.style.transform = 'translateX(' + (-idx * 100) + 'vw)';
       slides.forEach((s, i) => {
         s.scrollTop = 0;
@@ -1014,15 +1065,21 @@ make demo   <span class="cm"># review UI at :8501</span></pre>
       if (idx > 0 && hint) { hint.style.opacity = '0'; }
     }
 
+    // forward reveals the next fragment before advancing the slide
+    function next() {
+      if (shown[idx] < frags[idx].length) { shown[idx] += 1; paintFrags(idx); return; }
+      if (idx < total - 1) { shown[idx + 1] = 0; go(idx + 1, false, true); }
+    }
+
     prevBtn.addEventListener('click', () => go(idx - 1));
-    nextBtn.addEventListener('click', () => go(idx + 1));
+    nextBtn.addEventListener('click', () => next());
 
     document.addEventListener('keydown', (e) => {
       if (e.metaKey || e.ctrlKey || e.altKey) return;
       switch (e.key) {
-        case 'ArrowRight': case 'PageDown': go(idx + 1); e.preventDefault(); break;
+        case 'ArrowRight': case 'PageDown': next(); e.preventDefault(); break;
         case 'ArrowLeft':  case 'PageUp':   go(idx - 1); e.preventDefault(); break;
-        case ' ': go(idx + 1); e.preventDefault(); break;
+        case ' ': next(); e.preventDefault(); break;
         case 'Home': go(0); e.preventDefault(); break;
         case 'End':  go(total - 1); e.preventDefault(); break;
       }
