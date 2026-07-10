@@ -595,8 +595,10 @@
     <p class="eyebrow">04 · Platform</p>
     <h2>Why Claude Managed Agents</h2>
     <p>
-      The agent loop runs on Anthropic's servers. This repo ships no orchestration
-      machinery — just a thin event stream
+      The agent loop runs on Anthropic's servers. The alternative — a hand-rolled
+      loop over the Messages API — would mean owning session state, retries,
+      version pinning, and sandbox management before writing any deductions logic.
+      Here the repo ships a thin event stream
       (<span class="mono">src/run_agent.py</span>), the tool fulfilment layer, and
       the eval harness wrapped around them. Three platform properties carry the
       design:
@@ -767,11 +769,14 @@
     <h2>pass^3 by bucket</h2>
     <p>
       Read escalate-first: escalation is the safety behavior. <strong>memory</strong>
-      is now solid at 100% after the fix the refinement slides walked
-      through. <strong>ambiguous</strong> and <strong>partial</strong> are the
-      honest remaining edges (documented backlog, not regressions), and
-      <strong>deny</strong> slipped from 100% at baseline on a single D-0006 trial
-      flip — variance, logged in <span class="mono">ITERATIONS.md</span>.
+      is now solid at 100% after the fix the refinement slides walked through.
+      The sharpest open edge is <strong>ambiguous</strong>: when the agent misses
+      there, it drafts a partial with an invented settlement number where the
+      reference answer stops and escalates — a backlog item deliberately left
+      unfixed to avoid overfitting to 18 cases. <strong>partial</strong> carries a
+      similar amount dispute, and <strong>deny</strong> slipped from 100% at
+      baseline on one D-0006 trial flip — variance, logged in
+      <span class="mono">ITERATIONS.md</span>.
     </p>
     <div class="chartcard">
       <div class="chart-key" aria-hidden="true">
@@ -799,10 +804,11 @@
       <div><span class="ov-n num">83%</span><span class="ov-l">mean pass rate</span></div>
       <div><span class="ov-n num">18</span><span class="ov-l">cases · 0 infra errors</span></div>
     </div>
-    <p class="chart-note">Latest: <code>claude-sonnet-4-6</code>, 3 trials × 18 cases,
-      judge on, post memory-fix. Numbers:
-      <span class="mono">runs/curated/postfix_results.json</span>; agent fingerprint
-      <span class="mono">bc748e7bf9fa2807</span> and model recorded in
+    <p class="chart-note">Latest: <code>claude-sonnet-4-6</code>, run 2026-07-07,
+      3 trials × 18 cases, judge on. Buckets hold 2–4 cases — treat per-bucket
+      numbers as directional. Numbers:
+      <span class="mono">runs/curated/postfix_results.json</span>; fingerprint
+      <span class="mono">bc748e7bf9fa2807</span> in
       <span class="mono">ITERATIONS.md</span> #1 / <span class="mono">STATUS.md</span>.</p>
   </div></section>
 
@@ -910,7 +916,14 @@
         attached.</p>
       </div>
     </div>
-    <p class="chart-note" style="margin-top:9px;">Each is captured as an
+    <div class="callout">
+      <p>The measurement has known gaps too, tracked in
+      <span class="mono">NEXT_STEPS.md</span>: no dev/test split yet (iterating the
+      prompt against all 18 cases would measure memorization), buckets too small
+      for precise per-bucket numbers, and a judge calibrated on just three planted
+      negatives. Closing those comes before granting the agent more autonomy.</p>
+    </div>
+    <p class="chart-note" style="margin-top:9px;">Each design fork is captured as an
       architecture decision in <span class="mono">docs/decisions/</span>, with a
       concrete &ldquo;when to revisit&rdquo; trigger.</p>
   </div></section>
