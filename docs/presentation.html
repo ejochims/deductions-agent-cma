@@ -429,10 +429,9 @@
     <h1>An agent that adjudicates retailer deductions — and a harness that <em>proves you can trust it.</em></h1>
     <p class="lead">
       Retailers short-pay invoices claiming promotional allowances. Deductions Desk
-      investigates each claim against promo calendars, trade contracts, POS scan
-      data, and settlement history, then <strong>drafts</strong> one of four
-      decisions with cited evidence. It never moves money; anything it would pay
-      above <strong>$10,000</strong> routes to a human.
+      investigates each claim and <strong>drafts</strong> one of four decisions with
+      cited evidence. It never moves money; anything above
+      <strong>$10,000</strong> routes to a human.
     </p>
     <div class="kpis">
       <div class="kpi">
@@ -464,29 +463,24 @@
     <h2>The money is already gone</h2>
     <p>
       When a retailer short-pays an invoice, the difference is a
-      <strong>deduction</strong> — usually claimed against a trade promotion. The
-      cash left with the remittance; what remains is the work of deciding, claim by
-      claim, whether it should stay gone.
+      <strong>deduction</strong>, usually claimed against a trade promotion.
+      The cash is already gone — deciding whether it stays gone is the work.
     </p>
     <div class="grid3">
       <div class="card">
         <span class="tag">Every claim is an investigation</span>
-        <p>Validating one deduction means reconstructing what was promised (the
-        contract), what ran (the promo calendar), and what actually sold (POS
-        scans) — then checking history for duplicates. That costs an analyst
-        minutes to hours, per claim.</p>
+        <p>One claim means checking the contract, the promo calendar, POS scans,
+        and settlement history. Minutes to hours of analyst time, each.</p>
       </div>
       <div class="card">
         <span class="tag">The economics leak</span>
-        <p>Small claims get written off because checking them costs more than the
-        claim is worth. Large ones get settled under deadline pressure. Both paths
-        quietly hand margin to the retailer.</p>
+        <p>Small claims get written off; large ones get settled under deadline
+        pressure. Both hand margin to the retailer.</p>
       </div>
       <div class="card">
         <span class="tag">The bar for automation is high</span>
-        <p>A wrong approval pays an invalid claim; a wrong denial strains a retailer
-        relationship. An agent doing this work has to be verifiably careful — which
-        is exactly why it makes a strong proving ground for agent engineering.</p>
+        <p>A wrong approval pays an invalid claim; a wrong denial strains the
+        relationship. Automation here has to be verifiably careful.</p>
       </div>
     </div>
     <div class="stats">
@@ -494,10 +488,9 @@
       <div><span class="st-n">3</span><span class="st-l">retailers · 7 claim types</span></div>
       <div><span class="st-n">4</span><span class="st-l">possible decisions per case</span></div>
     </div>
-    <p class="chart-note">The case set is synthetic — a fictional manufacturer,
-      Meridian Foods, closing Q1 FY26 — but shaped like a real desk: clean
-      approvals, aggressive re-bills, a duplicate, inflated scan counts, missing
-      paperwork.</p>
+    <p class="chart-note">Synthetic case set (fictional Meridian Foods, Q1 FY26),
+      shaped like a real desk: clean approvals, re-bills, a duplicate, inflated
+      scans, missing paperwork.</p>
   </div></section>
 
   <!-- ==================================================== 3 · HOW IT WORKS -->
@@ -505,11 +498,9 @@
     <p class="eyebrow">02 · The approach</p>
     <h2>The tool boundary is the security boundary</h2>
     <p>
-      The agent reasons on Anthropic's orchestration layer, but its seven tools —
-      six reads and one write gate — are fulfilled <strong>host-side</strong> — the host answers each
-      <code>custom_tool_use</code> from <code>fixtures/</code>, and nothing is
-      mounted into the sandbox (no egress, no filesystem). Even <em>memory</em> is
-      just another host-fulfilled tool.
+      Seven tools — six reads and one write gate — all fulfilled
+      <strong>host-side</strong>. Nothing is mounted into the sandbox: no
+      filesystem, no egress. Even <em>memory</em> is just another tool.
     </p>
     <div class="arch">
       <div class="node">
@@ -534,8 +525,8 @@
     <div class="callout">
       <p>Four decisions — <span class="chip approve">APPROVE</span> <span class="chip deny">DENY</span>
       <span class="chip partial">PARTIAL</span> <span class="chip escalate">ESCALATE</span> —
-      and the tool layer enforces policy: a deny's amount is nulled in code, and
-      the $10k threshold is checked host-side before any draft lands.</p>
+      with policy enforced in the tool layer: deny amounts nulled in code, the
+      $10k threshold checked host-side.</p>
     </div>
   </div></section>
 
@@ -544,16 +535,15 @@
     <p class="eyebrow">03 · Watch it work</p>
     <h2>One case, end to end: D-0009</h2>
     <p>
-      Every fact below arrived through a typed tool result — no filesystem, no
-      guesswork — and the run ends in a <strong>drafted settlement</strong> that a
-      human reviews before any money moves. Six calls, in the order the agent made them:
+      Every fact arrived through a typed tool result, and the run ends in a
+      <strong>draft</strong> a human reviews. Six calls, in order:
     </p>
     <ol class="trace">
       <li class="step"><span class="sn"></span><div>
         <span class="call">get_deduction("D-0009")</span>
-        <span class="res">Harvest &amp; Co short-paid <strong>$8,899.80</strong>, claiming
-        13,692 units × $0.65 scan allowance. The claim worksheet's unit column is
-        labeled <em>"shipped+scanned"</em>.</span>
+        <span class="res">Harvest &amp; Co short-paid <strong>$8,899.80</strong>:
+        13,692 units × $0.65 — and the worksheet's unit column reads
+        <em>"shipped+scanned"</em>.</span>
       </div></li>
       <li class="step"><span class="sn"></span><div>
         <span class="call">search_promotions("harvest-co", 2025-11-10 → 12-07, "MF-BV-101")</span>
@@ -563,7 +553,7 @@
       <li class="step"><span class="sn"></span><div>
         <span class="call">get_contract_terms("harvest-co")</span>
         <span class="res">§2.1 pays per unit <strong>scanned at point of sale</strong> —
-        shipped-but-not-scanned units are not payable.</span>
+        shipped units don't count.</span>
       </div></li>
       <li class="step"><span class="sn"></span><div>
         <span class="call">check_settlement_history("harvest-co", "hc20690")</span>
@@ -577,17 +567,16 @@
       <li class="step gate"><span class="sn"></span><div>
         <span class="call">draft_settlement(…) →</span>
         <span class="res"><span class="chip partial">PARTIAL</span>&nbsp;
-        <strong>$5,519.80</strong> = 8,492 scanned units × $0.65. The excess
-        $3,379.00 is denied as unsupported by POS — the retailer counted shipped
-        inventory as scanned.</span>
+        <strong>$5,519.80</strong> = 8,492 × $0.65. The $3,379.00 excess is
+        denied — shipped inventory counted as scanned.</span>
         <div class="evidence"><span>PROMO-2026-Q1-008</span>
           <span>contract:harvest-co:section-2.1</span>
           <span>contract:harvest-co:section-3.3</span></div>
       </div></li>
     </ol>
-    <p class="chart-note">This exact transcript is committed at
-      <span class="mono">runs/curated/t0/D-0009/</span> and replays offline in the
-      review UI, where the draft is graded live against ground truth.</p>
+    <p class="chart-note">Committed at
+      <span class="mono">runs/curated/t0/D-0009/</span>; replays offline in the
+      review UI, graded live against ground truth.</p>
   </div></section>
 
   <!-- ============================================= 5 · WHY MANAGED AGENTS -->
@@ -595,43 +584,35 @@
     <p class="eyebrow">04 · Platform</p>
     <h2>Why Claude Managed Agents</h2>
     <p>
-      The agent loop runs on Anthropic's servers. The alternative — a hand-rolled
-      loop over the Messages API — would mean owning session state, retries,
-      version pinning, and sandbox management before writing any deductions logic.
-      Here the repo ships a thin event stream
-      (<span class="mono">src/run_agent.py</span>), the tool fulfilment layer, and
-      the eval harness wrapped around them. Three platform properties carry the
-      design:
+      Anthropic runs the agent loop. The alternative — hand-rolling it over the
+      Messages API — means owning session state, retries, version pinning, and
+      sandboxing before writing any deductions logic. This repo ships an event
+      stream, the tools, and the evals.
     </p>
     <div class="grid3">
       <div class="card">
         <span class="tag">Hosted loop</span>
         <h3>Sessions on demand</h3>
-        <p>One session per case and trial. The session goes <em>idle</em> at every
-        tool call and waits for the host to answer — and that pause is where the
-        draft-only gate lives.</p>
+        <p>One session per case and trial. It idles at every tool call — that
+        pause is where the draft-only gate lives.</p>
       </div>
       <div class="card">
         <span class="tag">Immutable versions</span>
         <h3>Evals that can't go stale</h3>
-        <p>Every config update publishes a new agent version, and the runner
+        <p>Every update publishes an immutable version, and the runner
         fingerprints <span class="mono">agent.yaml</span> — each score traces to
-        the exact prompt that produced it. Editing the prompt auto-publishes and
-        re-pins before the next run.</p>
+        the exact prompt that produced it.</p>
       </div>
       <div class="card">
         <span class="tag">Declarative sandbox</span>
         <h3>An environment that starts empty</h3>
-        <p>The environment config mounts nothing and allows no egress. Every
-        capability arrives as a custom tool the host fulfils, so fixtures stay
-        local and the answer key stays out of reach.</p>
+        <p>Mounts nothing, allows no egress. Every capability is a custom tool
+        the host fulfils, so the answer key stays out of reach.</p>
       </div>
     </div>
     <div class="callout">
-      <p>One honest friction: the platform's native memory store assumes file tools
-      that this deliberately empty sandbox lacks. That mismatch caused a silent 0%
-      you'll see two slides ahead — and the fix reused the same custom-tool pattern
-      as everything else.</p>
+      <p>One friction: the native memory store assumes file tools this empty
+      sandbox lacks. That mismatch caused a silent 0% — two slides ahead.</p>
     </div>
   </div></section>
 
@@ -642,28 +623,26 @@
     <div class="grid3">
       <div class="card">
         <h3>Five graders</h3>
-        <p>Deterministic checks per draft: <strong>action correct</strong>,
+        <p>Per draft: <strong>action correct</strong>,
         <strong>amount within tolerance</strong>, <strong>evidence cited</strong>,
         <strong>no hallucinated evidence</strong>, and a safety hard-fail —
-        <strong>threshold respected</strong> (never settle &gt; $10k).</p>
+        never settle &gt; $10k.</p>
       </div>
       <div class="card">
         <h3>Two calibration gates</h3>
         <p><strong>Gate A:</strong> all 18 reference solutions score perfect.
-        <strong>Gate B:</strong> a blind "approve-everything" agent fails every
-        judgement bucket. When known-good scores perfect and known-bad lands at
-        the floor, the ruler measures what it claims.</p>
+        <strong>Gate B:</strong> a blind approve-everything agent fails every
+        judgement bucket. The ruler measures what it claims.</p>
       </div>
       <div class="card">
         <h3>A calibrated judge</h3>
-        <p>The LLM judge must fail three <em>planted</em> bad justifications before
-        it is allowed to grade. It records rationale quality but never overrides the
-        programmatic pass/fail.</p>
+        <p>Must fail three <em>planted</em> bad justifications before it may
+        grade. Records rationale quality; never overrides pass/fail.</p>
       </div>
     </div>
-    <p class="chart-note"><strong>pass^k</strong> reads harder than an average: a
-      case counts as passing only if <em>all three</em> trials got it right — the
-      metric that matters when the failure mode is a confident wrong settlement.</p>
+    <p class="chart-note"><strong>pass^k</strong>: a case passes only if
+      <em>all three</em> trials got it right — the bar that matters when failure
+      is a confident wrong settlement.</p>
   </div></section>
 
   <!-- ==================================================== 7 · EVAL-DRIVEN IMPROVEMENT -->
@@ -671,19 +650,16 @@
     <p class="eyebrow">06 · Refinement</p>
     <h2>The eval caught a silent failure — then measured the fix</h2>
     <p>
-      The <strong>memory</strong> bucket scored <strong>0% pass^3</strong> while every
-      other bucket looked healthy. Nothing threw: the session status stayed
-      <code>ok</code> and the drafts looked plausible. A native memory store was
-      mounted at <code>/mnt/memory/</code>, but the deliberately toolless sandbox
-      exposed no way to read it — every access returned <code>"Unknown tool"</code>
-      and the agent drafted the precedent cases <strong>blind</strong>. A happy-path
-      demo sails straight past this; the per-bucket, ground-truth eval made it
-      impossible to miss.
+      The <strong>memory</strong> bucket scored <strong>0% pass^3</strong> while
+      everything else looked healthy. Nothing threw — sessions stayed
+      <code>ok</code>, drafts looked plausible. The native store was mounted at
+      <code>/mnt/memory/</code>, but the toolless sandbox had no way to read it:
+      the agent drafted the precedent cases <strong>blind</strong>. Only the
+      per-bucket eval surfaced it.
     </p>
     <p>
-      The fix: retire the native store and serve recall the same way as every other
-      capability — a host-fulfilled <code>get_precedents</code> tool. Re-running the
-      eval <strong>measured the climb</strong>:
+      The fix: a host-fulfilled <code>get_precedents</code> tool, the same pattern
+      as every other capability. The re-run <strong>measured the climb</strong>:
     </p>
     <div class="reg"><div class="grid3">
       <div class="card">
@@ -714,10 +690,9 @@
         <strong>3/3</strong> on D-0014.</p>
       </div>
     </div></div>
-    <p class="chart-note">The honest counter-check: a <code>--no-memory</code> re-run
-      collapses every recovered case back to <strong>0%</strong>, which pins the
-      improvement on the recall tool rather than the prompt wording. Before/after logged in
-      <span class="mono">ITERATIONS.md</span> #1 and
+    <p class="chart-note">Counter-check: a <code>--no-memory</code> re-run collapses
+      every recovered case back to <strong>0%</strong> — the recall tool is doing
+      the work. Logged in <span class="mono">ITERATIONS.md</span> #1 and
       <span class="mono">docs/decisions/0001</span>.</p>
   </div></section>
 
@@ -726,37 +701,34 @@
     <p class="eyebrow">07 · Refinement</p>
     <h2>Remove a piece, measure what breaks</h2>
     <p>
-      Each experiment removes one part of the system — a prompt section or a tool —
-      re-runs the eval, then reverts. If the score drops, that part was doing real
-      work, and the grader that catches the drop is named. If it doesn't, that's an
-      honest negative worth keeping.
+      Remove one piece — a prompt section or a tool — re-run the eval, revert.
+      A drop means the piece was doing real work; no drop is an honest negative
+      worth keeping.
     </p>
     <div class="reg"><div class="grid3">
       <div class="card">
         <span class="tag">Threshold safety</span>
         <h3>Breaks immediately</h3>
         <p>Weaken the $10k rule and <strong>D-0014</strong> flips
-        <span class="chip escalate">ESCALATE</span> → approve $42,000 in all three
-        trials. The <code>threshold_respected</code> hard-fail fires every time.</p>
+        <span class="chip escalate">ESCALATE</span> → approve $42,000, three
+        trials of three. The safety grader fires every time.</p>
         <div class="delta num">escalate pass^3 &nbsp;67% → 33%</div>
         <div class="verdict bad">✕ regression — keep the section</div>
       </div>
       <div class="card">
         <span class="tag">Memory / precedent</span>
         <h3>Breaks without it</h3>
-        <p>Run the same cases with <code>--no-memory</code> (the
-        <code>get_precedents</code> tool returns nothing) and both memory cases
+        <p>With <code>--no-memory</code>, both memory cases
         (<strong>D-0017 / D-0018</strong>) collapse — the agent recounts events
-        instead of applying 60%-of-claim and drops the <code>SH-…</code> citation.</p>
+        instead of applying the 60% precedent.</p>
         <div class="delta num">memory pass^3 &nbsp;100% → 0%</div>
         <div class="verdict bad">✕ regression — the recall tool earns its place</div>
       </div>
       <div class="card">
         <span class="tag">Citation discipline</span>
         <h3>Redundant</h3>
-        <p>Weaken the citation rule and <strong>nothing regresses</strong> — it's
-        reinforced independently by the tool descriptions. An honest result the
-        harness surfaced rather than hid.</p>
+        <p>Weaken the citation rule and <strong>nothing regresses</strong> — the
+        tool descriptions reinforce it independently.</p>
         <div class="delta num">D-0001 / D-0008 / D-0009 &nbsp;still pass</div>
         <div class="verdict ok">✓ no regression — belt-and-suspenders</div>
       </div>
@@ -768,15 +740,12 @@
     <p class="eyebrow">08 · Results</p>
     <h2>pass^3 by bucket</h2>
     <p>
-      Read escalate-first: escalation is the safety behavior. <strong>memory</strong>
-      is now solid at 100% after the fix the refinement slides walked through.
-      The sharpest open edge is <strong>ambiguous</strong>: when the agent misses
-      there, it drafts a partial with an invented settlement number where the
-      reference answer stops and escalates — a backlog item deliberately left
-      unfixed to avoid overfitting to 18 cases. <strong>partial</strong> carries a
-      similar amount dispute, and <strong>deny</strong> slipped from 100% at
-      baseline on one D-0006 trial flip — variance, logged in
-      <span class="mono">ITERATIONS.md</span>.
+      Read escalate-first: escalation is the safety behavior.
+      <strong>memory</strong> is 100% after the fix. The open edge is
+      <strong>ambiguous</strong>: on a miss the agent drafts a partial with an
+      invented number where the reference escalates — left unfixed to avoid
+      overfitting to 18 cases. <strong>deny</strong> slipped to 75% on one D-0006
+      trial flip (variance).
     </p>
     <div class="chartcard">
       <div class="chart-key" aria-hidden="true">
@@ -843,10 +812,9 @@
         </tbody>
       </table>
     </div>
-    <p class="chart-note">All four are committed as replayable transcripts under
-      <span class="mono">runs/curated/t0/</span> — D-0009's full trace is the
-      "Watch it work" slide, and the review UI replays all of them with no API key,
-      so the demo works fully offline.</p>
+    <p class="chart-note">All four replay offline in the review UI from
+      <span class="mono">runs/curated/t0/</span> — no API key needed. D-0009's
+      full trace is slide 04.</p>
   </div></section>
 
   <!-- ==================================================== 11 · DECISIONS -->
@@ -857,25 +825,23 @@
       <div class="decision"><span class="dn"></span>
         <div>
           <h3>The tool boundary is the security boundary</h3>
-          <p>Because nothing is mounted, the answer key can't leak into context and
-          untrusted remittance text can't reach the filesystem. Access control is a
-          property of the architecture itself.</p>
+          <p>Nothing is mounted, so the answer key can't leak and untrusted
+          remittance text can't reach a filesystem. Access control is the
+          architecture.</p>
         </div>
       </div>
       <div class="decision"><span class="dn"></span>
         <div>
           <h3>The tool layer enforces policy</h3>
-          <p>The $10k threshold and the null-amount coercion on a deny are enforced
-          in the tool layer. The model can be wrong or adversarially steered and the
-          money still can't move — the worst case is a bad draft a human reviews.</p>
+          <p>The model can be wrong or adversarially steered and money still
+          can't move — the worst case is a bad draft a human reviews.</p>
         </div>
       </div>
       <div class="decision"><span class="dn"></span>
         <div>
           <h3>Validation is a first-class artifact</h3>
-          <p>Graders, a calibrated judge, calibration gates, and a regression harness
-          ship alongside the agent — the difference between a plausible demo and a
-          defensible one, and what lets a finance owner sign off on auto-settling.</p>
+          <p>Graders, gates, a calibrated judge, and a regression harness ship
+          with the agent — what lets a finance owner sign off.</p>
         </div>
       </div>
     </div>
@@ -894,34 +860,28 @@
       <div class="card">
         <span class="tag">Memory model</span>
         <h3>Curated recall → governed learning</h3>
-        <p>Today precedents are a host-fulfilled, read-only tool — no model-writable
-        state, no poisoning surface. If the agent should <em>accumulate</em> new
-        precedents over time, move to native memory with human-gated writes, backed
-        by write→recall and poisoning cases in the eval.</p>
+        <p>Precedents are read-only today — no poisoning surface. To let the agent
+        <em>accumulate</em> them, add human-gated writes plus write-recall and
+        poisoning evals.</p>
       </div>
       <div class="card">
         <span class="tag">Systems of record</span>
         <h3>Fixtures → live integrations</h3>
-        <p>The six read tools read synthetic fixtures. Production swaps their
-        implementations for retailer EDI / deduction portals, the ERP (e.g. SAP),
-        and OCR of backup docs — behind the same typed tool interface. The boundary
-        holds; only the data source changes.</p>
+        <p>Swap the fixture-backed tools for retailer EDI, the ERP, and OCR of
+        backup docs — behind the same typed interface. Only the data source
+        changes.</p>
       </div>
       <div class="card">
         <span class="tag">Governance &amp; audit</span>
         <h3>Draft-only → approval workflow</h3>
-        <p>The $10k human gate is the seed. At scale: role-based execution, an
-        immutable audit trail, and adversarial remittance text as a first-class
-        eval bucket, so prompt injection shows up in the score with a number
-        attached.</p>
+        <p>At scale: role-based execution, an immutable audit trail, and an
+        adversarial eval bucket so prompt injection shows up in the score.</p>
       </div>
     </div>
     <div class="callout">
-      <p>The measurement has known gaps too, tracked in
-      <span class="mono">NEXT_STEPS.md</span>: no dev/test split yet (iterating the
-      prompt against all 18 cases would measure memorization), buckets too small
-      for precise per-bucket numbers, and a judge calibrated on just three planted
-      negatives. Closing those comes before granting the agent more autonomy.</p>
+      <p>Known measurement gaps (<span class="mono">NEXT_STEPS.md</span>): no
+      dev/test split yet, small buckets, a judge calibrated on three planted
+      negatives. Those close before the agent gets more autonomy.</p>
     </div>
     <p class="chart-note" style="margin-top:9px;">Each design fork is captured as an
       architecture decision in <span class="mono">docs/decisions/</span>, with a
@@ -937,10 +897,8 @@
         <pre class="cmd"><span class="cm"># from the repo root</span>
 pip install -e ".[ui]"
 make demo   <span class="cm"># review UI at :8501</span></pre>
-        <p style="margin-top:14px; margin-bottom:0;">Works fully offline: the
-        <strong>Results dashboard</strong> reads the committed eval and the
-        <strong>Investigation viewer</strong> replays the curated showcase cases.
-        Set <code>ANTHROPIC_API_KEY</code> to also drive a case live (~$0.15).</p>
+        <p style="margin-top:14px; margin-bottom:0;">Fully offline out of the box.
+        Set <code>ANTHROPIC_API_KEY</code> to drive a case live (~$0.15).</p>
       </div>
       <div class="run">
         <h3 style="margin-bottom:10px;">The four tabs</h3>
@@ -951,12 +909,9 @@ make demo   <span class="cm"># review UI at :8501</span></pre>
       </div>
     </div>
     <div class="scope">
-      <p><strong style="color:var(--ink-2)">Scope.</strong> A proof of concept, not a
-      product — it proves the judgment-and-trust layer on a realistic-but-synthetic
-      case set. Production ingestion (retailer EDI, deduction portals, OCR) is
-      deliberately out of scope. Full presenter script in
-      <span class="mono">WALKTHROUGH.md</span> §17; architecture in
-      <span class="mono">README.md</span>.</p>
+      <p><strong style="color:var(--ink-2)">Scope.</strong> A proof of concept of
+      the judgment-and-trust layer; production ingestion is out of scope.
+      Presenter script: <span class="mono">WALKTHROUGH.md</span> §17.</p>
     </div>
   </div></section>
 
