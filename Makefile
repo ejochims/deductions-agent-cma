@@ -1,4 +1,4 @@
-.PHONY: install lint verify-quickstart clean ui demo \
+.PHONY: install lint verify-quickstart clean ui demo deck \
         gates phase-a phase-b phase-c phase-d phase-e phase-f \
         test calibrate judge-calibrate run-one estimate trial eval digest sweep
 
@@ -60,6 +60,10 @@ ui:
 # out of the box (curated transcripts + committed results.json); the Live-run tab
 # lights up automatically when ANTHROPIC_API_KEY is set. See WALKTHROUGH.md sec 17.
 demo: ui
+
+# the slide deck (docs/presentation.html) at :8777 — docs/index.html redirects to it
+deck:
+	python -m http.server 8777 -d docs
 
 # model sweep (cost-per-success)
 sweep:

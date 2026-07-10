@@ -92,8 +92,9 @@ next call and continues. Two consequences worth internalizing:
   the descriptions, so they're written for cold use ("Call it first", "a claim you
   cannot corroborate ... should be escalated").
 - The tool boundary is the security boundary. The model can only see what tools
-  return. Our agent has exactly six tools and nothing else — no filesystem, no
-  shell — so the ground-truth answer key is unreachable *by construction*.
+  return. Our agent has exactly seven tools (six reads plus the `draft_settlement`
+  write gate) and nothing else — no filesystem, no shell — so the ground-truth
+  answer key is unreachable *by construction*.
 
 ## 4. What an "agent" is
 
@@ -142,7 +143,7 @@ You talk to a session through **events** over a server-sent-event stream:
 
 ### Custom tools: the host-fulfilled pattern
 
-Our six tools are declared on the agent as **custom tools**, which means Anthropic
+Our seven tools are declared on the agent as **custom tools**, which means Anthropic
 doesn't execute them — *our process does*. The mechanics:
 
 1. The model calls `get_pos_data`. The session emits an
@@ -696,7 +697,7 @@ paths, `all_case_ids()`, bucket mapping, label loading, and
 against). The anti-leakage rule starts here: this module reads `ground_truth/`
 *for the harness*; nothing on the agent's side of the boundary imports it.
 
-**`agent/tools_server.py`** — host-side fulfilment of the six tools.
+**`agent/tools_server.py`** — host-side fulfilment of the seven tools.
 `ToolServer.dispatch(name, tool_input, trial)` routes to one handler per tool.
 Three design points to notice while reading:
 

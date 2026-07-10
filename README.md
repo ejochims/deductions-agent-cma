@@ -38,7 +38,7 @@ required. Set `ANTHROPIC_API_KEY` to also enable the
 Live-run tab (~$0.15/case). The full presenter script is in
 [`WALKTHROUGH.md` §17](WALKTHROUGH.md#17-demoing-the-project); a one-page
 architecture-and-results overview to share with a team is
-[`docs/presentation.html`](docs/presentation.html).
+[`docs/presentation.html`](docs/presentation.html) (`make deck` serves it at :8777).
 
 ---
 
@@ -46,7 +46,7 @@ architecture-and-results overview to share with a team is
 
 ```
                         Anthropic orchestration layer
-   agent/agent.yaml ───▶ (agent loop: Claude decides, calls the 6 tools)
+   agent/agent.yaml ───▶ (agent loop: Claude decides, calls the 7 tools)
    (system prompt,              │  custom_tool_use  ▲  custom_tool_result
     model, tool schemas)        ▼                   │
                         src/run_agent.py  ── fulfils tools host-side ──▶ agent/tools_server.py

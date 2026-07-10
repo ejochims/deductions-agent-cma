@@ -1,6 +1,6 @@
 """Host-side fulfilment of the Deductions Desk custom tools.
 
-The agent (running on Anthropic's orchestration layer) calls the six tools
+The agent (running on Anthropic's orchestration layer) calls the seven tools
 declared in agent/agent.yaml. It never executes them itself: the session emits
 `agent.custom_tool_use`, and the orchestrator (src/run_agent.py) calls
 `ToolServer.dispatch(...)` here to produce the result, then returns it to the
