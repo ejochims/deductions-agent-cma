@@ -405,6 +405,35 @@
   .reduced .frag .ba-fill { transition:none; }
   .reduced .frag.on .ba-fill { transform:none; }
 
+  /* ---- speaker notes (toggle with "n") ---- */
+  .notes { position:fixed; left:22px; bottom:74px; z-index:35; max-width:400px;
+    background:var(--glass); border:1px solid var(--hairline); border-radius:12px;
+    padding:12px 16px 13px; box-shadow:var(--shadow); display:none;
+    -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px); }
+  body.notes-open .notes { display:block; }
+  .notes .n-label { font-family:var(--font-mono); font-size:.68rem; font-weight:600;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--muted);
+    margin-bottom:5px; }
+  .notes p { margin:0; font-size:.84rem; line-height:1.5; color:var(--ink-2);
+    max-width:none; }
+
+  /* ---- print: slides as vertical pages ---- */
+  @media print {
+    html, body { height:auto; overflow:visible; }
+    body::after, .topbar, .controls, .hint, .progress, .notes, .hero-bg {
+      display:none !important; }
+    .deck { position:static; overflow:visible; }
+    .track { display:block; width:auto; height:auto; transform:none !important;
+      transition:none; }
+    .slide { display:block; width:auto; height:auto; overflow:visible;
+      page-break-after:always; }
+    .slide-inner { margin:0 auto; padding:28px 8px; }
+    .fx-in, .frag, .bar-mean { opacity:1 !important; transform:none !important;
+      transition:none !important; }
+    .ba-fill, .frag .ba-fill { transform:none !important; }
+    .kpi, .card, .node, .step, .decision, .chartcard, .run { box-shadow:none; }
+  }
+
   @media (max-width:720px) {
     .kpis, .grid2, .grid3, .reg .grid3 { grid-template-columns:1fr; }
     .grid3 { grid-template-columns:1fr; }
@@ -951,7 +980,12 @@ make demo   <span class="cm"># review UI at :8501</span></pre>
  </div>
 </div>
 
-<div class="hint" id="hint">Use <kbd>←</kbd> <kbd>→</kbd> to navigate</div>
+<aside class="notes" aria-hidden="true">
+  <div class="n-label">Notes · slide <span id="notesNum">1</span></div>
+  <p id="notesText"></p>
+</aside>
+
+<div class="hint" id="hint"><kbd>→</kbd> reveal · <kbd>←</kbd> back · <kbd>n</kbd> notes</div>
 
 <div class="controls">
   <button class="nav" id="prev" type="button" aria-label="Previous slide">‹</button>
@@ -1057,6 +1091,8 @@ make demo   <span class="cm"># review UI at :8501</span></pre>
       if (idx === 0) countUp();
       dots.forEach((d, i) => d.setAttribute('aria-current', i === idx ? 'true' : 'false'));
       counter.textContent = (idx + 1) + ' / ' + total;
+      notesNum.textContent = idx + 1;
+      notesText.textContent = NOTES[idx] || '';
       progress.style.width = ((idx + 1) / total * 100) + '%';
       prevBtn.disabled = idx === 0;
       nextBtn.disabled = idx === total - 1;
@@ -1064,6 +1100,26 @@ make demo   <span class="cm"># review UI at :8501</span></pre>
       if (!fromHash) history.replaceState(null, '', '#s' + (idx + 1));
       if (idx > 0 && hint) { hint.style.opacity = '0'; }
     }
+
+    // speaker notes — toggle with "n"; audience never sees them unless mirrored
+    const NOTES = [
+      "Land the claim: an agent adjudicating money, plus the harness that earns the trust. 67 to 78 is the arc of the talk.",
+      "Define 'deduction'. The cash is already gone; analysts reconstruct promises vs. reality. $165k across 18 cases on this desk.",
+      "Seven tools: six reads, one write gate. Nothing mounted, so the answer key is unreachable by construction. Policy enforced in code.",
+      "Six calls, one case. Pause at POS: 8,492 scanned vs 13,692 claimed. Ends in a draft, never a payment.",
+      "Hosted loop; immutable versions mean every eval pins the exact prompt; the sandbox starts empty. The memory friction sets up slide 7.",
+      "Trust the ruler before the score: five graders, Gate A known-good perfect, Gate B null agent fails, judge must fail 3 planted negatives.",
+      "The silent failure: memory 0% while sessions stayed 'ok'. Fix = get_precedents tool. Memory 0 to 100, overall 67 to 78.",
+      "Remove a piece, measure: the threshold section stops a $42k auto-approve; --no-memory collapses recall; the citation rule proved redundant.",
+      "78% pass^3, 83% mean. Ambiguous misses invent a number instead of escalating. Small buckets, so read as directional.",
+      "If one live run: D-0009. D-0014 shows the threshold beating a fully valid claim. All four replay offline in the review UI.",
+      "Three rules that transfer: boundary lives in architecture, policy lives in code, validation ships with the agent.",
+      "Deliberate simplifications, each with a reopen trigger: governed memory writes, live integrations, approval workflow.",
+      "Own the gaps before Q&A does: no dev/test split yet, small buckets, thin judge calibration.",
+      "make demo, fully offline. A live run costs about $0.15 with a key. Hand off to the review UI here."
+    ];
+    const notesNum = document.getElementById('notesNum');
+    const notesText = document.getElementById('notesText');
 
     // forward reveals the next fragment before advancing the slide
     function next() {
@@ -1082,8 +1138,13 @@ make demo   <span class="cm"># review UI at :8501</span></pre>
         case ' ': next(); e.preventDefault(); break;
         case 'Home': go(0); e.preventDefault(); break;
         case 'End':  go(total - 1); e.preventDefault(); break;
+        case 'n': case 'N':
+          document.body.classList.toggle('notes-open'); e.preventDefault(); break;
       }
     });
+
+    // print: paint every chart/fragment so the PDF is complete
+    window.addEventListener('beforeprint', () => paintChart(true));
 
     // touch swipe (horizontal only)
     let tx = 0, ty = 0;

@@ -3,13 +3,13 @@
 [theme]
 base = "light"
 primaryColor = "#2a78d6"          # accent: categorical blue slot 1
-backgroundColor = "#f9f9f7"       # page plane
-secondaryBackgroundColor = "#f0efec"  # widget/secondary plane (neutral gray)
-textColor = "#0b0b0b"             # primary ink
+backgroundColor = "#f4f3ee"       # page plane (matches the deck's tokens)
+secondaryBackgroundColor = "#eceadf"  # widget/secondary plane (neutral gray)
+textColor = "#16150f"             # primary ink
 linkColor = "#1c5cab"
 font = "sans serif"
 baseRadius = "10px"
-borderColor = "#e1e0d9"           # hairline
+borderColor = "#e2e1da"           # hairline
 showWidgetBorder = true
 
 [server]
