@@ -375,6 +375,12 @@
     margin-top:30px; padding-top:16px; border-top:1px solid var(--hairline);
     font-size:.7rem; font-weight:600; letter-spacing:.09em; text-transform:uppercase;
     color:var(--muted); }
+  .stats { display:flex; gap:34px; margin-top:20px; flex-wrap:wrap; }
+  .stats > div { display:flex; flex-direction:column; }
+  .stats .st-n { font-size:1.9rem; font-weight:700; letter-spacing:-.02em;
+    line-height:1; color:var(--ink); font-variant-numeric:tabular-nums; }
+  .stats .st-l { font-size:.76rem; font-weight:600; letter-spacing:.06em;
+    text-transform:uppercase; color:var(--muted); margin-top:7px; }
 
   /* ---- motion: staggered entrances (JS stamps .fx-in + --i) ---- */
   .fx-in { opacity:0; transform:translateY(12px);
@@ -452,9 +458,51 @@
     </div>
   </div></section>
 
-  <!-- ==================================================== 2 · HOW IT WORKS -->
+  <!-- ==================================================== 2 · THE PROBLEM -->
+  <section class="slide" aria-label="The problem"><div class="slide-inner">
+    <p class="eyebrow">01 · The problem</p>
+    <h2>The money is already gone</h2>
+    <p>
+      When a retailer short-pays an invoice, the difference is a
+      <strong>deduction</strong> — usually claimed against a trade promotion. The
+      cash left with the remittance; what remains is the work of deciding, claim by
+      claim, whether it should stay gone.
+    </p>
+    <div class="grid3">
+      <div class="card">
+        <span class="tag">Every claim is an investigation</span>
+        <p>Validating one deduction means reconstructing what was promised (the
+        contract), what ran (the promo calendar), and what actually sold (POS
+        scans) — then checking history for duplicates. That costs an analyst
+        minutes to hours, per claim.</p>
+      </div>
+      <div class="card">
+        <span class="tag">The economics leak</span>
+        <p>Small claims get written off because checking them costs more than the
+        claim is worth. Large ones get settled under deadline pressure. Both paths
+        quietly hand margin to the retailer.</p>
+      </div>
+      <div class="card">
+        <span class="tag">The bar for automation is high</span>
+        <p>A wrong approval pays an invalid claim; a wrong denial strains a retailer
+        relationship. An agent doing this work has to be verifiably careful — which
+        is exactly why it makes a strong proving ground for agent engineering.</p>
+      </div>
+    </div>
+    <div class="stats">
+      <div><span class="st-n">$165k</span><span class="st-l">claimed · 18 open cases</span></div>
+      <div><span class="st-n">3</span><span class="st-l">retailers · 7 claim types</span></div>
+      <div><span class="st-n">4</span><span class="st-l">possible decisions per case</span></div>
+    </div>
+    <p class="chart-note">The case set is synthetic — a fictional manufacturer,
+      Meridian Foods, closing Q1 FY26 — but shaped like a real desk: clean
+      approvals, aggressive re-bills, a duplicate, inflated scan counts, missing
+      paperwork.</p>
+  </div></section>
+
+  <!-- ==================================================== 3 · HOW IT WORKS -->
   <section class="slide" aria-label="How it works"><div class="slide-inner">
-    <p class="eyebrow">How it works</p>
+    <p class="eyebrow">02 · The approach</p>
     <h2>The tool boundary is the security boundary</h2>
     <p>
       The agent reasons on Anthropic's orchestration layer, but its seven tools —
@@ -486,19 +534,19 @@
     <div class="callout">
       <p>Four decisions — <span class="chip approve">APPROVE</span> <span class="chip deny">DENY</span>
       <span class="chip partial">PARTIAL</span> <span class="chip escalate">ESCALATE</span> —
-      and policy lives in code, not the prompt: a deny's amount is nulled by the
-      tool layer, and the $10k threshold is enforced host-side.</p>
+      and the tool layer enforces policy: a deny's amount is nulled in code, and
+      the $10k threshold is checked host-side before any draft lands.</p>
     </div>
   </div></section>
 
-  <!-- ==================================================== 3 · WATCH IT WORK -->
+  <!-- ==================================================== 4 · WATCH IT WORK -->
   <section class="slide" aria-label="Watch it work"><div class="slide-inner">
-    <p class="eyebrow">Watch it work</p>
+    <p class="eyebrow">03 · Watch it work</p>
     <h2>One case, end to end: D-0009</h2>
     <p>
       Every fact below arrived through a typed tool result — no filesystem, no
-      guesswork — and the run ends in a <strong>draft</strong>, not a payment.
-      Six calls, in the order the agent made them:
+      guesswork — and the run ends in a <strong>drafted settlement</strong> that a
+      human reviews before any money moves. Six calls, in the order the agent made them:
     </p>
     <ol class="trace">
       <li class="step"><span class="sn"></span><div>
@@ -542,9 +590,52 @@
       review UI, where the draft is graded live against ground truth.</p>
   </div></section>
 
-  <!-- ==================================================== 4 · TRUST -->
+  <!-- ============================================= 5 · WHY MANAGED AGENTS -->
+  <section class="slide" aria-label="Why Managed Agents"><div class="slide-inner">
+    <p class="eyebrow">04 · Platform</p>
+    <h2>Why Claude Managed Agents</h2>
+    <p>
+      The agent loop runs on Anthropic's servers. This repo ships no orchestration
+      machinery — just a thin event stream
+      (<span class="mono">src/run_agent.py</span>), the tool fulfilment layer, and
+      the eval harness wrapped around them. Three platform properties carry the
+      design:
+    </p>
+    <div class="grid3">
+      <div class="card">
+        <span class="tag">Hosted loop</span>
+        <h3>Sessions on demand</h3>
+        <p>One session per case and trial. The session goes <em>idle</em> at every
+        tool call and waits for the host to answer — and that pause is where the
+        draft-only gate lives.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Immutable versions</span>
+        <h3>Evals that can't go stale</h3>
+        <p>Every config update publishes a new agent version, and the runner
+        fingerprints <span class="mono">agent.yaml</span> — each score traces to
+        the exact prompt that produced it. Editing the prompt auto-publishes and
+        re-pins before the next run.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Declarative sandbox</span>
+        <h3>An environment that starts empty</h3>
+        <p>The environment config mounts nothing and allows no egress. Every
+        capability arrives as a custom tool the host fulfils, so fixtures stay
+        local and the answer key stays out of reach.</p>
+      </div>
+    </div>
+    <div class="callout">
+      <p>One honest friction: the platform's native memory store assumes file tools
+      that this deliberately empty sandbox lacks. That mismatch caused a silent 0%
+      you'll see two slides ahead — and the fix reused the same custom-tool pattern
+      as everything else.</p>
+    </div>
+  </div></section>
+
+  <!-- ==================================================== 6 · TRUST -->
   <section class="slide" aria-label="Why the numbers are trustworthy"><div class="slide-inner">
-    <p class="eyebrow">Why the numbers are trustworthy</p>
+    <p class="eyebrow">05 · The eval harness</p>
     <h2>The harness is validated before any result is believed</h2>
     <div class="grid3">
       <div class="card">
@@ -558,8 +649,8 @@
         <h3>Two calibration gates</h3>
         <p><strong>Gate A:</strong> all 18 reference solutions score perfect.
         <strong>Gate B:</strong> a blind "approve-everything" agent fails every
-        judgement bucket. Known-good perfect + known-bad at the floor → the ruler
-        measures what it claims.</p>
+        judgement bucket. When known-good scores perfect and known-bad lands at
+        the floor, the ruler measures what it claims.</p>
       </div>
       <div class="card">
         <h3>A calibrated judge</h3>
@@ -573,9 +664,9 @@
       metric that matters when the failure mode is a confident wrong settlement.</p>
   </div></section>
 
-  <!-- ==================================================== 5 · EVAL-DRIVEN IMPROVEMENT -->
+  <!-- ==================================================== 7 · EVAL-DRIVEN IMPROVEMENT -->
   <section class="slide" aria-label="Eval-driven improvement"><div class="slide-inner">
-    <p class="eyebrow">Eval-driven improvement</p>
+    <p class="eyebrow">06 · Refinement</p>
     <h2>The eval caught a silent failure — then measured the fix</h2>
     <p>
       The <strong>memory</strong> bucket scored <strong>0% pass^3</strong> while every
@@ -622,20 +713,62 @@
       </div>
     </div></div>
     <p class="chart-note">The honest counter-check: a <code>--no-memory</code> re-run
-      collapses every recovered case back to <strong>0%</strong> — proving the tool,
-      not the prompt, does the work. Before/after logged in
+      collapses every recovered case back to <strong>0%</strong>, which pins the
+      improvement on the recall tool rather than the prompt wording. Before/after logged in
       <span class="mono">ITERATIONS.md</span> #1 and
       <span class="mono">docs/decisions/0001</span>.</p>
   </div></section>
 
-  <!-- ==================================================== 6 · RESULTS -->
+  <!-- ==================================================== 8 · REGRESSIONS -->
+  <section class="slide" aria-label="Stress-testing the prompt"><div class="slide-inner">
+    <p class="eyebrow">07 · Refinement</p>
+    <h2>Remove a piece, measure what breaks</h2>
+    <p>
+      Each experiment removes one part of the system — a prompt section or a tool —
+      re-runs the eval, then reverts. If the score drops, that part was doing real
+      work, and the grader that catches the drop is named. If it doesn't, that's an
+      honest negative worth keeping.
+    </p>
+    <div class="reg"><div class="grid3">
+      <div class="card">
+        <span class="tag">Threshold safety</span>
+        <h3>Breaks immediately</h3>
+        <p>Weaken the $10k rule and <strong>D-0014</strong> flips
+        <span class="chip escalate">ESCALATE</span> → approve $42,000 in all three
+        trials. The <code>threshold_respected</code> hard-fail fires every time.</p>
+        <div class="delta num">escalate pass^3 &nbsp;67% → 33%</div>
+        <div class="verdict bad">✕ regression — keep the section</div>
+      </div>
+      <div class="card">
+        <span class="tag">Memory / precedent</span>
+        <h3>Breaks without it</h3>
+        <p>Run the same cases with <code>--no-memory</code> (the
+        <code>get_precedents</code> tool returns nothing) and both memory cases
+        (<strong>D-0017 / D-0018</strong>) collapse — the agent recounts events
+        instead of applying 60%-of-claim and drops the <code>SH-…</code> citation.</p>
+        <div class="delta num">memory pass^3 &nbsp;100% → 0%</div>
+        <div class="verdict bad">✕ regression — the recall tool earns its place</div>
+      </div>
+      <div class="card">
+        <span class="tag">Citation discipline</span>
+        <h3>Redundant</h3>
+        <p>Weaken the citation rule and <strong>nothing regresses</strong> — it's
+        reinforced independently by the tool descriptions. An honest result the
+        harness surfaced rather than hid.</p>
+        <div class="delta num">D-0001 / D-0008 / D-0009 &nbsp;still pass</div>
+        <div class="verdict ok">✓ no regression — belt-and-suspenders</div>
+      </div>
+    </div></div>
+  </div></section>
+
+  <!-- ==================================================== 9 · RESULTS -->
   <section class="slide" aria-label="Results"><div class="slide-inner">
-    <p class="eyebrow">Results · latest eval</p>
+    <p class="eyebrow">08 · Results</p>
     <h2>pass^3 by bucket</h2>
     <p>
       Read escalate-first: escalation is the safety behavior. <strong>memory</strong>
-      is now solid at 100% — the previous slide shows how an eval caught it at 0% and
-      measured the fix. <strong>ambiguous</strong> and <strong>partial</strong> are the
+      is now solid at 100% after the fix the refinement slides walked
+      through. <strong>ambiguous</strong> and <strong>partial</strong> are the
       honest remaining edges (documented backlog, not regressions), and
       <strong>deny</strong> slipped from 100% at baseline on a single D-0006 trial
       flip — variance, logged in <span class="mono">ITERATIONS.md</span>.
@@ -673,51 +806,9 @@
       <span class="mono">ITERATIONS.md</span> #1 / <span class="mono">STATUS.md</span>.</p>
   </div></section>
 
-  <!-- ==================================================== 7 · REGRESSIONS -->
-  <section class="slide" aria-label="Stress-testing the prompt"><div class="slide-inner">
-    <p class="eyebrow">Stress-testing the prompt</p>
-    <h2>Which parts are load-bearing?</h2>
-    <p>
-      Each experiment removes one part of the system — a prompt section or a tool —
-      re-runs the eval, then reverts. If the score drops, that part was doing real
-      work, and the grader that catches the drop is named. If it doesn't, that's an
-      honest negative worth keeping.
-    </p>
-    <div class="reg"><div class="grid3">
-      <div class="card">
-        <span class="tag">Threshold safety</span>
-        <h3>Load-bearing</h3>
-        <p>Weaken the $10k rule and <strong>D-0014</strong> flips
-        <span class="chip escalate">ESCALATE</span> → approve $42,000 in all three
-        trials. The <code>threshold_respected</code> hard-fail fires every time.</p>
-        <div class="delta num">escalate pass^3 &nbsp;67% → 33%</div>
-        <div class="verdict bad">✕ regression — keep the section</div>
-      </div>
-      <div class="card">
-        <span class="tag">Memory / precedent</span>
-        <h3>Load-bearing</h3>
-        <p>Run the same cases with <code>--no-memory</code> (the
-        <code>get_precedents</code> tool returns nothing) and both memory cases
-        (<strong>D-0017 / D-0018</strong>) collapse — the agent recounts events
-        instead of applying 60%-of-claim and drops the <code>SH-…</code> citation.</p>
-        <div class="delta num">memory pass^3 &nbsp;100% → 0%</div>
-        <div class="verdict bad">✕ the tool, not the prompt, does the work</div>
-      </div>
-      <div class="card">
-        <span class="tag">Citation discipline</span>
-        <h3>Redundant</h3>
-        <p>Weaken the citation rule and <strong>nothing regresses</strong> — it's
-        reinforced independently by the tool descriptions. An honest result the
-        harness surfaced rather than hid.</p>
-        <div class="delta num">D-0001 / D-0008 / D-0009 &nbsp;still pass</div>
-        <div class="verdict ok">✓ no regression — belt-and-suspenders</div>
-      </div>
-    </div></div>
-  </div></section>
-
-  <!-- ==================================================== 8 · SHOWCASE -->
+  <!-- ==================================================== 10 · SHOWCASE -->
   <section class="slide" aria-label="Showcase cases"><div class="slide-inner">
-    <p class="eyebrow">Worth showing live</p>
+    <p class="eyebrow">09 · Worth showing live</p>
     <h2>Four cases that make the point</h2>
     <div class="tablewrap">
       <table>
@@ -726,7 +817,7 @@
           <tr>
             <td><span class="cs">D-0009</span><br><span class="chip partial">PARTIAL</span></td>
             <td>Evidence-based partial — the flagship</td>
-            <td>Claim $8,899.80 (13,692 × $0.65); POS supports only 8,492 units → drafts partial <strong>$5,519.80</strong>. Not approve, not deny — the math.</td>
+            <td>Claim $8,899.80 (13,692 × $0.65); POS supports only 8,492 units → drafts partial <strong>$5,519.80</strong>. The scans set the number.</td>
           </tr>
           <tr>
             <td><span class="cs">D-0008</span><br><span class="chip deny">DENY</span></td>
@@ -752,9 +843,9 @@
       so the demo works fully offline.</p>
   </div></section>
 
-  <!-- ==================================================== 9 · DECISIONS -->
+  <!-- ==================================================== 11 · DECISIONS -->
   <section class="slide" aria-label="Design decisions"><div class="slide-inner">
-    <p class="eyebrow">What generalizes</p>
+    <p class="eyebrow">10 · What generalizes</p>
     <h2>Three design decisions worth stealing</h2>
     <div class="decisions">
       <div class="decision"><span class="dn"></span>
@@ -762,12 +853,12 @@
           <h3>The tool boundary is the security boundary</h3>
           <p>Because nothing is mounted, the answer key can't leak into context and
           untrusted remittance text can't reach the filesystem. Access control is a
-          property of the architecture, not a prompt instruction.</p>
+          property of the architecture itself.</p>
         </div>
       </div>
       <div class="decision"><span class="dn"></span>
         <div>
-          <h3>Policy lives in code, not the prompt</h3>
+          <h3>The tool layer enforces policy</h3>
           <p>The $10k threshold and the null-amount coercion on a deny are enforced
           in the tool layer. The model can be wrong or adversarially steered and the
           money still can't move — the worst case is a bad draft a human reviews.</p>
@@ -784,14 +875,14 @@
     </div>
   </div></section>
 
-  <!-- ============================================= 10 · PRODUCTION SCALE -->
+  <!-- ============================================= 12 · PRODUCTION SCALE -->
   <section class="slide" aria-label="What we'd revisit at production scale"><div class="slide-inner">
-    <p class="eyebrow">Beyond the POC</p>
+    <p class="eyebrow">11 · Beyond the POC</p>
     <h2>What we'd revisit at production scale</h2>
     <p>
       Deliberately simplified to prove the trust layer. Three decisions we'd
-      reopen with real constraints — each a design fork we reasoned through, not
-      a gap we missed.
+      reopen under production constraints, each recorded with the condition
+      that would reopen it.
     </p>
     <div class="grid3">
       <div class="card">
@@ -815,7 +906,8 @@
         <h3>Draft-only → approval workflow</h3>
         <p>The $10k human gate is the seed. At scale: role-based execution, an
         immutable audit trail, and adversarial remittance text as a first-class
-        eval bucket — so prompt injection is measured, not assumed away.</p>
+        eval bucket, so prompt injection shows up in the score with a number
+        attached.</p>
       </div>
     </div>
     <p class="chart-note" style="margin-top:9px;">Each is captured as an
@@ -823,9 +915,9 @@
       concrete &ldquo;when to revisit&rdquo; trigger.</p>
   </div></section>
 
-  <!-- ==================================================== 11 · RUN IT -->
+  <!-- ==================================================== 13 · RUN IT -->
   <section class="slide" aria-label="Run the demo"><div class="slide-inner">
-    <p class="eyebrow">See it yourself</p>
+    <p class="eyebrow">12 · Run it</p>
     <h2>Run the demo in 60 seconds</h2>
     <div class="grid2">
       <div class="run">
@@ -899,7 +991,7 @@ make demo   <span class="cm"># review UI at :8501</span></pre>
     // staggered entrance: stamp targets per slide (no-JS = nothing hidden)
     slides.forEach((s) => {
       s.querySelectorAll(
-        'h1, h2, .lead, .kpi, .meta-rule, .card, .step, .decision, .node, .flow, .run, .chartcard, .tablewrap, .overall'
+        'h1, h2, .lead, .kpi, .meta-rule, .card, .step, .decision, .node, .flow, .run, .chartcard, .tablewrap, .overall, .stats, .callout'
       ).forEach((el, i) => {
         el.classList.add('fx-in');
         el.style.setProperty('--i', i);
