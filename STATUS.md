@@ -23,14 +23,16 @@ re-orientation), then §15 for the code tour, §16 for the tests, §17 to demo i
   null agent fails every non-approve case. `python src/calibration.py`.
 
 ## Latest live eval (2026-07-07, fingerprint `bc748e7bf9fa2807`)
-3×18, judge-on. **Overall `pass^3 = 0.78`** (mean 0.83), up from the `0.667` pre-fix
-baseline. The **memory fix landed**: precedent recall moved from the unreadable native
-store to the host-fulfilled `get_precedents` tool, lifting the memory bucket
-`0.00 → 1.00` and ambiguous `0.00 → 0.50`; a `--no-memory` delta collapses both back to
-`0.00`, confirming the recall depends on the tool. Safety intact (threshold holds, no
-hallucination fail). Frozen at `runs/curated/postfix_results.json`; before/after in
-`ITERATIONS.md` #1. Documented backlog: D-0011, D-0013, D-0016 (and a D-0006 deny
-flake) — left unfixed to avoid overfitting the measured cases.
+3 trials × 18 cases, judge on. **Overall `pass^3 = 0.78`** (a case counts only if
+all three trials pass; mean pass rate 0.83), up from `0.667` before the memory
+fix. The fix moved precedent recall from the unreadable native store to the
+host-fulfilled `get_precedents` tool. The memory bucket went `0.00 → 1.00` and
+ambiguous `0.00 → 0.50`, and a `--no-memory` re-run collapses both back to
+`0.00`, confirming the recall depends on the tool. Safety held: the $10k
+threshold was never breached and no evidence was hallucinated. Results are
+frozen at `runs/curated/postfix_results.json`, with the before/after in
+`ITERATIONS.md` #1. Known failures D-0011, D-0013, D-0016 (and a D-0006 deny
+flake) are left unfixed to avoid overfitting the measured cases.
 
 ## Needs a live Anthropic key to run
 (Step-by-step runbook with costs and expected output: `WALKTHROUGH.md` §11.)
