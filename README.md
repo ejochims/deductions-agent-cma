@@ -58,7 +58,7 @@ architecture-and-results overview to share with a team is
 
 ### The central design decision: host-fulfilled tools
 
-The five read tools and `draft_settlement` are declared on the agent as **custom
+The six read tools and `draft_settlement` are declared on the agent as **custom
 tools**, but they are fulfilled **host-side** by the orchestrator, not inside the
 container. When the agent calls a tool, the session emits `agent.custom_tool_use`
 and idles; `run_agent.py` runs the lookup against `fixtures/` and returns the
@@ -72,7 +72,7 @@ files, for two reasons:
    on the orchestrator host. The agent has no bash, file, or network access.
    The wall is structural, not a `.gitignore` we have to remember.
 2. **A typed, auditable tool surface.** Every piece of evidence the agent sees
-   arrives through one of six named tools with a schema — the same surface the
+   arrives through one of seven named tools with a schema — the same surface the
    graders later check citations against.
 
 This is the `research-desk` pattern (custom tools fulfilled by your own server). The
@@ -140,11 +140,11 @@ never trip it — a $12k duplicate is still a deny, a $42k valid claim is an
 escalate); an evidence-citation requirement; and "insufficient or contradictory
 evidence → escalate, never guess."
 
-Six tools, with descriptions written for cold use:
+Seven tools, with descriptions written for cold use:
 `get_deduction` · `search_promotions` · `get_contract_terms` · `get_pos_data` ·
-`check_settlement_history` · and the action tool `draft_settlement`, which is
-the approval gate — it writes a draft to `runs/<trial>/<case>/settlement.json`
-and executes nothing.
+`check_settlement_history` · `get_precedents` (precedent recall, §8) · and the
+action tool `draft_settlement`, which is the approval gate — it writes a draft
+to `runs/<trial>/<case>/settlement.json` and executes nothing.
 
 Default model `claude-sonnet-4-6`; the sweep (§9) decides the production answer
 empirically.
