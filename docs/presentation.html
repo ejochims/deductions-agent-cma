@@ -476,7 +476,7 @@
       <div class="kpi">
         <div class="k-label">Overall pass^3</div>
         <div class="k-val num">78<span style="font-size:1.3rem;">%</span></div>
-        <div class="k-sub">Up from 67% — an eval caught &amp; fixed the memory gap</div>
+        <div class="k-sub">Up from 67% after the eval caught the memory bug</div>
       </div>
       <div class="kpi">
         <div class="k-label">Mean pass rate</div>
@@ -512,7 +512,7 @@
         and settlement history. Minutes to hours of analyst time, each.</p>
       </div>
       <div class="card">
-        <span class="tag">The economics leak</span>
+        <span class="tag">Margin leaks both ways</span>
         <p>Small claims get written off; large ones get settled under deadline
         pressure. Both hand margin to the retailer.</p>
       </div>
@@ -554,7 +554,7 @@
       <div class="flow">— walled off, never mounted —</div>
       <div class="node wall">
         <div class="nt" style="color:var(--muted)">Answer key — <span class="nf">ground_truth/</span></div>
-        <div class="nd">Labels and reference solutions live only on the host, unreachable <em>by construction</em>.</div>
+        <div class="nd">Labels and reference solutions live only on the host; the agent has no way to reach them.</div>
       </div>
     </div>
     <ul class="toolset" aria-label="agent tools">
@@ -650,7 +650,7 @@
       </div>
     </div>
     <div class="callout">
-      <p>One friction: the native memory store assumes file tools this empty
+      <p>One catch: the native memory store assumes file tools this empty
       sandbox lacks. That mismatch caused a silent 0% — two slides ahead.</p>
     </div>
   </div></section>
@@ -698,7 +698,7 @@
     </p>
     <p>
       The fix: a host-fulfilled <code>get_precedents</code> tool, the same pattern
-      as every other capability. The re-run <strong>measured the climb</strong>:
+      as every other capability. The re-run measured the recovery:
     </p>
     <div class="reg"><div class="grid3">
       <div class="card">
@@ -741,8 +741,8 @@
     <h2>Remove a piece, measure what breaks</h2>
     <p>
       Remove one piece — a prompt section or a tool — re-run the eval, revert.
-      A drop means the piece was doing real work; no drop is an honest negative
-      worth keeping.
+      A drop means the piece was doing real work; no drop is a negative result
+      worth recording.
     </p>
     <div class="reg"><div class="grid3">
       <div class="card">
@@ -769,7 +769,7 @@
         <p>Weaken the citation rule and <strong>nothing regresses</strong> — the
         tool descriptions reinforce it independently.</p>
         <div class="delta num">D-0001 / D-0008 / D-0009 &nbsp;still pass</div>
-        <div class="verdict ok">✓ no regression — belt-and-suspenders</div>
+        <div class="verdict ok">✓ no regression — redundant, kept anyway</div>
       </div>
     </div></div>
   </div></section>
@@ -779,12 +779,12 @@
     <p class="eyebrow">08 · Results</p>
     <h2>pass^3 by bucket</h2>
     <p>
-      Read escalate-first: escalation is the safety behavior.
-      <strong>memory</strong> is 100% after the fix. The open edge is
+      Read escalate first: escalation is the safety behavior.
+      <strong>memory</strong> is 100% after the fix. The remaining weak spot is
       <strong>ambiguous</strong>: on a miss the agent drafts a partial with an
       invented number where the reference escalates — left unfixed to avoid
       overfitting to 18 cases. <strong>deny</strong> slipped to 75% on one D-0006
-      trial flip (variance).
+      trial flip (run-to-run variance).
     </p>
     <div class="chartcard">
       <div class="chart-key" aria-hidden="true">
@@ -865,8 +865,8 @@
         <div>
           <h3>The tool boundary is the security boundary</h3>
           <p>Nothing is mounted, so the answer key can't leak and untrusted
-          remittance text can't reach a filesystem. Access control is the
-          architecture.</p>
+          remittance text can't reach a filesystem. Access control is built
+          into the architecture.</p>
         </div>
       </div>
       <div class="decision"><span class="dn"></span>
@@ -878,9 +878,9 @@
       </div>
       <div class="decision"><span class="dn"></span>
         <div>
-          <h3>Validation is a first-class artifact</h3>
-          <p>Graders, gates, a calibrated judge, and a regression harness ship
-          with the agent — what lets a finance owner sign off.</p>
+          <h3>Validation ships with the agent</h3>
+          <p>Graders, gates, a calibrated judge, and a regression harness live
+          in the same repo — that's what lets a finance owner sign off.</p>
         </div>
       </div>
     </div>
@@ -917,8 +917,8 @@
         adversarial eval bucket so prompt injection shows up in the score.</p>
       </div>
     </div>
-    <p class="chart-note" style="margin-top:9px;">Each design fork is captured as an
-      architecture decision in <span class="mono">docs/decisions/</span>, with a
+    <p class="chart-note" style="margin-top:9px;">Each of these decisions is
+      recorded in <span class="mono">docs/decisions/</span>, with a
       concrete &ldquo;when to revisit&rdquo; trigger.</p>
   </div></section>
 
@@ -927,8 +927,8 @@
     <p class="eyebrow">12 · Honest limits</p>
     <h2>What we'd fix before trusting it further</h2>
     <p>
-      Tracked in <span class="mono">NEXT_STEPS.md</span> — these close before the
-      agent gets more autonomy.
+      Tracked in <span class="mono">NEXT_STEPS.md</span> — each must be fixed
+      before the agent gets more autonomy.
     </p>
     <div class="grid3">
       <div class="card">

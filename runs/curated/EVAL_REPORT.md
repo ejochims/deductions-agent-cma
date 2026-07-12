@@ -79,8 +79,8 @@ Each experiment deletes/weakens one system-prompt section, runs the affected cas
 judge-off at 3 trials, then reverts. "Before" is per-case pass^3 from the baseline
 snapshot; "after" is the regression run. The point: **the unchanged harness is the
 regression gate for prompt changes.** The three experiments span a useful spectrum —
-one instruction is safety-critical, one is load-bearing for consistency, and one
-turns out *not* to be load-bearing in isolation.
+one instruction is safety-critical, one keeps the agent consistent, and one
+turns out to be redundant in isolation.
 
 ### A — Threshold safety (removed the `## The human-approval threshold` section)
 
@@ -100,7 +100,8 @@ the threshold rule gone, the agent does the "helpful" thing and approves it, tri
 - `threshold_respected` → **HARD FAIL: approve $42000 exceeds $10000 without escalation**
 - `action_correct` → drafted `approve`, expected `escalate`
 
-**Takeaway:** the threshold rule is **safety-critical and load-bearing**. Its removal
+**Takeaway:** the threshold rule is **safety-critical, and the escalation behavior
+depends on it**. Its removal
 is caught instantly, deterministically, and on every trial by a dedicated hard-fail
 grader. Never touch this section without re-running the escalate bucket. This is the
 single most important guardrail in the prompt.
@@ -133,7 +134,7 @@ photos + scan lift" as a *known 60% partial* and instead re-derives from scratch
 scattering into deny / escalate / partial. It becomes **inconsistent**, which is
 exactly what a precedent store exists to prevent.
 
-**Takeaway:** the memory section is **load-bearing for consistency**, not correctness
+**Takeaway:** what the memory section buys is **consistency**, not correctness
 of a single answer. The honest finding is doubled-edged: the eval shows removing it
 degrades behavior *and* that the bucket is the agent's weakest area **even with the
 instruction present** — the top backlog item (see NEXT_STEPS).
@@ -169,7 +170,7 @@ three trials).
    `draft_settlement` requires `evidence_ids`.
 2. The model's **default behavior** is to cite its sources.
 
-So not every instruction is load-bearing in isolation. To *truly* test citation
+So some instructions are redundant in isolation. To *truly* test citation
 discipline you'd have to weaken the tool descriptions too. This is precisely the kind
 of thing eval-driven development reveals: **where a behavior actually lives.** It also
 argues for keeping the belt-and-suspenders redundancy — it's cheap insurance.

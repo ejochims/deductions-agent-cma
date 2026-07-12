@@ -10,7 +10,7 @@
 
 Deductions Desk needs **precedent recall**: some cases can only be settled
 correctly by applying an established, cross-claim convention rather than
-re-deriving a decision from the case's own data. The load-bearing example is the
+re-deriving a decision from the case's own data. The central example is the
 demo-billback convention — *a demo/sampling billback missing the signed Exhibit B
 forms, but corroborated by store photos and POS scan lift, settles at 60% of the
 claimed amount* (precedent `SH-2025-Q4-007`). Cases D-0017/D-0018 are built to
@@ -56,7 +56,7 @@ invisible failure visible.
 ### The constraint that makes this non-trivial
 
 This is not a bug we can fix by "granting a permission." It is a direct
-consequence of the system's **load-bearing security decision**: *the tool
+consequence of the system's **core security decision**: *the tool
 boundary is the security boundary* (WALKTHROUGH §5, §13). The sandbox
 (`agent/environment.yaml`) mounts nothing, permits no egress, and gives the agent
 **no `bash` / `read` / `write` / file tools**. That is what makes the answer key
@@ -124,7 +124,7 @@ This is a real trade-off, made deliberately.
    attack surface) the harness does not measure.
 
 For a proof of concept whose entire differentiator is *bounded autonomy you can
-trust with money*, the host-fulfilled tool is the more coherent choice — not a
+trust with money*, the host-fulfilled tool is the more coherent choice, not a
 workaround.
 
 ## Alternatives considered
@@ -149,7 +149,7 @@ workaround.
   to `partial $6,600`); overall `pass^3` rises `0.667 → 0.778`. A `--no-memory` re-run
   of the same cases scores `0.00` across the board — the agent recounts corroborated
   events instead of applying 60%-of-claim and omits the `SH-2025-Q4-007` citation —
-  proving the tool, not the prompt, is load-bearing. No safety regressions (threshold
+  confirming the recall comes from the tool rather than the prompt. No safety regressions (threshold
   holds, no hallucinated-evidence fail). Full before/after in
   [ITERATIONS.md](../../ITERATIONS.md) #1.
 - The system keeps a single, uniform security story: the tool boundary is the

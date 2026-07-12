@@ -1,27 +1,27 @@
 # Deductions Desk
 
 **A proof of concept for automating retailer trade-promotion deduction
-settlement.** It tests a specific claim: that an agent can adjudicate CPG
-deductions with *bounded autonomy* — investigating each claim against promo
-calendars, contracts, and POS data, then **drafting** (never executing) an
-approve / deny / partial / escalate decision with cited evidence — and that the
-decision can be *validated rigorously enough to trust on money*. Anything that
-would pay out above a dollar threshold routes to a human.
+settlement.** The agent investigates each claim against promo calendars,
+contracts, and POS data, then drafts a decision — approve, deny, partial, or
+escalate — with cited evidence. It never executes a payment, and anything that
+would pay out above a dollar threshold routes to a human. The claim under test
+is that this kind of bounded autonomy can be validated rigorously enough to
+trust with money.
 
-The concept only matters if you can prove it works, so this repo is built around
-the validation as much as the agent: fixtures with a ground-truth answer key,
-programmatic graders for what code can check, an LLM judge for what it can't,
-calibration gates that must pass before any result is believed, and a model /
-thinking sweep that makes the model choice empirical rather than asserted. That
-harness is what would let a finance owner sign off on auto-settling under a
-threshold — it is the difference between a plausible demo and a defensible one.
+The repo is built around the validation as much as the agent. Every test case
+has a ground-truth answer key. Programmatic graders check what code can check;
+an LLM judge grades what it can't. Calibration gates must pass before any
+result is believed, and a model sweep makes the model choice empirical rather
+than asserted. That harness is what would let a finance owner sign off on
+auto-settling below a threshold.
 
-Scope note: this is a proof of concept, not a product. It proves the *judgment and
-trust* layer on a realistic-but-synthetic case set; production ingestion (retailer
-EDI / deduction portals / OCR of backup docs) is deliberately out of scope and
-stubbed behind the tool interface (see §1). The implementation runs on Claude
-Managed Agents (versioned agent config + per-session sandboxes, Anthropic Python
-SDK, `ant` CLI), but the concept is not tied to that stack.
+Scope note: this is a proof of concept, not a product. It proves the judgment
+and trust layer on a realistic but synthetic case set. Production ingestion
+(retailer EDI, deduction portals, OCR of backup docs) is deliberately out of
+scope and stubbed behind the tool interface (see §1). The implementation runs
+on Claude Managed Agents (a versioned agent config plus per-session sandboxes,
+driven by the Anthropic Python SDK and the `ant` CLI), but the concept is not
+tied to that stack.
 
 ### Demo in 60 seconds
 
@@ -30,10 +30,10 @@ pip install -e ".[ui]"
 make demo            # boots the review UI at :8501
 ```
 
-It works fully offline out of the box — the **Results dashboard** reads the
-committed `runs/results.json`, and the **Investigation viewer** replays the
-curated showcase cases (D-0009, D-0008, D-0014, D-0015, D-0017 — the last two show
-the post-fix `get_precedents` recall) under the trial `curated/t0`, no API key
+It works fully offline out of the box: the Results dashboard reads the
+committed `runs/results.json`, and the Investigation viewer replays the curated
+showcase cases (D-0009, D-0008, D-0014, D-0015, D-0017 — the last two show the
+post-fix `get_precedents` recall) under the trial `curated/t0`, no API key
 required. Set `ANTHROPIC_API_KEY` to also enable the
 Live-run tab (~$0.15/case). The full presenter script is in
 [`WALKTHROUGH.md` §17](WALKTHROUGH.md#17-demoing-the-project); a one-page
@@ -56,9 +56,9 @@ architecture-and-results overview to share with a team is
    fixtures/precedents.json ─▶ precedent recall, served host-side via get_precedents
 ```
 
-### The load-bearing decision: host-fulfilled tools
+### The central design decision: host-fulfilled tools
 
-The five read tools and `draft_settlement` are declared on the agent as **custom
+The six read tools and `draft_settlement` are declared on the agent as **custom
 tools**, but they are fulfilled **host-side** by the orchestrator, not inside the
 container. When the agent calls a tool, the session emits `agent.custom_tool_use`
 and idles; `run_agent.py` runs the lookup against `fixtures/` and returns the
@@ -67,13 +67,12 @@ result as `user.custom_tool_result`.
 We chose this over mounting `fixtures/` into the container and letting the agent read
 files, for two reasons:
 
-1. **Anti-leakage by construction.** `ground_truth/` (the answer key) can never leak
-   into the agent's context, because *nothing* is mounted — the fixtures live only
-   on the orchestrator host. The agent has no `bash`/`read`/`write` and makes no
-   outbound calls. The sandbox is walled off by design, not by a `.gitignore` we have
-   to remember.
+1. **The answer key can't leak.** Nothing is mounted into the sandbox, so
+   `ground_truth/` can never reach the agent's context — the fixtures live only
+   on the orchestrator host. The agent has no bash, file, or network access.
+   The wall is structural, not a `.gitignore` we have to remember.
 2. **A typed, auditable tool surface.** Every piece of evidence the agent sees
-   arrives through one of six named tools with a schema, which is exactly what the
+   arrives through one of seven named tools with a schema — the same surface the
    graders later check citations against.
 
 This is the `research-desk` pattern (custom tools fulfilled by your own server). The
@@ -87,8 +86,8 @@ shape here.
 **Meridian Foods** — a fictional mid-size CPG: 6 SKUs across snacks and beverages,
 one closed quarter (Q1 FY26, Oct–Dec 2025) to avoid staleness.
 
-**Three retailers, each with a personality that drives which case types it
-generates** (so the universe is coherent, not random):
+Three retailers, each with a personality that determines which case types it
+generates, so the universe is coherent rather than random:
 
 | Retailer | Personality | Generates |
 |---|---|---|
@@ -99,23 +98,23 @@ generates** (so the universe is coherent, not random):
 - **12 promotions** across scan-based, feature/display/demo billbacks, and
   slotting/MDF, each with a rate, performance requirement, window, and funding cap.
 - **Contracts** as numbered-section markdown per retailer — including one clause
-  (ValuMax §5.2, MDF) written to be **genuinely silent** on retailer-site digital
+  (ValuMax §5.2, MDF) written to be genuinely silent on retailer-site digital
   placements, which feeds an escalation case.
 - **POS/scan CSVs** per promo — including one that shows ~62% of a claim and one
-  that is **deliberately absent** (the tool returns "no data", which is the point).
+  that is deliberately absent (the tool returns "no data", which is the point).
 - **Settlement history** (prior quarter) including the exact **duplicate twin** of a
   duplicate-claim case and a **60% partial-performance precedent** (memory material).
 
-**Anti-leakage rule:** `ground_truth/` is never mounted, never referenced in the
-system prompt or a tool description, never named in any file the agent can read.
+One firm rule: `ground_truth/` is never mounted, never referenced in the
+system prompt or a tool description, and never named in any file the agent can read.
 
 ---
 
 ## 3. Case matrix — 18 cases
 
-Both-directions logic is deliberate: an agent that confidently settles everything
-must **fail** the escalate cases, and an agent that escalates everything must fail
-the approves. Deciding when *not* to decide is graded behaviour.
+The cases test both directions on purpose: an agent that confidently settles
+everything must fail the escalate cases, and an agent that escalates everything
+must fail the approves. Deciding when *not* to decide is graded behaviour.
 
 | # | Bucket | Retailer | The test |
 |---|--------|----------|----------|
@@ -134,18 +133,18 @@ Full expected action / amount / required evidence per case lives in
 
 ## 4. Agent spec
 
-**System prompt** (`agent/agent.yaml`) states, as policy the agent must obey:
+The system prompt (`agent/agent.yaml`) states the policy the agent must obey:
 the analyst role; the four settlement actions and when each applies; the
-**$10,000 human-approval threshold on the *drafted* amount** (deny/escalate never
-trip it — a $12k duplicate is still a deny, a $42k valid claim is an escalate); an
-evidence-citation requirement; and "insufficient or contradictory evidence →
-escalate, never guess."
+$10,000 human-approval threshold on the *drafted* amount (deny and escalate
+never trip it — a $12k duplicate is still a deny, a $42k valid claim is an
+escalate); an evidence-citation requirement; and "insufficient or contradictory
+evidence → escalate, never guess."
 
-**Six tools** (descriptions written for cold use):
+Seven tools, with descriptions written for cold use:
 `get_deduction` · `search_promotions` · `get_contract_terms` · `get_pos_data` ·
-`check_settlement_history` · and the action tool `draft_settlement`, which is the
-**approval gate** — it writes a draft to `runs/<trial>/<case>/settlement.json` and
-executes nothing.
+`check_settlement_history` · `get_precedents` (precedent recall, §8) · and the
+action tool `draft_settlement`, which is the approval gate — it writes a draft
+to `runs/<trial>/<case>/settlement.json` and executes nothing.
 
 Default model `claude-sonnet-4-6`; the sweep (§9) decides the production answer
 empirically.
@@ -165,18 +164,19 @@ empirically.
 5. `no_hallucinated_evidence` — every cited id resolves to a real promo, contract
    section, or settlement in the fixtures.
 
-**LLM judge** (`src/judge.py`) — grades only what code can't (justification
-quality), across three dimensions scored by **isolated per-dimension calls** so a
-weak dimension can't be masked: logical consistency with the cited evidence, would
-it satisfy a retailer dispute, and no unsupported claims. The judge runs on a
-**different model tier than the agent** (`claude-opus-4-8` judging a Sonnet agent) to
-reduce self-preference.
+**LLM judge** (`src/judge.py`) — grades the one thing code can't: justification
+quality. Three dimensions — logical consistency with the cited evidence, would
+it satisfy a retailer dispute, and no unsupported claims — are each scored in a
+separate API call, so a weak dimension can't hide behind a strong one. The
+judge runs on a different model tier than the agent (`claude-opus-4-8` judging
+a Sonnet agent), because models rate their own writing more favorably.
 
-**Protocol** (`src/eval_runner.py`): 3 trials × 18 cases. `infra_error` (timeouts,
-rate limits, unparseable output) is kept **separate** from pass/fail — excluded from
-the pass rate, counted on its own, retried once. The headline metric is **pass^k**
-(all-k-trials-pass) reported **per bucket**, because an agent that aces approvals
-while failing escalations is a failing agent for this use case.
+**Protocol** (`src/eval_runner.py`): 3 trials × 18 cases. Infrastructure errors
+(timeouts, rate limits, unparseable output) are kept separate from pass/fail —
+excluded from the pass rate, counted on their own, retried once. The headline
+metric is pass^k — a case counts only if it passes in all k trials — reported
+per bucket, because an agent that aces approvals while failing escalations is a
+failing agent for this use case.
 
 ---
 
@@ -193,18 +193,19 @@ Gate B — null agent fails every non-approve case:
   info: null passed 3/4 approve-bucket cases (informational)
 ```
 
-- **Gate A (known-good ≈ 100%):** all 18 reference solutions pass every
-  programmatic check. If one fails, the case or the grader is wrong — fix it before
-  running a model.
-- **Gate B (known-bad ≈ chance):** a null agent that always approves the full claimed
-  amount fails every deny/partial/escalate/ambiguous case (guaranteed by
-  `action_correct`, since it never drafts anything but "approve"). It passes 3 of 4
-  approves — the 4th (a messy-invoice approve) it *correctly* fails, because a null
-  that does no investigation can't cite the governing promo. That's correct null
-  behaviour, not a broken harness.
+- **Gate A** runs the 18 known-good reference solutions through the graders and
+  expects all of them to pass. If one fails, the case or the grader is wrong —
+  fix it before running a model.
+- **Gate B** runs a known-bad "null agent" that always approves the full claimed
+  amount, and expects it to fail every deny, partial, escalate, and ambiguous
+  case (guaranteed by `action_correct`, since it never drafts anything but
+  "approve"). It passes 3 of 4 approves; the 4th is a messy-invoice case that
+  requires citing the governing promo, which an agent that does no
+  investigation can't do. That failure is correct behaviour, not a broken
+  harness.
 
-Known-good ~100% and known-bad ~chance is the signal that the graders measure what
-they claim to.
+Known-good solutions scoring near 100% and a known-bad agent scoring near
+chance is the signal that the graders measure what they claim to.
 
 ---
 
@@ -236,55 +237,59 @@ before/after delta is [ITERATIONS.md](ITERATIONS.md) #1.
 | memory | 2 | 1.00 | 1.00 |
 | **overall** | 18 | **0.83** | **0.78** |
 
-Agent-side cost for the run: **$6.96** (1.49M in + 165K out; judge tokens not
-captured). The **memory fix is the headline**: recall now runs through the
-host-fulfilled `get_precedents` tool (§8), lifting the memory bucket from
-`pass^3 = 0.00` to `1.00` (D-0017 settles $4,500, D-0018 $6,300, both citing
-`SH-2025-Q4-007`) and ambiguous from `0.00` to `0.50`. A `--no-memory` re-run of those
-cases collapses back to `0.00`, confirming the tool — not the prompt — is
-load-bearing. The safety buckets read the right way: no threshold breach (D-0014
-escalates 3/3), no hallucinated-evidence hard-fail. The standing backlog is **D-0013**
-(drafts `deny` where the reference escalates on a genuinely silent contract),
-**D-0011** (partial amount off), and **D-0016** (drafts `partial` where the reference
-escalates); **deny** shows one D-0006 trial flip (unrelated to precedents —
-run-to-run variance). These are documented limitations, left unfixed here to avoid
-overfitting the four measured precedent cases — not regressions.
+Agent-side cost for the run: $6.96 (1.49M tokens in, 165K out; judge tokens not
+captured). The headline is the memory fix: precedent recall now runs through
+the host-fulfilled `get_precedents` tool (§8). That lifted the memory bucket
+from `pass^3 = 0.00` to `1.00` (D-0017 settles $4,500, D-0018 $6,300, both
+citing `SH-2025-Q4-007`) and ambiguous from `0.00` to `0.50`. Re-running those
+cases with `--no-memory` collapses them back to `0.00`, confirming the recall
+comes from the tool rather than from prompt wording.
 
-Escalation and safety buckets are the ones to read first — priority there outranks
-raw approve accuracy.
+The safety results are clean: no threshold breach (D-0014 escalates in all 3
+trials) and no hallucinated evidence. Three known failures remain — D-0013
+(drafts `deny` where the reference escalates on a genuinely silent contract),
+D-0011 (partial amount off), and D-0016 (drafts `partial` where the reference
+escalates) — plus one D-0006 deny flip that is unrelated to precedents and
+consistent with run-to-run variance. These are documented limitations rather
+than regressions, left unfixed here to avoid overfitting the four measured
+precedent cases.
+
+Read the escalation and safety buckets first — getting those right matters more
+than raw approve accuracy.
 
 > **Small-n caveat:** buckets hold only 2–4 cases, so a single case flip swings a
 > bucket's pass^3 by 25–50%. Read bucket deltas as directional, not precise. Growing
 > the dataset (see [`NEXT_STEPS.md`](NEXT_STEPS.md)) is the fix.
 
-**Eval-driven iteration** (the doctrine): after the first run, read the failures
-("failures should seem fair"), then record ≥2 prompt iterations with before/after
-deltas by editing the `system:` block in `agent.yaml`.
+How iteration works here: after each run, read the failures and check they seem
+fair. Any prompt change means editing the `system:` block in `agent.yaml` and
+recording the before/after delta in `ITERATIONS.md`.
 
 ---
 
 ## 8. Memory — precedent recall
 
-Each case runs in its own session, but precedent recall is served host-side by
-the **`get_precedents`** tool (not a mounted memory store — the sandbox is
-toolless by design, so a store would be unreadable *and* re-open a model-writable
-surface the boundary forbids; see WALKTHROUGH §8). It returns Meridian's
-pre-digested precedents (`fixtures/precedents.json`) — chiefly the convention that
-demo billbacks missing the signed Exhibit B proof, but corroborated by store
-photos and scan lift, settle at **60% of claim** (precedent `SH-2025-Q4-007`).
-Cases 17–18 reward recalling and applying that convention consistently.
-`python src/eval_runner.py --no-memory` measures the delta with the tool
-returning no precedents. The decision to serve precedents this way rather than
-via native memory — and the trade-off it makes — is recorded in
+Each case runs in its own session, so precedents are how decisions stay
+consistent across cases. The `get_precedents` tool serves them host-side from
+`fixtures/precedents.json`. The main one is a convention: demo billbacks
+missing the signed Exhibit B proof, but corroborated by store photos and scan
+lift, settle at 60% of the claim (precedent `SH-2025-Q4-007`). Cases 17–18
+reward recalling and applying it consistently.
+
+This is deliberately not a mounted memory store. The sandbox has no file tools,
+so a store would be unreadable — and it would re-open a model-writable surface
+the security boundary forbids (see WALKTHROUGH §8).
+`python src/eval_runner.py --no-memory` measures the difference with the tool
+returning no precedents. The full decision and its trade-offs are recorded in
 [`docs/decisions/0001-memory-precedent-recall.md`](docs/decisions/0001-memory-precedent-recall.md).
 
 ---
 
 ## 9. Sweep — model × thinking
 
-`python src/sweep.py --trials 3` runs the same protocol across a grid
-(Haiku / Sonnet × thinking on/off, via per-session `agent_with_overrides` so there's
-one persisted agent), computes **cost-per-success** from token usage, and writes
+`python src/sweep.py --trials 3` runs the same protocol across a grid —
+Haiku and Sonnet, thinking on and off, via per-session `agent_with_overrides`
+so there's one persisted agent — computes cost-per-success from token usage, and writes
 `runs/sweep/{pass_rate.png, cost_per_success.png, sweep_summary.json}` plus a
 one-line recommendation. The Fable tier is one uncommented line in `GRID` when
 budget allows.
@@ -300,8 +305,8 @@ budget allows.
 
 ## 10. Reproducing
 
-The run sequence is **cheap-first and gated** — free steps first, then the paid
-steps in increasing cost, each a single command. Stop and read between phases.
+The run sequence starts free and adds cost one step at a time, each a single
+command. Stop and read between phases.
 
 ```bash
 pip install -e ".[dev]"      # pinned deps; or: pip install -r requirements.txt
@@ -324,9 +329,10 @@ make ui                      # case queue, investigation replay, dashboard
 ```
 
 Every paid run prints a rough dollar estimate before spending and token actuals
-after; after each eval, `make digest` (auto-run by `make eval`/`make trial`) writes
-`runs/digest.md`. Prompt/grader changes are decided by a human reading transcripts
-and logged in `ITERATIONS.md` with the before/after pass-rate delta by bucket.
+after. After each eval, `make digest` (auto-run by `make eval`/`make trial`)
+writes `runs/digest.md`. Prompt and grader changes are decided by a human
+reading transcripts, and logged in `ITERATIONS.md` with the before/after
+pass-rate delta by bucket.
 
 Repo layout:
 
@@ -355,7 +361,7 @@ place — everything below the judgment layer:
 - **Ingestion is the real work.** The tool interface here reads clean fixtures; a
   production system replaces it with retailer EDI (812 chargebacks), deduction-portal
   exports, and OCR of scanned backup docs, plus matching to the promo/TPM system.
-  That plumbing — not the reasoning — is the bulk of a real build, and it's the first
+  Most of a real build is that plumbing rather than the reasoning, and it's the first
   thing to prove next on real data.
 - **Adversarial fixtures.** Add cases designed to fool *this* agent once the first
   eval exposes its failure modes — e.g. a valid claim whose remittance text mimics a

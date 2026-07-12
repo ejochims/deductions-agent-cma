@@ -80,7 +80,7 @@ def evidence_cited(settlement: dict, label: dict) -> CheckResult:
 
     Always applicable. Set semantics: every id in label['required_evidence'] must
     appear in settlement['evidence_ids']; extra citations are allowed (an agent may
-    cite more than the minimum load-bearing set).
+    cite more than the minimum required set).
     """
     required = set(label.get("required_evidence") or [])
     cited = set(settlement.get("evidence_ids") or [])
