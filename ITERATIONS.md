@@ -76,8 +76,8 @@ Config: model=claude-sonnet-4-6, trials=3, judge=on. Frozen at
 | memory    | 0.00          | 1.00         | 0.17        | 1.00       |
 | overall   | 0.67          | 0.78         | 0.70        | 0.83       |
 
-**Memory-on vs `--no-memory` delta** (Track A cases, 3×, judge-on) — proves the
-*tool*, not the prompt, is load-bearing:
+**Memory-on vs `--no-memory` delta** (Track A cases, 3×, judge-on) — shows the
+recall comes from the *tool* rather than the prompt:
 
 | case (bucket)      | memory ON pass^3 | `--no-memory` pass^3 |
 |--------------------|------------------|----------------------|
@@ -104,13 +104,13 @@ cost $6.96 (1.49M in + 165K out); delta run ~$2.
 ---
 
 > The three entries below are **regression experiments (reverted)** — deliberate
-> prompt breaks to probe which instructions are load-bearing, **not** improvements.
+> prompt breaks to probe which instructions the results actually depend on, **not** improvements.
 > The prompt was restored (`git checkout`) after each; the shipped agent is unchanged.
 > "Before" = baseline per-case pass^3; only the listed cases were run.
 
 ### R1. Regression experiment (reverted) — remove threshold section  (2026-07-06)
 Change: deleted `## The human-approval threshold` from `agent.yaml`. Probing whether
-the $10k auto-settlement guardrail is load-bearing.
+the behavior depends on the $10k auto-settlement guardrail.
 Config: model=claude-sonnet-4-6, trials=3, judge=off, fingerprint=`7d6bb9fc9f6e7363`
 
 | case (bucket)      | before pass^3 | after pass^3 |
@@ -122,8 +122,8 @@ Config: model=claude-sonnet-4-6, trials=3, judge=off, fingerprint=`7d6bb9fc9f6e7
 
 Notes: **Caught, hard.** D-0014 ($42k valid slotting) flips escalate→approve in all 3
 trials, tripping the `threshold_respected` HARD FAIL + `action_correct` every trial.
-Verdict: threshold rule is safety-critical and load-bearing — never edit without
-re-running the escalate bucket.
+Verdict: the escalation behavior depends on the threshold rule, and it is
+safety-critical — never edit without re-running the escalate bucket.
 
 ### R2. Regression experiment (reverted) — remove memory/precedents section  (2026-07-06)
 Change: deleted `## Precedents (memory)` from `agent.yaml` (store stays mounted; only
@@ -137,7 +137,7 @@ Config: model=claude-sonnet-4-6, trials=3, judge=off
 
 Notes: Bucket already failing at baseline, so pass^3 can't fall further — signal is in
 mean pass rate (0.17→0.00) and failure-mode shift: agent abandons the consistent 60%
-partial and scatters into deny/escalate/partial. Load-bearing for *consistency*.
+partial and scatters into deny/escalate/partial. What the section buys is *consistency*.
 
 ### R3. Regression experiment (reverted) — weaken citation section  (2026-07-06)
 Change: softened `## Evidence and citations` from "must cite… never invent…" to a
@@ -154,5 +154,5 @@ Config: model=claude-sonnet-4-6, trials=3, judge=off
 
 Notes: **No regression.** Citation behavior is redundantly reinforced by the tool
 descriptions (`get_contract_terms`/`draft_settlement`) and model defaults, so weakening
-this one section doesn't move the graders. Negative result: this instruction is *not*
-load-bearing in isolation — a real finding about where the behavior actually lives.
+this one section doesn't move the graders. Negative result: this instruction is
+redundant in isolation — a real finding about where the behavior actually lives.

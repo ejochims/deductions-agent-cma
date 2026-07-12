@@ -238,7 +238,7 @@ A trial passes iff every *applicable* check passes.
 
 Code can check *what* was decided; it cannot check whether the justification is
 *good*. That's a language-quality judgment, so a second model grades it — three
-dimensions, and crucially **one isolated API call per dimension**, so a strong
+dimensions, with **one isolated API call per dimension**, so a strong
 dimension can't mask a weak one:
 
 - **consistent** — is the justification logically consistent with the evidence it
@@ -246,8 +246,8 @@ dimension can't mask a weak one:
 - **dispute_proof** — would it hold up if the retailer's analyst pushed back?
 - **no_unsupported** — does it assert anything the cited evidence doesn't show?
 
-Each call returns structured JSON (`pass | fail | unknown` + a one-line reason).
-That's not a parsing convention — it's **structured outputs**, an API feature:
+Each call returns structured JSON (`pass | fail | unknown` + a one-line reason),
+enforced by **structured outputs**, an API feature:
 the request carries a JSON schema and the API constrains generation so the reply
 must validate against it. Short of a refusal or truncation, the verdict cannot
 be malformed — which is why an unparseable reply is treated as an infrastructure
@@ -600,8 +600,8 @@ it; the tool guarantees it.
 a fluent justification smuggle an unsupported claim past the grader. Isolation
 keeps each dimension's verdict independent.
 
-**Why record token usage per run?** Cost is a first-class output. The sweep's
-cost-per-success — not raw accuracy — is the deployment decision metric, and it
+**Why record token usage per run?** Cost is a first-class output. The deployment
+decision metric is the sweep's cost-per-success rather than raw accuracy, and it
 can't be computed without per-run usage.
 
 ---

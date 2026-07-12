@@ -95,7 +95,7 @@ recurring root causes are countable and targetable rather than re-diagnosed case
 ## 8. Systematic prompt-section ablation matrix
 
 **Why:** this session's three regressions were the manual version of a repeatable
-practice — *which instructions are actually load-bearing?* The threshold section is
+practice — *which instructions actually matter?* The threshold section is
 safety-critical; the citation section turned out redundant. That map is worth
 maintaining as the prompt evolves, so you know what's safe to touch.
 

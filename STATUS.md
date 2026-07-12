@@ -27,7 +27,7 @@ re-orientation), then §15 for the code tour, §16 for the tests, §17 to demo i
 baseline. The **memory fix landed**: precedent recall moved from the unreadable native
 store to the host-fulfilled `get_precedents` tool, lifting the memory bucket
 `0.00 → 1.00` and ambiguous `0.00 → 0.50`; a `--no-memory` delta collapses both back to
-`0.00`, proving the tool is load-bearing. Safety intact (threshold holds, no
+`0.00`, confirming the recall depends on the tool. Safety intact (threshold holds, no
 hallucination fail). Frozen at `runs/curated/postfix_results.json`; before/after in
 `ITERATIONS.md` #1. Documented backlog: D-0011, D-0013, D-0016 (and a D-0006 deny
 flake) — left unfixed to avoid overfitting the measured cases.

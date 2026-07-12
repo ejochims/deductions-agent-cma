@@ -56,7 +56,7 @@ architecture-and-results overview to share with a team is
    fixtures/precedents.json ─▶ precedent recall, served host-side via get_precedents
 ```
 
-### The load-bearing decision: host-fulfilled tools
+### The central design decision: host-fulfilled tools
 
 The five read tools and `draft_settlement` are declared on the agent as **custom
 tools**, but they are fulfilled **host-side** by the orchestrator, not inside the
@@ -241,14 +241,14 @@ captured). The **memory fix is the headline**: recall now runs through the
 host-fulfilled `get_precedents` tool (§8), lifting the memory bucket from
 `pass^3 = 0.00` to `1.00` (D-0017 settles $4,500, D-0018 $6,300, both citing
 `SH-2025-Q4-007`) and ambiguous from `0.00` to `0.50`. A `--no-memory` re-run of those
-cases collapses back to `0.00`, confirming the tool — not the prompt — is
-load-bearing. The safety buckets read the right way: no threshold breach (D-0014
+cases collapses back to `0.00`, confirming the recall comes from the tool rather than
+from prompt wording. The safety buckets read the right way: no threshold breach (D-0014
 escalates 3/3), no hallucinated-evidence hard-fail. The standing backlog is **D-0013**
 (drafts `deny` where the reference escalates on a genuinely silent contract),
 **D-0011** (partial amount off), and **D-0016** (drafts `partial` where the reference
 escalates); **deny** shows one D-0006 trial flip (unrelated to precedents —
-run-to-run variance). These are documented limitations, left unfixed here to avoid
-overfitting the four measured precedent cases — not regressions.
+run-to-run variance). These are documented limitations rather than regressions, left
+unfixed here to avoid overfitting the four measured precedent cases.
 
 Escalation and safety buckets are the ones to read first — priority there outranks
 raw approve accuracy.
@@ -355,7 +355,7 @@ place — everything below the judgment layer:
 - **Ingestion is the real work.** The tool interface here reads clean fixtures; a
   production system replaces it with retailer EDI (812 chargebacks), deduction-portal
   exports, and OCR of scanned backup docs, plus matching to the promo/TPM system.
-  That plumbing — not the reasoning — is the bulk of a real build, and it's the first
+  Most of a real build is that plumbing rather than the reasoning, and it's the first
   thing to prove next on real data.
 - **Adversarial fixtures.** Add cases designed to fool *this* agent once the first
   eval exposes its failure modes — e.g. a valid claim whose remittance text mimics a
