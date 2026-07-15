@@ -11,9 +11,9 @@ trust with money.
 The repo is built around the validation as much as the agent. Every test case
 has a ground-truth answer key. Programmatic graders check what code can check;
 an LLM judge grades what it can't. Calibration gates must pass before any
-result is believed, and a model sweep makes the model choice empirical rather
-than asserted. That harness is what would let a finance owner sign off on
-auto-settling below a threshold.
+result is believed, and a model sweep is available to put the model choice on an
+empirical footing rather than an asserted one. That harness is what would let a
+finance owner sign off on auto-settling below a threshold.
 
 Scope note: this is a proof of concept, not a product. It proves the judgment
 and trust layer on a realistic but synthetic case set. Production ingestion
@@ -146,8 +146,8 @@ Seven tools, with descriptions written for cold use:
 action tool `draft_settlement`, which is the approval gate — it writes a draft
 to `runs/<trial>/<case>/settlement.json` and executes nothing.
 
-Default model `claude-sonnet-4-6`; the sweep (§9) decides the production answer
-empirically.
+Default model `claude-sonnet-4-6`; the sweep (§9) is the tool for deciding the
+production model empirically (an optional extension — not run here).
 
 ---
 
@@ -285,21 +285,22 @@ returning no precedents. The full decision and its trade-offs are recorded in
 
 ---
 
-## 9. Sweep — model × thinking
+## 9. Model sweep — cost per success
 
-`python src/sweep.py --trials 3` runs the same protocol across a grid —
-Haiku and Sonnet, thinking on and off, via per-session `agent_with_overrides`
-so there's one persisted agent — computes cost-per-success from token usage, and writes
-`runs/sweep/{pass_rate.png, cost_per_success.png, sweep_summary.json}` plus a
-one-line recommendation. The Fable tier is one uncommented line in `GRID` when
-budget allows.
+`make sweep` (`python src/sweep.py --trials 3`) re-runs the identical eval
+protocol across a model grid — `claude-haiku-4-5`, `claude-sonnet-4-6`, and
+`claude-sonnet-5` — via per-session `agent_with_overrides`, so one persisted
+agent is measured under each model. It computes **cost-per-success** from token
+usage and writes `runs/sweep/{pass_rate.png, cost_per_success.png,
+sweep_summary.json}` plus a one-line recommendation. The Fable tier is one
+uncommented line in `GRID` when budget allows. (Managed Agents exposes no
+per-session thinking override, so the sweep varies model only.)
 
-| Config | pass^3 | cost / success |
-|--------|--------|----------------|
-| haiku-nothink | — | — |
-| haiku-think | — | — |
-| sonnet-nothink | — | — |
-| sonnet-think | — | — |
+This is an **optional extension** — it settles the production model choice, not
+the POC's core validation (that's §7). It has not been run here. `sweep.py`
+prints the grid's cost before anything executes (~$15 at judge-off, 3 trials ×
+18 cases); run it, then replace this note with the resulting cost-per-success
+rows.
 
 ---
 
