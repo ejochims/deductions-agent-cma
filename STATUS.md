@@ -40,9 +40,8 @@ flake) are left unfixed to avoid overfitting the measured cases.
 - Judge calibration: `python src/judge.py --calibrate`
 - Full eval: `python src/eval_runner.py --trials 3 --judge`
 - Memory delta: add `--no-memory` to compare
-- Model sweep: `python src/sweep.py --trials 3`
-- Then paste the pass^3-by-bucket numbers and the two sweep PNGs into `README.md`
-  §7 and §9.
+- Model sweep (optional): `python src/sweep.py --trials 3`
+- Then paste the cost-per-success rows and the two sweep PNGs into `README.md` §9.
 
 ## Possible next steps
 - Prompt iteration loop: edit the `system:` block in `agent.yaml`, re-run the eval,
