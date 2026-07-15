@@ -11,7 +11,11 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest==9.1.1", "ruff==0.15.20"]
-ui = ["streamlit==1.58.0"]
+# pandas/pyarrow are transitive via streamlit but pinned explicitly: pyarrow 25.0.0
+# segfaults converting a DataFrame to Arrow under streamlit's AppTest on py3.12
+# (pyarrow/pandas_compat.py convert_column), which crashed CI. Both are verified
+# to pass the suite; bump deliberately, not by float.
+ui = ["streamlit==1.58.0", "pandas==2.3.3", "pyarrow==24.0.0"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src", "agent", "ui"]
