@@ -457,7 +457,6 @@
 <div class="deck" id="deck">
  <div class="track" id="track">
 
-  <!-- ==================================================== 1 · TITLE -->
   <section class="slide" aria-label="Title">
    <div class="hero-bg" aria-hidden="true"></div>
    <div class="slide-inner">
@@ -496,7 +495,6 @@
     </div>
   </div></section>
 
-  <!-- ==================================================== 2 · THE PROBLEM -->
   <section class="slide" aria-label="The problem"><div class="slide-inner">
     <p class="eyebrow">01 · The problem</p>
     <h2>The money is already gone</h2>
@@ -532,7 +530,6 @@
       scans, missing paperwork.</p>
   </div></section>
 
-  <!-- ==================================================== 3 · HOW IT WORKS -->
   <section class="slide" aria-label="How it works"><div class="slide-inner">
     <p class="eyebrow">02 · The approach</p>
     <h2>The tool boundary is the security boundary</h2>
@@ -540,6 +537,8 @@
       Seven tools — six reads and one write gate — all fulfilled
       <strong>host-side</strong>. Nothing is mounted into the sandbox: no
       filesystem, no egress. Even <em>memory</em> is just another tool.
+      The agent is a mind in an empty room: it asks these seven questions
+      through a slot in the wall and can never reach the filing cabinet itself.
     </p>
     <div class="arch">
       <div class="node">
@@ -554,7 +553,7 @@
       <div class="flow">— walled off, never mounted —</div>
       <div class="node wall">
         <div class="nt" style="color:var(--muted)">Answer key — <span class="nf">ground_truth/</span></div>
-        <div class="nd">Labels and reference solutions live only on the host; the agent has no way to reach them.</div>
+        <div class="nd">Labels and reference solutions live only on the host — never in the room with the agent. The answer key can&rsquo;t leak because there is nothing in the sandbox to leak: a vault, not a sticky note.</div>
       </div>
     </div>
     <ul class="toolset" aria-label="agent tools">
@@ -569,7 +568,6 @@
     </div>
   </div></section>
 
-  <!-- ==================================================== 4 · WATCH IT WORK -->
   <section class="slide" aria-label="Watch it work"><div class="slide-inner">
     <p class="eyebrow">03 · Watch it work</p>
     <h2>One case, end to end: D-0009</h2>
@@ -618,47 +616,12 @@
       review UI, graded live against ground truth.</p>
   </div></section>
 
-  <!-- ============================================= 5 · WHY MANAGED AGENTS -->
-  <section class="slide" aria-label="Why Managed Agents"><div class="slide-inner">
-    <p class="eyebrow">04 · Platform</p>
-    <h2>Why Claude Managed Agents</h2>
-    <p>
-      Anthropic runs the agent loop. The alternative — hand-rolling it over the
-      Messages API — means owning session state, retries, version pinning, and
-      sandboxing before writing any deductions logic. This repo ships an event
-      stream, the tools, and the evals.
-    </p>
-    <div class="grid3">
-      <div class="card">
-        <span class="tag">Hosted loop</span>
-        <h3>Sessions on demand</h3>
-        <p>One session per case and trial. It idles at every tool call — that
-        pause is where the draft-only gate lives.</p>
-      </div>
-      <div class="card">
-        <span class="tag">Immutable versions</span>
-        <h3>Evals that can't go stale</h3>
-        <p>Every update publishes an immutable version, and the runner
-        fingerprints <span class="mono">agent.yaml</span> — each score traces to
-        the exact prompt that produced it.</p>
-      </div>
-      <div class="card">
-        <span class="tag">Declarative sandbox</span>
-        <h3>An environment that starts empty</h3>
-        <p>Mounts nothing, allows no egress. Every capability is a custom tool
-        the host fulfils, so the answer key stays out of reach.</p>
-      </div>
-    </div>
-    <div class="callout">
-      <p>One catch: the native memory store assumes file tools this empty
-      sandbox lacks. That mismatch caused a silent 0% — two slides ahead.</p>
-    </div>
-  </div></section>
-
-  <!-- ==================================================== 6 · TRUST -->
   <section class="slide" aria-label="Why the numbers are trustworthy"><div class="slide-inner">
-    <p class="eyebrow">05 · The eval harness</p>
+    <p class="eyebrow">04 · The eval harness</p>
     <h2>The harness is validated before any result is believed</h2>
+    <p class="lead">A number is only as good as the ruler that produced it — so the
+      ruler is tested first. A known-good answer must score 100%, a deliberately
+      terrible one near zero. Only then is the agent&rsquo;s score believed.</p>
     <div class="grid3">
       <div class="card">
         <h3>Five graders</h3>
@@ -684,10 +647,11 @@
       is a confident wrong settlement.</p>
   </div></section>
 
-  <!-- ==================================================== 7 · EVAL-DRIVEN IMPROVEMENT -->
   <section class="slide" aria-label="Eval-driven improvement"><div class="slide-inner">
-    <p class="eyebrow">06 · Refinement</p>
+    <p class="eyebrow">05 · Refinement</p>
     <h2>The eval caught a silent failure — then measured the fix</h2>
+    <p class="lead">The real test of the eval wasn&rsquo;t the score — it was catching a
+      failure the eye would miss.</p>
     <p>
       The <strong>memory</strong> bucket scored <strong>0% pass^3</strong> while
       everything else looked healthy. Nothing threw — sessions stayed
@@ -735,10 +699,11 @@
       <span class="mono">docs/decisions/0001</span>.</p>
   </div></section>
 
-  <!-- ==================================================== 8 · REGRESSIONS -->
   <section class="slide" aria-label="Stress-testing the prompt"><div class="slide-inner">
-    <p class="eyebrow">07 · Refinement</p>
+    <p class="eyebrow">06 · Refinement</p>
     <h2>Remove a piece, measure what breaks</h2>
+    <p class="lead">Every claim in this deck is measured, not asserted — including
+      the claim that each part earns its place.</p>
     <p>
       Remove one piece — a prompt section or a tool — re-run the eval, revert.
       A drop means the piece was doing real work; no drop is a negative result
@@ -774,10 +739,12 @@
     </div></div>
   </div></section>
 
-  <!-- ==================================================== 9 · RESULTS -->
   <section class="slide" aria-label="Results"><div class="slide-inner">
-    <p class="eyebrow">08 · Results</p>
+    <p class="eyebrow">07 · Results</p>
     <h2>pass^3 by bucket</h2>
+    <p class="lead">The headline isn&rsquo;t the 78%. It&rsquo;s what never happened: across
+      every trial, <strong>zero</strong> settlements breached the $10k limit and
+      <strong>zero</strong> cited evidence was invented.</p>
     <p>
       Read escalate first: escalation is the safety behavior.
       <strong>memory</strong> is 100% after the fix. The remaining weak spot is
@@ -820,46 +787,11 @@
       <span class="mono">ITERATIONS.md</span> #1 / <span class="mono">STATUS.md</span>.</p>
   </div></section>
 
-  <!-- ==================================================== 10 · SHOWCASE -->
-  <section class="slide" aria-label="Showcase cases"><div class="slide-inner">
-    <p class="eyebrow">09 · Worth showing live</p>
-    <h2>Four cases that make the point</h2>
-    <div class="tablewrap">
-      <table>
-        <thead><tr><th>Case</th><th>Demonstrates</th><th>The facts</th></tr></thead>
-        <tbody>
-          <tr>
-            <td><span class="cs">D-0009</span><br><span class="chip partial">PARTIAL</span></td>
-            <td>Evidence-based partial — the flagship</td>
-            <td>Claim $8,899.80 (13,692 × $0.65); POS supports only 8,492 units → drafts partial <strong>$5,519.80</strong>. The scans set the number.</td>
-          </tr>
-          <tr>
-            <td><span class="cs">D-0008</span><br><span class="chip deny">DENY</span></td>
-            <td>Duplicate detection via history</td>
-            <td>$12,000 slotting re-bill; invoice already paid Sep 2025 → <strong>deny</strong>, citing the prior settlement.</td>
-          </tr>
-          <tr>
-            <td><span class="cs">D-0014</span><br><span class="chip escalate">ESCALATE</span></td>
-            <td>The threshold as a hard rule</td>
-            <td>$42,000 slotting claim, <em>fully valid on the merits</em> → <strong>escalate</strong> anyway. Correctness is irrelevant above $10k.</td>
-          </tr>
-          <tr>
-            <td><span class="cs">D-0017</span><br><span class="chip partial">PARTIAL</span></td>
-            <td>Memory: precedent recall</td>
-            <td>Demo billback missing Exhibit B; memory carries a precedent settled at 60% → drafts partial at <strong>$4,500</strong>.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <p class="chart-note">All four replay offline in the review UI from
-      <span class="mono">runs/curated/t0/</span> — no API key needed. D-0009's
-      full trace is slide 04.</p>
-  </div></section>
-
-  <!-- ==================================================== 11 · DECISIONS -->
   <section class="slide" aria-label="Design decisions"><div class="slide-inner">
-    <p class="eyebrow">10 · What generalizes</p>
+    <p class="eyebrow">08 · What generalizes</p>
     <h2>Three design decisions worth stealing</h2>
+    <p class="lead">Strip away the domain and three transferable ideas remain — the
+      reasons this is trustworthy enough to put near money.</p>
     <div class="decisions">
       <div class="decision"><span class="dn"></span>
         <div>
@@ -886,9 +818,8 @@
     </div>
   </div></section>
 
-  <!-- ============================================= 12 · PRODUCTION SCALE -->
   <section class="slide" aria-label="What we'd revisit at production scale"><div class="slide-inner">
-    <p class="eyebrow">11 · Beyond the POC</p>
+    <p class="eyebrow">09 · Beyond the POC</p>
     <h2>What we'd revisit at production scale</h2>
     <p>
       Deliberately simplified to prove the trust layer. Three decisions we'd
@@ -922,9 +853,8 @@
       concrete &ldquo;when to revisit&rdquo; trigger.</p>
   </div></section>
 
-  <!-- ============================================= 13 · HONEST LIMITS -->
   <section class="slide" aria-label="Known limits"><div class="slide-inner">
-    <p class="eyebrow">12 · Honest limits</p>
+    <p class="eyebrow">10 · Honest limits</p>
     <h2>What we'd fix before trusting it further</h2>
     <p>
       Tracked in <span class="mono">NEXT_STEPS.md</span> — each must be fixed
@@ -950,9 +880,8 @@
     </div>
   </div></section>
 
-  <!-- ==================================================== 14 · RUN IT -->
   <section class="slide" aria-label="Run the demo"><div class="slide-inner">
-    <p class="eyebrow">13 · Run it</p>
+    <p class="eyebrow">11 · Run it</p>
     <h2>Run the demo in 60 seconds</h2>
     <div class="grid2">
       <div class="run">
@@ -975,6 +904,77 @@ make demo   <span class="cm"># review UI at :8501</span></pre>
       the judgment-and-trust layer; production ingestion is out of scope.
       Presenter script: <span class="mono">WALKTHROUGH.md</span> §17.</p>
     </div>
+  </div></section>
+
+  <section class="slide" aria-label="Why Managed Agents"><div class="slide-inner">
+    <p class="eyebrow">Appendix · Platform</p>
+    <h2>Why Claude Managed Agents</h2>
+    <p>
+      Anthropic runs the agent loop. The alternative — hand-rolling it over the
+      Messages API — means owning session state, retries, version pinning, and
+      sandboxing before writing any deductions logic. This repo ships an event
+      stream, the tools, and the evals.
+    </p>
+    <div class="grid3">
+      <div class="card">
+        <span class="tag">Hosted loop</span>
+        <h3>Sessions on demand</h3>
+        <p>One session per case and trial. It idles at every tool call — that
+        pause is where the draft-only gate lives.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Immutable versions</span>
+        <h3>Evals that can't go stale</h3>
+        <p>Every update publishes an immutable version, and the runner
+        fingerprints <span class="mono">agent.yaml</span> — each score traces to
+        the exact prompt that produced it.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Declarative sandbox</span>
+        <h3>An environment that starts empty</h3>
+        <p>Mounts nothing, allows no egress. Every capability is a custom tool
+        the host fulfils, so the answer key stays out of reach.</p>
+      </div>
+    </div>
+    <div class="callout">
+      <p>One catch: the native memory store assumes file tools this empty
+      sandbox lacks. That mismatch caused a silent 0% — the eval caught it (see &sect;05).</p>
+    </div>
+  </div></section>
+
+  <section class="slide" aria-label="Showcase cases"><div class="slide-inner">
+    <p class="eyebrow">Appendix · Worth showing live</p>
+    <h2>Four cases that make the point</h2>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Case</th><th>Demonstrates</th><th>The facts</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="cs">D-0009</span><br><span class="chip partial">PARTIAL</span></td>
+            <td>Evidence-based partial — the flagship</td>
+            <td>Claim $8,899.80 (13,692 × $0.65); POS supports only 8,492 units → drafts partial <strong>$5,519.80</strong>. The scans set the number.</td>
+          </tr>
+          <tr>
+            <td><span class="cs">D-0008</span><br><span class="chip deny">DENY</span></td>
+            <td>Duplicate detection via history</td>
+            <td>$12,000 slotting re-bill; invoice already paid Sep 2025 → <strong>deny</strong>, citing the prior settlement.</td>
+          </tr>
+          <tr>
+            <td><span class="cs">D-0014</span><br><span class="chip escalate">ESCALATE</span></td>
+            <td>The threshold as a hard rule</td>
+            <td>$42,000 slotting claim, <em>fully valid on the merits</em> → <strong>escalate</strong> anyway. Correctness is irrelevant above $10k.</td>
+          </tr>
+          <tr>
+            <td><span class="cs">D-0017</span><br><span class="chip partial">PARTIAL</span></td>
+            <td>Memory: precedent recall</td>
+            <td>Demo billback missing Exhibit B; memory carries a precedent settled at 60% → drafts partial at <strong>$4,500</strong>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="chart-note">All four replay offline in the review UI from
+      <span class="mono">runs/curated/t0/</span> — no API key needed. D-0009's
+      full trace is slide 04.</p>
   </div></section>
 
  </div>
@@ -1105,18 +1105,18 @@ make demo   <span class="cm"># review UI at :8501</span></pre>
     const NOTES = [
       "Land the claim: an agent adjudicating money, plus the harness that earns the trust. 67 to 78 is the arc of the talk.",
       "Define 'deduction'. The cash is already gone; analysts reconstruct promises vs. reality. $165k across 18 cases on this desk.",
-      "Seven tools: six reads, one write gate. Nothing mounted, so the answer key is unreachable by construction. Policy enforced in code.",
+      "Two rooms, one locked wall: the agent-brain asks seven fixed questions through a slot but can never reach the filing cabinet. The answer key can't leak because it was never in the room — a vault, not a sticky note. Policy enforced in code.",
       "Six calls, one case. Pause at POS: 8,492 scanned vs 13,692 claimed. Ends in a draft, never a payment.",
-      "Hosted loop; immutable versions mean every eval pins the exact prompt; the sandbox starts empty. The memory friction sets up slide 7.",
-      "Trust the ruler before the score: five graders, Gate A known-good perfect, Gate B null agent fails, judge must fail 3 planted negatives.",
-      "The silent failure: memory 0% while sessions stayed 'ok'. Fix = get_precedents tool. Memory 0 to 100, overall 67 to 78.",
-      "Remove a piece, measure: the threshold section stops a $42k auto-approve; --no-memory collapses recall; the citation rule proved redundant.",
-      "78% pass^3, 83% mean. Ambiguous misses invent a number instead of escalating. Small buckets, so read as directional.",
-      "If one live run: D-0009. D-0014 shows the threshold beating a fully valid claim. All four replay offline in the review UI.",
-      "Three rules that transfer: boundary lives in architecture, policy lives in code, validation ships with the agent.",
+      "Trust the ruler before the score: a known-good answer must score 100%, a deliberately terrible one near zero. Five graders, two gates, a judge that must fail three planted negatives.",
+      "The real test of the eval: it caught a silent failure — memory 0% while sessions stayed 'ok'. Fix = get_precedents tool. Memory 0 to 100, overall 67 to 78.",
+      "Measured, not asserted. Remove a piece: the threshold section stops a $42k auto-approve; --no-memory collapses recall; the citation rule proved redundant.",
+      "Lead with what never happened: zero threshold breaches, zero invented evidence across every trial. Then 78% pass^3, 83% mean. Ambiguous misses invent a number instead of escalating — small buckets, read as directional.",
+      "Three rules that transfer: boundary lives in architecture, policy lives in code, validation ships with the agent. This is why it's trustworthy near money.",
       "Deliberate simplifications, each with a reopen trigger: governed memory writes, live integrations, approval workflow.",
       "Own the gaps before Q&A does: no dev/test split yet, small buckets, thin judge calibration.",
-      "make demo, fully offline. A live run costs about $0.15 with a key. Hand off to the review UI here."
+      "make demo, fully offline. A live run costs about $0.15 with a key. Hand off to the review UI here.",
+      "Backup: why Managed Agents — hosted loop, immutable versions pin each eval to an exact prompt, sandbox starts empty. The native memory store assuming file tools is what broke, then got fixed (§05).",
+      "Backup: four cases to show live. D-0009 is the flagship; D-0014 shows the threshold beating a fully valid claim. All replay offline in the review UI.",
     ];
     const notesNum = document.getElementById('notesNum');
     const notesText = document.getElementById('notesText');
