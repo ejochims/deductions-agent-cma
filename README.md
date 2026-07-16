@@ -8,6 +8,10 @@ would pay out above a dollar threshold routes to a human. The claim under test
 is that this kind of bounded autonomy can be validated rigorously enough to
 trust with money.
 
+📊 **[View the slide deck →](https://ejochims.github.io/deductions-agent-cma/presentation.html)** —
+the architecture, the trust argument, and the results in a ~15-minute walkthrough.
+(Runs GitHub Pages from [`docs/`](docs/presentation.html); `make deck` serves it locally.)
+
 The repo is built around the validation as much as the agent. Every test case
 has a ground-truth answer key. Programmatic graders check what code can check;
 an LLM judge grades what it can't. Calibration gates must pass before any
