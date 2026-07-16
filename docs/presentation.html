@@ -406,7 +406,8 @@
   .reduced .frag.on .ba-fill { transform:none; }
 
   /* ---- speaker notes (toggle with "n") ---- */
-  .notes { position:fixed; left:22px; bottom:74px; z-index:35; max-width:400px;
+  .notes { position:fixed; left:22px; bottom:74px; z-index:35; max-width:420px;
+    max-height:46vh; overflow-y:auto;
     background:var(--glass); border:1px solid var(--hairline); border-radius:12px;
     padding:12px 16px 13px; box-shadow:var(--shadow); display:none;
     -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px); }
@@ -1103,20 +1104,20 @@ make demo   <span class="cm"># review UI at :8501</span></pre>
 
     // speaker notes — toggle with "n"; audience never sees them unless mirrored
     const NOTES = [
-      "Land the claim: an agent adjudicating money, plus the harness that earns the trust. The hero numbers are the two zeros — no threshold breaches, no invented evidence; 78% pass^3 is the accuracy behind them.",
-      "Define 'deduction'. The cash is already gone; analysts reconstruct promises vs. reality. $165k across 18 cases on this desk.",
-      "Two rooms, one locked wall: the agent-brain asks seven fixed questions through a slot but can never reach the filing cabinet. The answer key can't leak because it was never in the room — a vault, not a sticky note. Policy enforced in code.",
-      "Six calls, one case. Pause at POS: 8,492 scanned vs 13,692 claimed. Ends in a draft, never a payment.",
-      "Trust the ruler before the score: a known-good answer must score 100%, a deliberately terrible one near zero. Five graders, two gates, a judge that must fail three planted negatives.",
-      "The real test of the eval: it caught a silent failure — memory 0% while sessions stayed 'ok'. Fix = get_precedents tool. Memory 0 to 100, overall 67 to 78.",
-      "Measured, not asserted. Remove a piece: the threshold section stops a $42k auto-approve; --no-memory collapses recall; the citation rule proved redundant.",
-      "Lead with what never happened: zero threshold breaches, zero invented evidence across every trial. Then 78% pass^3, 83% mean. Ambiguous misses invent a number instead of escalating — small buckets, read as directional.",
-      "What those numbers look like on real cases: D-0009 the flagship partial, D-0008 a duplicate caught via history, D-0014 the threshold beating a fully valid $42k claim, D-0017 precedent recall. All replay offline in the review UI.",
-      "Three rules that transfer: boundary lives in architecture, policy lives in code, validation ships with the agent. This is why it's trustworthy near money.",
-      "Deliberate simplifications, each with a reopen trigger: governed memory writes, live integrations, approval workflow.",
-      "Own the gaps before Q&A does: no dev/test split yet, small buckets, thin judge calibration.",
-      "make demo, fully offline. A live run costs about $0.15 with a key. Hand off to the review UI here.",
-      "Backup: why Managed Agents — hosted loop, immutable versions pin each eval to an exact prompt, sandbox starts empty. The native memory store assuming file tools is what broke, then got fixed (§05).",
+      "[~45s] Open on the tension, not the tech. Retailers short-pay our invoices; someone has to decide whether that money stays gone. This is an agent that makes the call — and a harness that proves you can trust it with money. Point at the two zeros: no threshold breaches, no invented evidence; 78% is the accuracy behind them. → \"First, why this is genuinely hard.\"",
+      "[~75s] Define 'deduction' plainly: the cash is already gone, and an analyst reconstructs promise-versus-reality one claim at a time — contract, promo calendar, POS scans, settlement history. Land the stakes: a wrong approval pays a bad claim; a wrong denial burns the retailer relationship. That's why the bar for automating this is so high. $165k across 18 cases on this desk. → \"So here's the one idea that makes it safe.\"",
+      "[~90s] This is the core idea — say it slowly. Two rooms, one locked wall. The agent is a mind in an empty room: it asks seven fixed questions through a slot, but can never reach the filing cabinet. Nothing is mounted — no files, no network. So the answer key can't leak, because it was never in the room. A vault, not a sticky note. And policy lives in code: deny amounts nulled, the $10k gate enforced host-side. → \"Let's watch it actually reason.\"",
+      "[~90s] Walk the six calls like a story. Harvest claims 13,692 units — but the worksheet reads 'shipped + scanned', and the contract only pays what's scanned. POS shows 8,492. Pause there: that gap is the whole case. It drafts a partial at $5,519.80, denies the rest, and cites the promo plus two contract sections. Every fact arrived through a typed tool, and it ends in a draft a human signs — never a payment. → \"Now: why believe any score I show you?\"",
+      "[~75s] The trust move: test the ruler before the score. A known-good answer must score 100% (Gate A); a deliberately terrible approve-everything agent must fail every judgment case (Gate B). Five graders do the mechanical checks; a separate, stronger model judges reasoning quality — and must first fail three planted-bad justifications. pass^3 means all three trials, because a confident wrong settlement is the failure that costs money. → \"Here's the eval earning its keep.\"",
+      "[~75s] Tell this as a story — it's your credibility moment. Everything looked healthy, but the memory bucket sat at 0%. Nothing errored; the drafts looked plausible. The native memory store needed file tools the locked sandbox doesn't have — so the agent was drafting those cases blind. Only the per-bucket eval caught it. The fix, a host-fulfilled get_precedents tool, took memory 0→100 and overall 67→78. → \"And we pressure-test the rest the same way.\"",
+      "[~60s] Quick and confident: measured, not asserted. Pull the $10k rule and a valid $42k claim auto-approves, three of three — the safety grader catches it. Run --no-memory and precedent recall collapses. Weaken the citation rule and nothing moves — redundant, so we kept it and said so. A negative result still counts. → \"So — the numbers.\"",
+      "[~90s] Lead with what never happened: zero threshold breaches, zero invented evidence, every trial. Then the bars — read escalate first, because escalation is the safety behavior. Memory's at 100 after the fix. Be honest about the weak spot: ambiguous cases sometimes invent a number instead of escalating — left unfixed so we don't overfit 18 cases. Small buckets, so read them as directional. → \"Here's what those numbers look like on real cases.\"",
+      "[~75s] Make it concrete with four cases. D-0009, the flagship — the scans set the number. D-0008 — a duplicate caught only because it checked history. D-0014 — a fully valid $42k claim escalated anyway, because above $10k correctness is beside the point. D-0017 — recalling the 60% precedent across sessions. All four replay offline in the review UI. → \"Strip away the domain and three ideas transfer.\"",
+      "[~75s] The climax — slow down. Three things worth stealing. One: the tool boundary is the security boundary — access control lives in the architecture, not a config file you can forget. Two: policy lives in the tool layer, so even a wrong or manipulated model can't move money; worst case is a bad draft a human catches. Three: validation ships with the agent. That trio is what lets a finance owner sign off. → \"What we deliberately left for later.\"",
+      "[~45s] Frame the simplifications as choices, each with a reopen trigger. Curated read-only precedents → governed, human-gated learning. Fixtures → live EDI, ERP, and OCR, behind the same typed interface. Draft-only → a real approval workflow with an audit trail. → \"And the gaps I'd own before trusting it further.\"",
+      "[~45s] Get ahead of Q&A by naming the gaps yourself: no dev/test split yet, so tuning the prompt would measure memorization; buckets are small, so a single flip swings them; judge calibration is still thin. Each one is tracked with a fix. → \"And you can run all of this yourself.\"",
+      "[~30s] Close on how real it is: make demo, fully offline, no key needed. A live run is about fifteen cents with a key. Then hand to the review UI — case queue, investigation replay, the live grader scorecard. Take questions here.",
+      "[BACKUP — only if asked about the stack] Managed Agents runs the loop; immutable versions pin every eval to an exact prompt; the sandbox starts empty. The native memory store assuming file tools is exactly what broke on the refinement slide — then got fixed.",
     ];
     const notesNum = document.getElementById('notesNum');
     const notesText = document.getElementById('notesText');
